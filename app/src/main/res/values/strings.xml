@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Calendar</string>
     <string name="action_settings">Settings</string>
+    <string name="intro_string">Calendar App</string>
+    <string name="users">Users</string>
+    <string name="about_us">About Us</string>
 </resources>
