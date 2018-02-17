@@ -1,14 +1,14 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/settings_id"
-        android:title="@string/action_settings"
-         />
+        android:title=""
+        android:id="@+id/schedule"
+        android:icon="@drawable/schedule"
+        app:showAsAction="ifRoom" />
     <item
-        android:title="@string/users"
-        android:id="@+id/users_id"
-        />
-    <item
-        android:title="@string/about_us"
-        android:id="@+id/about_us_id"/>
+        android:title=""
+        android:id="@+id/nav"
+        android:icon="@drawable/nav"
+        app:showAsAction="ifRoom" />
 </menu>

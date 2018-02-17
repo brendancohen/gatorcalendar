@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<group>
+    <item
+        android:title="@string/home"
+        android:id="@+id/home"
+        android:icon="@drawable/home_icon">
+    </item>
+    <item
+        android:title="@string/calendar_view"
+        android:id="@+id/cal_view"
+        android:icon="@drawable/calendar">
+    </item>
+    <item
+        android:title="@string/classes"
+        android:id="@+id/classes"
+        android:icon="@drawable/schedule">
+    </item>
+    <item
+        android:title="@string/tasks"
+        android:id="@+id/tasks"
+        android:icon="@drawable/alarm">
+    </item>
+    <item
+        android:title="@string/commute"
+        android:id="@+id/commute"
+        android:icon="@drawable/rts">
+    </item>
+<item
+    android:title="">
+    <menu>
+        <item
+            android:id="@+id/settings_id"
+            android:title="@string/settings">
+
+        </item>
+        <item
+            android:id="@+id/Help_id"
+            android:title="@string/help">
+
+        </item>
+    </menu>
+</item>
+</group>
+</menu>
