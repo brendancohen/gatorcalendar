@@ -1,5 +1,6 @@
 package com.group18.app.calendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -15,15 +16,18 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mytoolbar;
     private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
+    private Button startaddClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
         mytoolbar = findViewById(R.id.mytoolbar);
@@ -37,32 +41,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout,mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        startaddClass = findViewById(R.id.start_add_class);
+        startaddClass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddClassActivity.class);
+                startActivity(intent);
+            }
+        });
+        
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-/*
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
         switch (id) {
-            case R.id.about_us_id:
+            case R.id.nav:
                 Toast.makeText(this, "We are still building this ", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.settings_id:
+            case R.id.schedule:
                 Toast.makeText(this, "What setting are we including here? ", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.users_id:
-                Toast.makeText(this, "Is this a valid menu option? ", Toast.LENGTH_SHORT).show();
+                if(item.getIcon().getConstantState().equals(getResources().getDrawable(R.drawable.schedule).getConstantState()))
+                item.setIcon(R.drawable.calendar);
+                else
+                    item.setIcon(R.drawable.schedule);
                 break;
 
         }
         return super.onOptionsItemSelected(item);
     }
-*/
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();

@@ -5,7 +5,8 @@
         android:title=""
         android:id="@+id/schedule"
         android:icon="@drawable/schedule"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:tooltipText="Toggle Between Reminders and Classes"/>
     <item
         android:title=""
         android:id="@+id/nav"
