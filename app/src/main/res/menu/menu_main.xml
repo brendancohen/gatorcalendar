@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title=""
+        android:title="Toggle View"
         android:id="@+id/schedule"
         android:icon="@drawable/schedule"
         app:showAsAction="ifRoom"
@@ -11,5 +11,5 @@
         android:title=""
         android:id="@+id/nav"
         android:icon="@drawable/nav"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
 </menu>
