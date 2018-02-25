@@ -25,7 +25,6 @@ public class UFClass implements Parcelable{
     }
 
     public Date getStart() {
-
         return start;
     }
 
