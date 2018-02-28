@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //onActivityResult(int requestCode, int resultCode, Intent data);
         commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
         recyclerView.setAdapter(cCommitmentsAdapter);
-//        displayListView();
+        displayListView();
     }
 
     @Override
