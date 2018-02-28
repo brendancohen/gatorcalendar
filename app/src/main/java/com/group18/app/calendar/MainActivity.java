@@ -4,22 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
     private Button startaddClass;
-    private ArrayList<UFClass> myCommits = new ArrayList<>();
+    private ArrayList<Commitments> myCommits = new ArrayList<>();
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0;
@@ -48,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
 
-
+//myCommits.add()
         myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
         myDrawerLayout = findViewById(R.id.drawer_layout);
@@ -66,6 +63,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
+//        setContentView(R.layout.row_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
+//        myCommits.add(com1);
+        //onActivityResult(int requestCode, int resultCode, Intent data);
+        commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
+        recyclerView.setAdapter(cCommitmentsAdapter);
+//        displayListView();
     }
 
     @Override
@@ -147,12 +153,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onBackPressed();
     }
 
-    @Override //Function called after a commiment is committed. It adds the commitment to the myCommits array
+    @Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode != Activity.RESULT_OK)
             return;
         if(requestCode == AddClassCode){
-            UFClass tempclass =  data.getParcelableExtra("retrieveUFClass");
+            Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
             myCommits.add(tempclass);
         }
 
