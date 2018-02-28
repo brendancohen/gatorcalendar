@@ -68,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
 //        myCommits.add(com1);
-        //onActivityResult(int requestCode, int resultCode, Intent data);
+        //onActivityResult2(int requestCode, int resultCode, Intent data);
         commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
         recyclerView.setAdapter(cCommitmentsAdapter);
-        displayListView();
+//        displayListView();
     }
 
     @Override
@@ -153,8 +153,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onBackPressed();
     }
 
-    @Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    //Function called after a commitment is committed. It adds the commitment to the myCommits array
+    public void onActivityResult2(int requestCode, int resultCode, Intent data) {
         if(resultCode != Activity.RESULT_OK)
             return;
         if(requestCode == AddClassCode){
