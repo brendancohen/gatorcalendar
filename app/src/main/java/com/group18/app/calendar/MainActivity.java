@@ -132,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this,"Commute",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings_id:
+                Intent intent = new Intent (this, SettingsActivity.class);
+                startActivity(intent);
                 Toast.makeText(this,"Settings",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.Help_id:
