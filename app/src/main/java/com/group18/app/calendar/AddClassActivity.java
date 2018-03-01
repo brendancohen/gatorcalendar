@@ -31,7 +31,7 @@ public class AddClassActivity extends AppCompatActivity implements addClassFragm
         Intent myIntent = new Intent();
         myIntent.putExtra("retrieveUFClass", myobj);
         setResult(Activity.RESULT_OK, myIntent);
-        MainActivity.onActivityResult2(Activity.RESULT_OK, Activity.RESULT_OK, myIntent);
+        //myIntent.onActivityResult2(myIntent);
        finish();
     }
 

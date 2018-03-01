@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -64,14 +63,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 //        setContentView(R.layout.row_view);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
-//        myCommits.add(com1);
-        //onActivityResult2(int requestCode, int resultCode, Intent data);
-        commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
-        recyclerView.setAdapter(cCommitmentsAdapter);
-//        displayListView();
+        //RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
+        //myCommits.add(com1);
+        //commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
+        //recyclerView.setAdapter(cCommitmentsAdapter);
+        //displayListView();
     }
 
     @Override
@@ -153,14 +151,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onBackPressed();
     }
 
-    //Function called after a commitment is committed. It adds the commitment to the myCommits array
-    public void onActivityResult2(int requestCode, int resultCode, Intent data) {
-        if(resultCode != Activity.RESULT_OK)
-            return;
-        if(requestCode == AddClassCode){
-            Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
-            myCommits.add(tempclass);
-        }
-
+    //@Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if(resultCode != Activity.RESULT_OK)
+                return;
+            if(requestCode == AddClassCode){
+                Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
+                myCommits.add(tempclass);
+            }
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
+        //myCommits.add(com1);
+        commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
+        recyclerView.setAdapter(cCommitmentsAdapter);
     }
 }
