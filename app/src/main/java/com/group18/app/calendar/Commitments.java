@@ -10,7 +10,7 @@ import java.util.Date;
  */
 
 public class Commitments implements Parcelable{
-    public String professor;
+    private String professor;
     private String cname;
     private String onTheseDays;
     private Date start;
