@@ -1,7 +1,6 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +34,7 @@ public class addClassFragment extends Fragment {
     private Button commit;
     private Calendar mCalendar = Calendar.getInstance();
     private onFragmentEnd mylistener;
-    UFClass obj1 = new UFClass("","","");
+    Commitments obj1 = new Commitments("","","");
 
     private static final String CLASS_BEGIN_DATE = "BeginDate";
     private static final int START_DATE_PICKED = 1;
@@ -48,7 +46,7 @@ public class addClassFragment extends Fragment {
     }
 
     public interface onFragmentEnd {
-        void sendUFClass(UFClass ufclass);
+        void sendUFClass(Commitments ufclass);
     }
 
     @Override
