@@ -9,8 +9,8 @@ import java.util.Date;
  * Created by eddie on 2/19/18.
  */
 
-public class UFClass implements Parcelable{
-    private String professor;
+public class Commitments implements Parcelable{
+    public String professor;
     private String cname;
     private String onTheseDays;
     private Date start;
@@ -33,7 +33,7 @@ public class UFClass implements Parcelable{
         this.start = start;
     }
 
-    public UFClass(String uprofessor, String classname, String days){
+    public Commitments(String uprofessor, String classname, String days){
         professor = uprofessor;
         cname = classname;
         onTheseDays = days;
@@ -63,7 +63,7 @@ public class UFClass implements Parcelable{
         this.onTheseDays = onTheseDays;
     }
 
-    protected UFClass(Parcel in) {
+    protected Commitments(Parcel in) {
         professor = in.readString();
         cname = in.readString();
         onTheseDays = in.readString();
@@ -88,15 +88,15 @@ public class UFClass implements Parcelable{
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UFClass> CREATOR = new Parcelable.Creator<UFClass>() {
+    public static final Parcelable.Creator<Commitments> CREATOR = new Parcelable.Creator<Commitments>() {
         @Override
-        public UFClass createFromParcel(Parcel in) {
-            return new UFClass(in);
+        public Commitments createFromParcel(Parcel in) {
+            return new Commitments(in);
         }
 
         @Override
-        public UFClass[] newArray(int size) {
-            return new UFClass[size];
+        public Commitments[] newArray(int size) {
+            return new Commitments[size];
         }
     };
 }
