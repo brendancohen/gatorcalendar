@@ -3,8 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/gatorcalendar.iml" filepath="$PROJECT_DIR$/.idea/gatorcalendar.iml" />
-      <module fileurl="file://$PROJECT_DIR$/software_engineering.iml" filepath="$PROJECT_DIR$/software_engineering.iml" />
+      <module fileurl="file://C:\Users\bmott\AndroidStudioProjects\gatorcalendar\app\app.iml" filepath="C:\Users\bmott\AndroidStudioProjects\gatorcalendar\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gatorcalendar.iml" filepath="$PROJECT_DIR$/gatorcalendar.iml" />
+      <module fileurl="file://C:\Users\bmott\AndroidStudioProjects\gatorcalendar\.idea\gatorcalendar.iml" filepath="C:\Users\bmott\AndroidStudioProjects\gatorcalendar\.idea\gatorcalendar.iml" />
+      <module fileurl="file://C:\Users\bmott\AndroidStudioProjects\gatorcalendar\software_engineering.iml" filepath="C:\Users\bmott\AndroidStudioProjects\gatorcalendar\software_engineering.iml" />
     </modules>
   </component>
 </project>
