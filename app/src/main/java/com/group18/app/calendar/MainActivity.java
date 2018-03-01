@@ -1,7 +1,9 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -24,15 +26,19 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+//this is the Activity that is launched when app is started, see manifest file
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private Toolbar mytoolbar;
     private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
     private Button startaddClass;
-    private ArrayList<UFClass> myCommits = new ArrayList<>();
-    private boolean mScheduleVisible = true;
+    private ArrayList<UFClass> myCommits = new ArrayList<>(); //holds Commitments (on ActivityResult adds Commitments to this ArrayList
+    private boolean mScheduleVisible = true; //sentinel value used to toggle hat icon on toolbar
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
-    private static final int AddClassCode = 0;
+    private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +48,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        //upon rotation, activity is recreated, retrieve icon status from savedInstanceState
         if(savedInstanceState != null){
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
@@ -51,11 +58,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
+
         myDrawerLayout = findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout,mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        //startaddClass will start AddClassActivity for result
         startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,12 +78,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    //called when Activity is being destroyed and relevant data should be saved
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVED_SCHEDULE_VISIBLE, mScheduleVisible);
     }
 
+    //called before menu is shown
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(!mScheduleVisible)
@@ -81,12 +93,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onPrepareOptionsMenu(menu);
     }
 
+    //create Optionsmenu on toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
+    //what do we do if an item on the menu bar is selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -153,7 +167,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         if(requestCode == AddClassCode){
             UFClass tempclass =  data.getParcelableExtra("retrieveUFClass");
+
             myCommits.add(tempclass);
+            Toast.makeText(this,myCommits.get(myCommits.size()-1).getCname(),Toast.LENGTH_SHORT).show();
         }
 
     }
