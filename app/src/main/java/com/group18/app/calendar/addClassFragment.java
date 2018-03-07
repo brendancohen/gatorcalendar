@@ -27,6 +27,7 @@ import java.util.Date;
  */
 
 public class addClassFragment extends Fragment {
+
     private EditText enterclassname;
     private EditText enterprofessor;
     private CheckBox MWF;
@@ -47,10 +48,12 @@ public class addClassFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    //declare interface so that AddClassActivity can receive the Commitment object from this activity
     public interface onFragmentEnd {
         void sendUFClass(UFClass ufclass);
     }
 
+    //called once fragment is associated with its activity
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -67,6 +70,7 @@ public class addClassFragment extends Fragment {
         start = v.findViewById(R.id.button);
         end = v.findViewById(R.id.button2);
 
+        //start DatePickerFragment so that user selects start date of commitment
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +82,7 @@ public class addClassFragment extends Fragment {
             }
         });
 
+        //start DatePickerFragment so that user selects start date of commitment
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +114,8 @@ public class addClassFragment extends Fragment {
 
              }
          });
+
+        //adding listener, taking in user input as to Professor Name
          enterprofessor.addTextChangedListener(new TextWatcher() {
              @Override
              public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -126,6 +133,8 @@ public class addClassFragment extends Fragment {
              }
          });
         commit = v.findViewById(R.id.button3);
+
+        //once commit button is pressed, call interface method sendUFClass (implemented by AddClassActivity)
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +144,7 @@ public class addClassFragment extends Fragment {
         return v;
     }
 
+    //receive information from DatePicker Fragment (dates)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode != Activity.RESULT_OK)

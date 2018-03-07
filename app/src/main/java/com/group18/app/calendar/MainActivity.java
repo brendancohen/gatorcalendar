@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+//what do we do if an option is selected on the navigation drawer, answer below
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    //closes drawer after an option is pressed on navigation drawer or if area not on navigation drawer is pressed
     @Override
     public void onBackPressed() {
         if(myDrawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onBackPressed();
     }
 
+    //process information received from AddClassActivity(hint: Commitment is passed here)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode != Activity.RESULT_OK)
