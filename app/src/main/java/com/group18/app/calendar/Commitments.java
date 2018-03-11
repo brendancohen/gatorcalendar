@@ -11,6 +11,7 @@ import java.util.Date;
 
 //implements parcelable, allows a Commitment object to be put into the extra of an intent
 public class UFClass implements Parcelable{
+public class Commitments implements Parcelable{
     private String professor;
     private String cname;
     private String onTheseDays;
@@ -26,7 +27,6 @@ public class UFClass implements Parcelable{
     }
 
     public Date getStart() {
-
         return start;
     }
 
@@ -35,7 +35,7 @@ public class UFClass implements Parcelable{
         this.start = start;
     }
 
-    public UFClass(String uprofessor, String classname, String days){
+    public Commitments(String uprofessor, String classname, String days){
         professor = uprofessor;
         cname = classname;
         onTheseDays = days;
@@ -65,7 +65,7 @@ public class UFClass implements Parcelable{
         this.onTheseDays = onTheseDays;
     }
 
-    protected UFClass(Parcel in) {
+    protected Commitments(Parcel in) {
         professor = in.readString();
         cname = in.readString();
         onTheseDays = in.readString();
@@ -90,15 +90,15 @@ public class UFClass implements Parcelable{
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UFClass> CREATOR = new Parcelable.Creator<UFClass>() {
+    public static final Parcelable.Creator<Commitments> CREATOR = new Parcelable.Creator<Commitments>() {
         @Override
-        public UFClass createFromParcel(Parcel in) {
-            return new UFClass(in);
+        public Commitments createFromParcel(Parcel in) {
+            return new Commitments(in);
         }
 
         @Override
-        public UFClass[] newArray(int size) {
-            return new UFClass[size];
+        public Commitments[] newArray(int size) {
+            return new Commitments[size];
         }
     };
 }

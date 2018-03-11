@@ -13,6 +13,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,7 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -33,8 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
     private Button startaddClass;
-    private ArrayList<UFClass> myCommits = new ArrayList<>(); //holds Commitments (on ActivityResult adds Commitments to this ArrayList
-    private boolean mScheduleVisible = true; //sentinel value used to toggle hat icon on toolbar
+    private ArrayList<Commitments> myCommits = new ArrayList<>();
+    private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
     private Context mContext;
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
 
-
+//myCommits.add()
         myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
 
@@ -76,6 +78,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
+//        setContentView(R.layout.row_view);
+        //RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
+        //myCommits.add(com1);
+        //commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
+        //recyclerView.setAdapter(cCommitmentsAdapter);
+        //displayListView();
     }
 
     //called when Activity is being destroyed and relevant data should be saved
@@ -143,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this,"Commute",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings_id:
+                Intent intent = new Intent (this, SettingsActivity.class);
+                startActivity(intent);
                 Toast.makeText(this,"Settings",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.Help_id:
@@ -163,17 +175,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onBackPressed();
     }
 
-    //process information received from AddClassActivity(hint: Commitment is passed here)
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != Activity.RESULT_OK)
-            return;
-        if(requestCode == AddClassCode){
-            UFClass tempclass =  data.getParcelableExtra("retrieveUFClass");
-
-            myCommits.add(tempclass);
-            Toast.makeText(this,myCommits.get(myCommits.size()-1).getCname(),Toast.LENGTH_SHORT).show();
-        }
-
+    //@Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if(resultCode != Activity.RESULT_OK)
+                return;
+            if(requestCode == AddClassCode){
+                Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
+                myCommits.add(tempclass);
+            }
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
+        //myCommits.add(com1);
+        commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
+        recyclerView.setAdapter(cCommitmentsAdapter);
     }
 }

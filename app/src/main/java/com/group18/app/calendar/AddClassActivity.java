@@ -16,19 +16,20 @@ import java.util.Date;
 //implements interface in addClassFragment, necessary to receive information from a fragment
 public class AddClassActivity extends AppCompatActivity implements addClassFragment.onFragmentEnd {
 
-    private UFClass myobj;
+    private Commitments myobj;
 
     /*implement method in onFragmentEnd interface, this will receive the commitment object in addClassFragment
     and send it to MainActivity
     */
     @Override
-    public void sendUFClass(UFClass ufclass) {
+    public void sendUFClass(Commitments ufclass) {
         Log.v("AddClassActivity", "sendUFClass called");
         myobj = ufclass;
         Intent myIntent = new Intent();
         myIntent.putExtra("retrieveUFClass", myobj);
         setResult(Activity.RESULT_OK, myIntent);
         //finish ends this activity, will pop off AddClassActivity from activity stack
+        //myIntent.onActivityResult2(myIntent);
        finish();
     }
 

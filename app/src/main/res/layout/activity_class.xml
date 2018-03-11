@@ -23,11 +23,18 @@
         android:layout_gravity="right"
         android:text="Add Class"/>
 
-    <LinearLayout
+    <!--replaced linearLayout with recycleView for scrolling-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:orientation="vertical"
-        android:id="@+id/fragment_container" >
-    </LinearLayout>
+        android:layout_height="match_parent"/>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="400dp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:id="@+id/fragment_container" >-->
+    <!--</LinearLayout>-->
 
 </LinearLayout>
