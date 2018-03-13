@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         switch (id) {
             case R.id.nav:
+                Intent intent = new Intent (this, MapActivity.class);
+                startActivity(intent);
                 Toast.makeText(this, "We are still building this ", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.schedule:
