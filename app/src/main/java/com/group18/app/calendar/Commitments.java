@@ -10,7 +10,6 @@ import java.util.Date;
  */
 
 //implements parcelable, allows a Commitment object to be put into the extra of an intent
-public class UFClass implements Parcelable{
 public class Commitments implements Parcelable{
     private String professor;
     private String cname;
