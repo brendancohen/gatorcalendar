@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by eddie on 2/19/18.
@@ -17,6 +18,14 @@ public class Commitments implements Parcelable{
     private String onTheseDays;
     private Date start;
     private Date end;
+    //we want to be able to uniquely identify this class
+    private UUID primarykey;
+
+    public UUID getPrimarykey() {
+        return primarykey;
+    }
+
+
 
     public Date getEnd() {
         return end;
@@ -39,6 +48,7 @@ public class Commitments implements Parcelable{
         professor = uprofessor;
         cname = classname;
         onTheseDays = days;
+        primarykey = UUID.randomUUID();
     }
 
     public String getProfessor() {
