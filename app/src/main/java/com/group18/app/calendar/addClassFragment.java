@@ -16,8 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,7 +56,7 @@ public class addClassFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    //declare interface so that AddClassActivity can receive the Commitment object from this activity
+    //declare interface so that AddClassActivity can receive the Commitment object from this fragment
     public interface onFragmentEnd {
         void sendUFClass(Commitments ufclass);
     }
@@ -82,8 +82,8 @@ public class addClassFragment extends Fragment {
         initializeData();
 
         mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap);
-
         mListView.setAdapter(mListAdapter);
+
 
         //start DatePickerFragment so that user selects start date of commitment
         start.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +153,14 @@ public class addClassFragment extends Fragment {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              mylistener.sendUFClass(obj1);
+
+               String Days = "";
+               for(int i = 0 ; i < mListAdapter.getCheckedDays().size(); i++)
+                   Days += mListAdapter.getCheckedDays().get(i) + " ";
+                 Toast.makeText(getContext(), Days,Toast.LENGTH_SHORT).show();
+                 if(Days.length() != 0 )
+                 obj1.setOnTheseDays(Days);
+                 mylistener.sendUFClass(obj1);
             }
         });
         return v;

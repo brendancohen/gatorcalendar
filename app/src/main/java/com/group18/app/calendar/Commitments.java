@@ -12,7 +12,7 @@ import java.util.UUID;
 
 //implements parcelable, allows a Commitment object to be put into the extra of an intent
 
-public class Commitments implements Parcelable{
+public class Commitments implements Parcelable {
     private String professor;
     private String cname;
     private String onTheseDays;
@@ -75,6 +75,7 @@ public class Commitments implements Parcelable{
         this.onTheseDays = onTheseDays;
     }
 
+
     protected Commitments(Parcel in) {
         professor = in.readString();
         cname = in.readString();
@@ -83,6 +84,7 @@ public class Commitments implements Parcelable{
         start = tmpStart != -1 ? new Date(tmpStart) : null;
         long tmpEnd = in.readLong();
         end = tmpEnd != -1 ? new Date(tmpEnd) : null;
+        primarykey = (UUID) in.readValue(UUID.class.getClassLoader());
     }
 
     @Override
@@ -97,6 +99,7 @@ public class Commitments implements Parcelable{
         dest.writeString(onTheseDays);
         dest.writeLong(start != null ? start.getTime() : -1L);
         dest.writeLong(end != null ? end.getTime() : -1L);
+        dest.writeValue(primarykey);
     }
 
     @SuppressWarnings("unused")
