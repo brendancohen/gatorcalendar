@@ -29,7 +29,6 @@
         <activity
             android:name=".AddClassActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.AddClassTheme"
             android:windowSoftInputMode="adjustPan"
             />
         <activity
