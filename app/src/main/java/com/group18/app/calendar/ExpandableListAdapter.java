@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.group18.app.calendar.R;
@@ -74,9 +75,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_group,null);
         }
 
-        TextView lblListHeader = (TextView) convertView.findViewById(R.id.ListHeader);
+        TextView lblListHeader = convertView.findViewById(R.id.ListHeader);
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
+        ImageView indicator = convertView.findViewById(R.id.ivGroupIndicator);
+        indicator.setSelected(isExpanded);
         return convertView;
     }
 
@@ -88,7 +91,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_group_item,null);
         }
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.ListHeaderitem);
+        TextView txtListChild = convertView.findViewById(R.id.ListHeaderitem);
         txtListChild.setText(childText);
         return convertView;
     }
