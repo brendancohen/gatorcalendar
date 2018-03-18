@@ -23,9 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 //this is the Activity that is launched when app is started, see manifest file
@@ -41,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
     private Context mContext;
     private SQLiteDatabase mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

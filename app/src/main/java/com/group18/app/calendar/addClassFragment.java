@@ -16,9 +16,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by eddie on 2/21/18.
@@ -40,6 +45,11 @@ public class addClassFragment extends Fragment {
     private static final String CLASS_BEGIN_DATE = "BeginDate";
     private static final int START_DATE_PICKED = 1;
     private static final int END_DATE_PICKED = 0;
+
+    private ExpandableListView mListView;
+    private ExpandableListAdapter mListAdapter;
+    private List<String> mlistDataHeader;
+    private HashMap<String, List<String>> mListHashMap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +77,13 @@ public class addClassFragment extends Fragment {
         enterprofessor = v.findViewById(R.id.professor_name);
         start = v.findViewById(R.id.button);
         end = v.findViewById(R.id.button2);
+
+        mListView = (ExpandableListView) v.findViewById(R.id.expandableList);
+        initializeData();
+
+        mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap);
+
+        mListView.setAdapter(mListAdapter);
 
         //start DatePickerFragment so that user selects start date of commitment
         start.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +172,24 @@ public class addClassFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             obj1.setEnd(date);
         }
+    }
+
+
+    public void initializeData(){
+        mlistDataHeader = new ArrayList<>();
+        mListHashMap = new HashMap<>();
+
+        mlistDataHeader.add("Days on Campus");
+        List<String> Days = new ArrayList<>();
+        Days.add("Monday");
+        Days.add("Tuesday");
+        Days.add("Wednesday");
+        Days.add("Thursday");
+        Days.add("Friday");
+        Days.add("Saturday");
+        Days.add("Sunday");
+
+        mListHashMap.put(mlistDataHeader.get(0), Days);
     }
 
 
