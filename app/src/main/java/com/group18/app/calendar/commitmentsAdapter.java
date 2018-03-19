@@ -1,6 +1,7 @@
 package com.group18.app.calendar;
 
 import android.content.Context;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,7 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
              view.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-                     //gets rid of a commitment when it is clicked
+                     //.remove deletes commitment when it is clicked
                      commitments.remove(getAdapterPosition());
                      notifyItemRemoved(getAdapterPosition());
                  }
