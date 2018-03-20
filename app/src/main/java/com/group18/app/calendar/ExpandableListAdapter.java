@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.group18.app.calendar.R;
 
@@ -28,10 +29,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private HashMap<String, List<String>> mListHashMap;
     private ArrayList<String> checkedDays = new ArrayList<>();
 
-    public ExpandableListAdapter(Context context, List<String> listDataHeader, HashMap<String, List<String>> listHashMap){
+    public ExpandableListAdapter(Context context, List<String> listDataHeader, HashMap<String, List<String>> listHashMap, ArrayList<String> usercheckedDays){
         mContext = context;
         mlistDataHeader = listDataHeader;
         mListHashMap = listHashMap;
+        if(usercheckedDays != null) {
+            checkedDays = usercheckedDays;
+           Toast.makeText(mContext, checkedDays.get(0) +"", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -91,6 +96,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
+
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_group_item,null);
@@ -98,6 +104,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txtListChild = convertView.findViewById(R.id.ListHeaderitem);
         txtListChild.setText(childText);
         CheckBox mCheckbox = convertView.findViewById(R.id.checkbox);
+        //Toast.makeText(mContext, "" + getCheckedDays().size(), Toast.LENGTH_SHORT).show();
+        //mCheckbox.setChecked(ShouldIBeChecked(childPosition));
+
         mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -158,6 +167,33 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     public ArrayList<String> getCheckedDays() {
         return checkedDays;
+    }
+
+    public boolean ShouldIBeChecked(int childPosition){
+        Toast.makeText(mContext, "called up", Toast.LENGTH_SHORT).show();
+
+
+        if(checkedDays.isEmpty())
+            return false;
+        Toast.makeText(mContext, childPosition +" " + getCheckedDays().get(0) + "what", Toast.LENGTH_SHORT).show();
+            for(int i = 0 ; i < checkedDays.size(); i++) {
+
+                if (checkedDays.get(i).equals("Monday") && childPosition == 0)
+                    return true;
+                if (checkedDays.get(i).equals("Tuesday") && childPosition == 1)
+                    return true;
+                if (checkedDays.get(i).equals("Wednesday") && childPosition == 2)
+                    return true;
+                if (checkedDays.get(i).equals("Thursday") && childPosition == 3)
+                    return true;
+                if (checkedDays.get(i).equals("Friday") && childPosition == 4)
+                    return true;
+                if (checkedDays.get(i).equals("Saturday") && childPosition == 5)
+                    return true;
+                if (checkedDays.get(i).equals("Sunday") && childPosition == 6)
+                    return true;
+            }
+            return false;
     }
 
     @Override

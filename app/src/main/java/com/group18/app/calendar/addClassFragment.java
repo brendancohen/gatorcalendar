@@ -1,6 +1,7 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,29 +34,26 @@ import java.util.List;
 
 public class addClassFragment extends Fragment {
 
-    private EditText enterclassname;
-    private EditText enterprofessor;
-    private CheckBox MWF;
-    private CheckBox TR;
-    private Button start;
-    private Button end;
-    private Button commit;
+    private EditText enterclassname, enterprofessor;
+    private CheckBox MWF, TR;
+    private Button start, end, commit, time;
     private Calendar mCalendar = Calendar.getInstance();
     private onFragmentEnd mylistener;
+    private ExpandableListView mListView;
+    private ExpandableListAdapter mListAdapter;
+    private List<String> mlistDataHeader;
+    private HashMap<String, List<String>> mListHashMap;
     Commitments obj1 = new Commitments("","","");
 
     private static final String CLASS_BEGIN_DATE = "BeginDate";
     private static final int START_DATE_PICKED = 1;
     private static final int END_DATE_PICKED = 0;
-
-    private ExpandableListView mListView;
-    private ExpandableListAdapter mListAdapter;
-    private List<String> mlistDataHeader;
-    private HashMap<String, List<String>> mListHashMap;
+    public static final String DAYS = "com.group18.app.calendar.addClassFragment";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setRetainInstance(true);
     }
 
     //declare interface so that AddClassActivity can receive the Commitment object from this fragment
@@ -77,13 +77,21 @@ public class addClassFragment extends Fragment {
         enterprofessor = v.findViewById(R.id.professor_name);
         start = v.findViewById(R.id.button);
         end = v.findViewById(R.id.button2);
+        time = v.findViewById(R.id.time_button);
+        //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
 
         mListView = (ExpandableListView) v.findViewById(R.id.expandableList);
+        //mListView.expandGroup(0,true);
         initializeData();
 
-        mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap);
-        mListView.setAdapter(mListAdapter);
-
+        if(savedInstanceState == null) {
+            mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap, null);
+            mListView.setAdapter(mListAdapter);
+        }
+        else {
+            mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap, savedInstanceState.getStringArrayList(DAYS));
+            mListView.setAdapter(mListAdapter);
+        }
 
         //start DatePickerFragment so that user selects start date of commitment
         start.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +115,13 @@ public class addClassFragment extends Fragment {
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar);
                 dialog.setTargetFragment(addClassFragment.this, END_DATE_PICKED);
                 dialog.show(manager, CLASS_BEGIN_DATE);
+            }
+        });
+
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TimePickerDialog dialog = new TimePickerDialog()
             }
         });
 
@@ -199,5 +214,12 @@ public class addClassFragment extends Fragment {
         mListHashMap.put(mlistDataHeader.get(0), Days);
     }
 
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!mListAdapter.getCheckedDays().isEmpty())
+        outState.putStringArrayList(DAYS, mListAdapter.getCheckedDays());
+        //mListView.collapseGroup(0);
+       // Toast.makeText(getContext(), "Saving...",Toast.LENGTH_SHORT).show();
+        super.onSaveInstanceState(outState);
+    }
 }
