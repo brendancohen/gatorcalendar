@@ -37,6 +37,7 @@ public class AddClassActivity extends AppCompatActivity implements addClassFragm
     @Override
         protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            setContentView(R.layout.add_class_container);
             FragmentManager fm = getSupportFragmentManager();
             Fragment fragment = fm.findFragmentById(R.id.fragment_add_class);
 

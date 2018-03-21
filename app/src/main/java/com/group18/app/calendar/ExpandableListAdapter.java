@@ -35,7 +35,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         mListHashMap = listHashMap;
         if(usercheckedDays != null) {
             checkedDays = usercheckedDays;
-           Toast.makeText(mContext, checkedDays.get(0) +"", Toast.LENGTH_SHORT).show();
+           //Toast.makeText(mContext, checkedDays.get(0) +"", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -105,7 +105,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         txtListChild.setText(childText);
         CheckBox mCheckbox = convertView.findViewById(R.id.checkbox);
         //Toast.makeText(mContext, "" + getCheckedDays().size(), Toast.LENGTH_SHORT).show();
-        //mCheckbox.setChecked(ShouldIBeChecked(childPosition));
+        mCheckbox.setChecked(ShouldIBeChecked(childPosition));
 
         mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

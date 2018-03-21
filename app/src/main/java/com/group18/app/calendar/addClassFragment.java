@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -21,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 import android.widget.Toolbar;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,7 +53,7 @@ public class addClassFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setRetainInstance(true);
+        setRetainInstance(true);
     }
 
     //declare interface so that AddClassActivity can receive the Commitment object from this fragment
@@ -99,7 +99,7 @@ public class addClassFragment extends Fragment {
             public void onClick(View v) {
                 mCalendar.set(2018, 0, 8);
                 FragmentManager manager = getFragmentManager();
-                DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar);
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar, "Start");
                 dialog.setTargetFragment(addClassFragment.this, START_DATE_PICKED);
                 dialog.show(manager, CLASS_BEGIN_DATE);
             }
@@ -112,16 +112,18 @@ public class addClassFragment extends Fragment {
                 mCalendar.set(2018, 3, 25);
                 FragmentManager manager = getFragmentManager();
 
-                DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar);
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar, "End");
                 dialog.setTargetFragment(addClassFragment.this, END_DATE_PICKED);
                 dialog.show(manager, CLASS_BEGIN_DATE);
             }
         });
 
+
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TimePickerDialog dialog = new TimePickerDialog()
+                DialogFragment dialogFragment = new TimePickerFragment();
+                dialogFragment.show(getFragmentManager(),"TimePicker" );
             }
         });
 
@@ -169,12 +171,30 @@ public class addClassFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                //check to see if user has input a class name, else set Error
+               if(enterclassname.getText().toString().length() == 0)
+                   enterclassname.setError("Class Name is Required!");
+
+               //check to see if user has input a professor name, else set Error
+                if(enterprofessor.getText().toString().length() == 0)
+                    enterprofessor.setError("Professor Name is Required!");
+
+                //if EditText error, do not proceed
+                if(enterprofessor.getError() != null || enterclassname.getError() != null)
+                    return;
+
                String Days = "";
+
                for(int i = 0 ; i < mListAdapter.getCheckedDays().size(); i++)
                    Days += mListAdapter.getCheckedDays().get(i) + " ";
-                 Toast.makeText(getContext(), Days,Toast.LENGTH_SHORT).show();
+
                  if(Days.length() != 0 )
-                 obj1.setOnTheseDays(Days);
+                     obj1.setOnTheseDays(Days);
+
+                 else {
+                     Toast.makeText(getContext(), "Please select Meeting Days in the Dropdown Menu", Toast.LENGTH_SHORT).show();
+                     return;
+                 }
                  mylistener.sendUFClass(obj1);
             }
         });

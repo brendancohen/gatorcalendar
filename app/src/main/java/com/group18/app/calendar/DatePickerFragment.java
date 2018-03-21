@@ -22,15 +22,23 @@ import java.util.GregorianCalendar;
 
 public class DatePickerFragment extends DialogFragment {
 
-    private static final String ARG_DATE = "date";
+    private static final String ARG_DATE_START = "Class Starts: ";
+    private static final String ARG_DATE_END = "Class Ends: ";
+    private static final String ARG_DATE ="Date";
+    private static final String ARG_CALENDAR = "Calendar";
     public static final String EXTRA_DATE = "com.group18.app.calendar.date";
     private DatePicker mDatePicker;
 
     //create a newInstance of DatePicker, called by addClassFragment, calendar is given as an argument by caller
-    public static DatePickerFragment newInstance(Calendar calendar){
+    public static DatePickerFragment newInstance(Calendar calendar,String StartorEnd){
      Bundle args = new Bundle();
-     args.putSerializable(ARG_DATE, calendar);
-
+     if(StartorEnd.equals("Start")) {
+         args.putString(ARG_DATE, ARG_DATE_START);
+     }
+     else {
+         args.putString(ARG_DATE, ARG_DATE_END);
+     }
+     args.putSerializable(ARG_CALENDAR, calendar);
      DatePickerFragment fragment = new DatePickerFragment();
      fragment.setArguments(args);
      return fragment;
@@ -41,17 +49,16 @@ public class DatePickerFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Calendar calendar = (Calendar) getArguments().getSerializable(ARG_DATE);
-
+        Calendar calendar = (Calendar) getArguments().getSerializable(ARG_CALENDAR);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-
+        String title = getArguments().getString(ARG_DATE);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date,null);
 
         mDatePicker = (DatePicker) v.findViewById(R.id.dialog_date_picker);
         mDatePicker.init(year,month,day,null);
-        return new AlertDialog.Builder(getActivity()).setView(v).setTitle(R.string.date_picker_title)
+        return new AlertDialog.Builder(getActivity()).setView(v).setTitle(title)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
