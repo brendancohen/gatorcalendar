@@ -78,11 +78,16 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
 //                    vv this is the code that we are working on right now
-//                    boolean confirmed = true;
-//                    DeleteCommitmentFragment myDeleteCommitmentFragment = new DeleteCommitmentFragment();
-//                    myDeleteCommitmentFragment.show(getFragmentManager(), "Delete Alert");
-//                    Intent intent = new Intent(this, DeleteCommitmentFragment.this);
-//                    return confirmed;
+                    boolean confirmed = true;
+                    DeleteCommitmentFragment myDeleteCommitmentFragment = new DeleteCommitmentFragment();
+                    MainActivity mainActivity = (MainActivity)context;
+                    android.app.FragmentManager manager = mainActivity.getFragmentManager();
+
+
+
+                    myDeleteCommitmentFragment.show(manager, "Delete Alert");
+
+                    return confirmed;
 
 
 
@@ -118,9 +123,9 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
 //               .remove deletes commitment when it is clicked
 
 //                    this long click works
-                    commitments.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
-                    return true;    // <- set to true
+//                    commitments.remove(getAdapterPosition());
+//                    notifyItemRemoved(getAdapterPosition());
+//                    return true;    // <- set to true
 //
                 }
             });
