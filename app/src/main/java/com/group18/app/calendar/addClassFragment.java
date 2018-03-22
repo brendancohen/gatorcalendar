@@ -1,7 +1,6 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,7 +19,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +34,7 @@ public class addClassFragment extends Fragment {
 
     private EditText enterclassname, enterprofessor;
     private CheckBox MWF, TR;
-    private Button start, end, commit, time;
+    private Button startdate, enddate, commit, starttime, endtime;
     private Calendar mCalendar = Calendar.getInstance();
     private onFragmentEnd mylistener;
     private ExpandableListView mListView;
@@ -48,6 +46,8 @@ public class addClassFragment extends Fragment {
     private static final String CLASS_BEGIN_DATE = "BeginDate";
     private static final int START_DATE_PICKED = 1;
     private static final int END_DATE_PICKED = 0;
+    private static final int TIME_START_PICKED = 2;
+    private static final int TIME_END_PICKED = 3;
     public static final String DAYS = "com.group18.app.calendar.addClassFragment";
 
     @Override
@@ -75,9 +75,10 @@ public class addClassFragment extends Fragment {
 
         enterclassname = v.findViewById(R.id.class_name);
         enterprofessor = v.findViewById(R.id.professor_name);
-        start = v.findViewById(R.id.button);
-        end = v.findViewById(R.id.button2);
-        time = v.findViewById(R.id.time_button);
+        startdate = v.findViewById(R.id.start_date_class);
+        enddate = v.findViewById(R.id.end_date_class);
+        starttime = v.findViewById(R.id.time_start_class);
+        endtime = v.findViewById(R.id.time_end_class);
         //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
 
         mListView = (ExpandableListView) v.findViewById(R.id.expandableList);
@@ -94,7 +95,7 @@ public class addClassFragment extends Fragment {
         }
 
         //start DatePickerFragment so that user selects start date of commitment
-        start.setOnClickListener(new View.OnClickListener() {
+        startdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCalendar.set(2018, 0, 8);
@@ -106,7 +107,7 @@ public class addClassFragment extends Fragment {
         });
 
         //start DatePickerFragment so that user selects start date of commitment
-        end.setOnClickListener(new View.OnClickListener() {
+        enddate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCalendar.set(2018, 3, 25);
@@ -119,10 +120,20 @@ public class addClassFragment extends Fragment {
         });
 
 
-        time.setOnClickListener(new View.OnClickListener() {
+        starttime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment dialogFragment = new TimePickerFragment();
+                dialogFragment.setTargetFragment(addClassFragment.this,TIME_START_PICKED);
+                dialogFragment.show(getFragmentManager(),"TimePicker" );
+            }
+        });
+
+        endtime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialogFragment = new TimePickerFragment();
+                dialogFragment.setTargetFragment(addClassFragment.this,TIME_END_PICKED);
                 dialogFragment.show(getFragmentManager(),"TimePicker" );
             }
         });
@@ -164,7 +175,7 @@ public class addClassFragment extends Fragment {
 
              }
          });
-        commit = v.findViewById(R.id.button3);
+        commit = v.findViewById(R.id.commit);
 
         //once commit button is pressed, call interface method sendUFClass (implemented by AddClassActivity)
         commit.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +194,7 @@ public class addClassFragment extends Fragment {
                 if(enterprofessor.getError() != null || enterclassname.getError() != null)
                     return;
 
+                if()
                String Days = "";
 
                for(int i = 0 ; i < mListAdapter.getCheckedDays().size(); i++)
@@ -213,6 +225,18 @@ public class addClassFragment extends Fragment {
         if(requestCode == END_DATE_PICKED){
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             obj1.setEnd(date);
+        }
+        if(requestCode == TIME_START_PICKED){
+            int hour = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_HOUR);
+            int minute = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_MINUTE);
+            obj1.setStartHour(hour);
+            obj1.setStartMinute(minute);
+        }
+        if(requestCode == TIME_END_PICKED){
+            int hour = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_HOUR);
+            int minute = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_MINUTE);
+            obj1.setEndHour(hour);
+            obj1.setEndMinute(minute);
         }
     }
 

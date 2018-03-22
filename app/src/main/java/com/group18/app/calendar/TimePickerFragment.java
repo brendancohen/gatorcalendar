@@ -18,8 +18,8 @@ import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
-    public static final String EXTRA_TIME_START_HOUR = "com.group18.app.calendar.TimePickerFragment.start";
-    public static final String EXTRA_TIME_START_MINUTE = "com.group18.app.calendar.TimePickerFragment.start";
+    public static final String EXTRA_TIME_HOUR = "com.group18.app.calendar.TimePickerFragment.start";
+    public static final String EXTRA_TIME_MINUTE= "com.group18.app.calendar.TimePickerFragment.start";
 
     @NonNull
     @Override
@@ -43,8 +43,8 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             return;
         }
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_TIME_START_HOUR, hour);
-        intent.putExtra(EXTRA_TIME_START_MINUTE, minute);
+        intent.putExtra(EXTRA_TIME_HOUR, hour);
+        intent.putExtra(EXTRA_TIME_MINUTE, minute);
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 }

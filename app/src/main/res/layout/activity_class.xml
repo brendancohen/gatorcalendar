@@ -21,7 +21,8 @@
         android:id="@+id/start_add_class"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="Add Class"/>
+        android:text="Add Class"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <!--replaced linearLayout with recycleView for scrolling-->
     <android.support.v7.widget.RecyclerView

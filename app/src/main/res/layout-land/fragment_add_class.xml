@@ -6,6 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/time_end_class"
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
+        android:layout_marginBottom="52dp"
+        android:layout_marginStart="72dp"
+        android:text="End Time"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/time_start_class" />
+
     <EditText
         android:id="@+id/class_name"
         android:layout_width="wrap_content"
@@ -40,20 +50,20 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/time_button"
+        android:id="@+id/time_start_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="52dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Time"
+        android:text="Start Time"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.233"
+        app:layout_constraintHorizontal_bias="0.071"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/start_date_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -62,14 +72,14 @@
         android:layout_marginTop="8dp"
         android:text="@string/start_date"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/end_date_class"
         app:layout_constraintHorizontal_bias="0.204"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.593" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/end_date_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -82,7 +92,7 @@
         app:layout_constraintVertical_bias="0.593" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/commit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
