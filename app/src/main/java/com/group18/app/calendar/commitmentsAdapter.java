@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.midi.MidiDeviceService;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,12 +25,19 @@ import java.util.ArrayList;
 public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.CustomViewHolder> {
     Context context;
     ArrayList<Commitments> commitments;
+//    myinterface myinterfacelistener;
+    Activity mActivity;
+
+//    public interface myinterface{
+//        void callDeleteFragment();
+//    }
 //    private GestureDetectorCompat myDetector;
 
 //    Constructor
-    public commitmentsAdapter(Context context, ArrayList<Commitments> commitments) {
-        this.context = context;
+    public commitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
+        this.context =  context;
         this.commitments = commitments;
+       mActivity = mainactivity;
     }
 
     @Override
@@ -79,13 +87,11 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
                 public boolean onLongClick(View arg0) {
 //                    vv this is the code that we are working on right now
                     boolean confirmed = true;
-                    DeleteCommitmentFragment myDeleteCommitmentFragment = new DeleteCommitmentFragment();
-                    MainActivity mainActivity = (MainActivity)context;
-                    android.app.FragmentManager manager = mainActivity.getFragmentManager();
+                    android.app.FragmentManager mFragmentManager = mActivity.getFragmentManager();
+                    DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
+                    dialog.show(mFragmentManager, "whatever");
 
-
-
-                    myDeleteCommitmentFragment.show(manager, "Delete Alert");
+                    //myinterfacelistener.callDeleteFragment();
 
                     return confirmed;
 

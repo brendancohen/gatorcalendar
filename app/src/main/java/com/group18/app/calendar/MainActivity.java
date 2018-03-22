@@ -1,6 +1,7 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,24 +30,28 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 //this is the Activity that is launched when app is started, see manifest file
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private Toolbar mytoolbar;
     private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
     private Button startaddClass;
+    private Button test;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
+    private static final int DeleteFragmentCode = 1;
     private Context mContext;
     private SQLiteDatabase mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
+        test = findViewById(R.id.test_button);
         mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
@@ -74,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddClassActivity.class);
                 startActivityForResult(intent,AddClassCode);
+            }
+        });
+
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -189,7 +201,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
         //myCommits.add(com1);
-        commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
+        commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits, MainActivity.this);
         recyclerView.setAdapter(cCommitmentsAdapter);
     }
+/*
+    public void callDeleteFragment() {
+
+    }
+    */
 }
