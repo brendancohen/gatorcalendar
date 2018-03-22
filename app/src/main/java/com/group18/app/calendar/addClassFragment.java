@@ -112,7 +112,6 @@ public class addClassFragment extends Fragment {
             public void onClick(View v) {
                 mCalendar.set(2018, 3, 25);
                 FragmentManager manager = getFragmentManager();
-
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar, "End");
                 dialog.setTargetFragment(addClassFragment.this, END_DATE_PICKED);
                 dialog.show(manager, CLASS_BEGIN_DATE);
@@ -194,7 +193,7 @@ public class addClassFragment extends Fragment {
                 if(enterprofessor.getError() != null || enterclassname.getError() != null)
                     return;
 
-                if()
+
                String Days = "";
 
                for(int i = 0 ; i < mListAdapter.getCheckedDays().size(); i++)
