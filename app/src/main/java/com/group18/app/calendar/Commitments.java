@@ -12,6 +12,7 @@ import java.util.UUID;
 
 //implements parcelable, allows a Commitment object to be put into the extra of an intent
 
+
 public class Commitments implements Parcelable {
     private String professor, cname, onTheseDays;
     private Date start, end;
@@ -57,8 +58,6 @@ public class Commitments implements Parcelable {
     public UUID getPrimarykey() {
         return primarykey;
     }
-
-
 
     public Date getEnd() {
         return end;
