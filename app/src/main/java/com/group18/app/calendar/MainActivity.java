@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
     private Button startaddClass;
-    private Button test;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
-        test = findViewById(R.id.test_button);
         mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
@@ -77,13 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddClassActivity.class);
                 startActivityForResult(intent,AddClassCode);
-            }
-        });
-
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
 
