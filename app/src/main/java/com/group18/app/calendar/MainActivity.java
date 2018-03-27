@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(requestCode == AddClassCode){
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
-                Toast.makeText(this, myCommits.get(0).getEndHour() + " " + myCommits.get(0).getEndMinute(),Toast.LENGTH_SHORT ).show();
+
             }
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);

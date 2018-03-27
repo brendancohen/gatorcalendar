@@ -25,19 +25,12 @@ import java.util.ArrayList;
 public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.CustomViewHolder> {
     Context context;
     ArrayList<Commitments> commitments;
-//    myinterface myinterfacelistener;
     Activity mActivity;
 
-//    public interface myinterface{
-//        void callDeleteFragment();
-//    }
-//    private GestureDetectorCompat myDetector;
-
-//    Constructor
     public commitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
         this.context =  context;
         this.commitments = commitments;
-       mActivity = mainactivity;
+        mActivity = mainactivity;
     }
 
     @Override
@@ -83,6 +76,7 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
             profName = (TextView) view.findViewById(R.id.ProfessorName);
             className = (TextView) view.findViewById(R.id.ClassName);
 
+
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
 //                    vv this is the code that we are working on right now
@@ -90,8 +84,6 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
                     android.app.FragmentManager mFragmentManager = mActivity.getFragmentManager();
                     DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
                     dialog.show(mFragmentManager, "whatever");
-
-                    //myinterfacelistener.callDeleteFragment();
 
                     return confirmed;
 
