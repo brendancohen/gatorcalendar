@@ -26,6 +26,7 @@ public class DatePickerFragment extends DialogFragment {
     public static final String EXTRA_DATE = "com.group18.app.calendar.date";
     private DatePicker mDatePicker;
 
+    //create a newInstance of DatePicker, called by addClassFragment, calendar is given as an argument by caller
     public static DatePickerFragment newInstance(Calendar calendar){
      Bundle args = new Bundle();
      args.putSerializable(ARG_DATE, calendar);
@@ -36,6 +37,7 @@ public class DatePickerFragment extends DialogFragment {
 
     }
 
+    //display the view of DatePicker
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class DatePickerFragment extends DialogFragment {
                 }).create();
 
     }
-
+//send selected date by user to the calling Fragment, aka addClassFragment
     private void sendResult(int resultCode, Date date){
         if(getTargetFragment() == null){
             return;

@@ -16,15 +16,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by eddie on 2/21/18.
  */
 
 public class addClassFragment extends Fragment {
+
     private EditText enterclassname;
     private EditText enterprofessor;
     private CheckBox MWF;
@@ -40,15 +46,22 @@ public class addClassFragment extends Fragment {
     private static final int START_DATE_PICKED = 1;
     private static final int END_DATE_PICKED = 0;
 
+    private ExpandableListView mListView;
+    private ExpandableListAdapter mListAdapter;
+    private List<String> mlistDataHeader;
+    private HashMap<String, List<String>> mListHashMap;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    //declare interface so that AddClassActivity can receive the Commitment object from this activity
     public interface onFragmentEnd {
         void sendUFClass(Commitments ufclass);
     }
 
+    //called once fragment is associated with its activity
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -65,6 +78,14 @@ public class addClassFragment extends Fragment {
         start = v.findViewById(R.id.button);
         end = v.findViewById(R.id.button2);
 
+        mListView = (ExpandableListView) v.findViewById(R.id.expandableList);
+        initializeData();
+
+        mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap);
+
+        mListView.setAdapter(mListAdapter);
+
+        //start DatePickerFragment so that user selects start date of commitment
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +97,7 @@ public class addClassFragment extends Fragment {
             }
         });
 
+        //start DatePickerFragment so that user selects start date of commitment
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +129,8 @@ public class addClassFragment extends Fragment {
 
              }
          });
+
+        //adding listener, taking in user input as to Professor Name
          enterprofessor.addTextChangedListener(new TextWatcher() {
              @Override
              public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -124,6 +148,8 @@ public class addClassFragment extends Fragment {
              }
          });
         commit = v.findViewById(R.id.button3);
+
+        //once commit button is pressed, call interface method sendUFClass (implemented by AddClassActivity)
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +159,7 @@ public class addClassFragment extends Fragment {
         return v;
     }
 
+    //receive information from DatePicker Fragment (dates)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode != Activity.RESULT_OK)
@@ -145,6 +172,24 @@ public class addClassFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             obj1.setEnd(date);
         }
+    }
+
+
+    public void initializeData(){
+        mlistDataHeader = new ArrayList<>();
+        mListHashMap = new HashMap<>();
+
+        mlistDataHeader.add("Days on Campus");
+        List<String> Days = new ArrayList<>();
+        Days.add("Monday");
+        Days.add("Tuesday");
+        Days.add("Wednesday");
+        Days.add("Thursday");
+        Days.add("Friday");
+        Days.add("Saturday");
+        Days.add("Sunday");
+
+        mListHashMap.put(mlistDataHeader.get(0), Days);
     }
 
 
