@@ -1,6 +1,7 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,7 +28,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 //this is the Activity that is launched when app is started, see manifest file
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private Toolbar mytoolbar;
     private NavigationView myNavView;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
+    private static final int DeleteFragmentCode = 1;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
@@ -56,10 +58,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
 
-//myCommits.add()
+
         myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
-
         myDrawerLayout = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout,mytoolbar,R.string.open_drawer,R.string.close_drawer);
@@ -75,22 +76,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(intent,AddClassCode);
             }
         });
-
-
-//        setContentView(R.layout.row_view);
-        //RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
-        //myCommits.add(com1);
-        //commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
-        //recyclerView.setAdapter(cCommitmentsAdapter);
-        //displayListView();
     }
 
     //called when Activity is being destroyed and relevant data should be saved
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        //save icon status (which is one is viewable)
         outState.putBoolean(SAVED_SCHEDULE_VISIBLE, mScheduleVisible);
     }
 
@@ -178,17 +171,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //@Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //if we receive a bad result from the activity, do nothing
             if(resultCode != Activity.RESULT_OK)
                 return;
+
+            //if the activity reporting back is AddClassActivity, do the following
             if(requestCode == AddClassCode){
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
+
             }
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
-        //myCommits.add(com1);
-        commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
+        commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits, MainActivity.this);
         recyclerView.setAdapter(cCommitmentsAdapter);
     }
 }

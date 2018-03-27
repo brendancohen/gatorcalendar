@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- spanish strings -->
+<resources>
+    <string name="app_name">Calendario</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="intro_string">Calendario App</string>
+    <string name="users">Usuarios</string>
+    <string name="about_us">Sobre Nosotros</string>
+    <string name="help">Ayuda</string>
+    <string name="settings">Configuracion</string>
+    <string name="commute">Conmutar</string>
+    <string name="tasks">Asignaciones</string>
+    <string name="classes">Clases</string>
+    <string name="calendar_view">Panorama de Calendario</string>
+    <string name="home">Casa</string>
+    <string name="open_drawer">Abre Cajon</string>
+    <string name="close_drawer">Cierra Cajon</string>
+    <string name="welcome_name">Bienvenidos [Nombre]</string>
+    <string name="mwf">LMV</string>
+    <string name="t_r">M/J</string>
+    <string name="ask_prof">Ingrese Nombre de Profesor</string>
+    <string name="ask_class">Ingrese Nombre de Clase</string>
+    <string name="date_picker_title">Fecha de comienzo de Clase:</string>
+    <string name="end_date">Fecha Termino</string>
+    <string name="start_date">Fecha Comienzo</string>
+    <string name="commit">Aceptar</string>
+    <string name="title_activity_settings">Configuracion</string>
+    <string name="title_activity_map">Mapa</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Permitir recomendaciones sociales</string>
+    <string name="pref_description_social_recommendations">Recommendaciones para contacto basado en historial de mensaje
+    </string>
+
+    <string name="pref_title_display_name">Desplegar nombre</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Anadir amigos a mensajes</string>
+    <string-array name="pref_example_list_titles">
+        <item>Siempre</item>
+        <item>Cuando Posible</item>
+        <item>Nunca</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutos</item>
+        <item>30 minutos</item>
+        <item>1 hora</item>
+        <item>3 horas</item>
+        <item>6 horas</item>
+        <item>Nunca</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entrada 1</item>
+        <item>Entrada 2</item>
+        <item>Entrada 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">Configuracion Systema</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notificaciones</string>
+
+    <string name="pref_title_new_message_notifications">Nuevos mensajes</string>
+
+    <string name="pref_title_ringtone">Tono de llamada</string>
+    <string name="pref_ringtone_silent">Silenciar</string>
+
+    <string name="pref_title_vibrate">Vibrar</string>
+    <string name="time_picker_title">Escoja Tiempo de Clase</string>
+</resources>
