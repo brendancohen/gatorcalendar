@@ -53,7 +53,9 @@ public class addClassFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+
+        //retain this fragment across configuration changes
+        this.setRetainInstance(true);
     }
 
     //declare interface so that AddClassActivity can receive the Commitment object from this fragment
@@ -81,18 +83,10 @@ public class addClassFragment extends Fragment {
         endtime = v.findViewById(R.id.time_end_class);
         //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
 
-        mListView = (ExpandableListView) v.findViewById(R.id.expandableList);
-        //mListView.expandGroup(0,true);
-        initializeData();
 
-        if(savedInstanceState == null) {
-            mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap, null);
-            mListView.setAdapter(mListAdapter);
-        }
-        else {
-            mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap, savedInstanceState.getStringArrayList(DAYS));
-            mListView.setAdapter(mListAdapter);
-        }
+        //mListView.expandGroup(0,true);
+
+
 
         //start DatePickerFragment so that user selects start date of commitment
         startdate.setOnClickListener(new View.OnClickListener() {
@@ -193,15 +187,13 @@ public class addClassFragment extends Fragment {
                 if(enterprofessor.getError() != null || enterclassname.getError() != null)
                     return;
 
-
                String Days = "";
 
                for(int i = 0 ; i < mListAdapter.getCheckedDays().size(); i++)
-                   Days += mListAdapter.getCheckedDays().get(i) + " ";
+                   Days += mListAdapter.getCheckedDays().get(i) + ",";
 
                  if(Days.length() != 0 )
                      obj1.setOnTheseDays(Days);
-
                  else {
                      Toast.makeText(getContext(), "Please select Meeting Days in the Dropdown Menu", Toast.LENGTH_SHORT).show();
                      return;
@@ -258,11 +250,23 @@ public class addClassFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mListView = (ExpandableListView) view.findViewById(R.id.expandableList);
+        initializeData();
+        if(savedInstanceState != null) {
+            mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap, savedInstanceState.getStringArrayList(DAYS));
+        }
+        else
+            mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap, null);
+        if(mListView != null)
+        mListView.setAdapter(mListAdapter);
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if(!mListAdapter.getCheckedDays().isEmpty())
         outState.putStringArrayList(DAYS, mListAdapter.getCheckedDays());
-        //mListView.collapseGroup(0);
-       // Toast.makeText(getContext(), "Saving...",Toast.LENGTH_SHORT).show();
         super.onSaveInstanceState(outState);
     }
 }

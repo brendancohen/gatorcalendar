@@ -14,12 +14,12 @@ import android.util.Log;
 
 import java.util.Date;
 
-//implements interface in addClassFragment, necessary to receive information from a fragment
+
 public class AddClassActivity extends AppCompatActivity implements addClassFragment.onFragmentEnd {
 
     private Commitments myobj;
 
-    /*implement method in onFragmentEnd interface, this will receive the commitment object in addClassFragment
+    /*implemented method in onFragmentEnd interface, this will receive the commitment object in addClassFragment
     and send it to MainActivity
     */
     @Override
@@ -30,7 +30,6 @@ public class AddClassActivity extends AppCompatActivity implements addClassFragm
         myIntent.putExtra("retrieveUFClass", myobj);
         setResult(Activity.RESULT_OK, myIntent);
         //finish ends this activity, will pop off AddClassActivity from activity stack
-        //myIntent.onActivityResult2(myIntent);
        finish();
     }
 
@@ -39,12 +38,13 @@ public class AddClassActivity extends AppCompatActivity implements addClassFragm
             super.onCreate(savedInstanceState);
             setContentView(R.layout.add_class_container);
             FragmentManager fm = getSupportFragmentManager();
-            Fragment fragment = fm.findFragmentById(R.id.fragment_add_class);
+            Fragment fragment = fm.findFragmentByTag("addclassFragment");
 
-           //new Fragment transaction to add addClassFragment to container view (fragment_add_class)
+           // If the Fragment is non-null, then it is currently being
+           // retained across a configuration change.
            if(fragment == null){
                fragment = new addClassFragment();
-               fm.beginTransaction().add(R.id.add_class_container, fragment).commit();
+               fm.beginTransaction().add(R.id.add_class_container, fragment, "addclassFragment").commit();
            }
 
         }
