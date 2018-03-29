@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import java.util.Date;
@@ -37,6 +38,8 @@ public class AddClassActivity extends AppCompatActivity implements addClassFragm
         protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.add_class_container);
+
+
             FragmentManager fm = getSupportFragmentManager();
             Fragment fragment = fm.findFragmentByTag("addclassFragment");
 
