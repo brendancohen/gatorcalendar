@@ -18,12 +18,15 @@
     <string name="welcome_name">Bienvenidos [Nombre]</string>
     <string name="mwf">LMV</string>
     <string name="t_r">M/J</string>
+    <string name="start_time">Tiempo Comienzo</string>
+    <string name="end_time">Tiempo Termino</string>
     <string name="ask_prof">Ingrese Nombre de Profesor</string>
     <string name="ask_class">Ingrese Nombre de Clase</string>
     <string name="date_picker_title">Fecha de comienzo de Clase:</string>
     <string name="end_date">Fecha Termino</string>
     <string name="start_date">Fecha Comienzo</string>
     <string name="commit">Aceptar</string>
+    <string name="add_class">A\u0148adir Clase</string>
     <string name="title_activity_settings">Configuracion</string>
     <string name="title_activity_map">Mapa</string>
 

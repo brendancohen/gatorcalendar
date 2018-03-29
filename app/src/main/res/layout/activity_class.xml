@@ -21,7 +21,7 @@
         android:id="@+id/start_add_class"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="Add Class"
+        android:text="@string/add_class"
         style="?android:attr/borderlessButtonStyle"/>
 
 
