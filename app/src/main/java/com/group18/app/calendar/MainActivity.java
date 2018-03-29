@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //one that just generates the random id by itself
                 // also constructor doesnt have start and end string days being instantiated
                 myCommits.add(obj1);
+                Toast.makeText(this,myCommits.get(0).getProfessor(), Toast.LENGTH_SHORT).show();
             }
 //            Context context = getApplicationContext();
 //            CharSequence text = "Hello toast!";
@@ -258,8 +259,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for(int i = 0; i<myCommits.size(); ++i){
             Commitments obj1 = myCommits.get(i);
             Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String start = formatter.format(obj1.getStart());
-            String end = formatter.format(obj1.getEnd());
+            //String start = formatter.format(obj1.getStart());
+            //String end = formatter.format(obj1.getEnd());
             String suuid = obj1.getProfessor().toString();
 
 
@@ -267,8 +268,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             values.put(CommitmentSchema.CommitmentTable.Cols.CNAME, obj1.getCname());
             values.put(CommitmentSchema.CommitmentTable.Cols.ID, suuid);
             values.put(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS, obj1.getOnTheseDays());
-            values.put(CommitmentSchema.CommitmentTable.Cols.START, start);
-            values.put(CommitmentSchema.CommitmentTable.Cols.END, end);
+            //values.put(CommitmentSchema.CommitmentTable.Cols.START, start);
+            //values.put(CommitmentSchema.CommitmentTable.Cols.END, end);
             mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, values);
 
 
