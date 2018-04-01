@@ -15,8 +15,11 @@ import java.util.UUID;
 
 public class Commitments implements Parcelable {
     private String professor, cname, onTheseDays;
-    private Date start, end;
+    private Date start = new Date();
+    private Date end = new Date();
     private int startHour, endHour, startMinute, endMinute;
+
+
     //we want to be able to uniquely identify this class
     private UUID primarykey;
 
@@ -81,6 +84,7 @@ public class Commitments implements Parcelable {
         cname = classname;
         onTheseDays = days;
         primarykey = UUID.randomUUID();
+        start = new Date();
     }
 
     public String getProfessor() {

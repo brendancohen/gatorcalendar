@@ -2,8 +2,11 @@ package com.group18.app.calendar;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,7 +28,16 @@ import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.group18.app.calendar.database.CommitmentHelper;
+import com.group18.app.calendar.database.CommitmentSchema;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.UUID;
 
 //this is the Activity that is launched when app is started, see manifest file
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -36,11 +48,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button startaddClass;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
     private boolean mScheduleVisible = true;
+
+    private static final String SAVED_DATABASE = "database";
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
     private static final int DeleteFragmentCode = 1;
     private Context mContext;
     private SQLiteDatabase mDatabase;
+    CommitmentHelper mDbHelper;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String retrieve = "ret";
 
 
     @Override
@@ -56,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //upon rotation, activity is recreated, retrieve icon status from savedInstanceState
         if(savedInstanceState != null){
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
+
         }
 
 
@@ -68,6 +86,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         //startaddClass will start AddClassActivity for result
+        //may not be the right path..
+        mContext = MainActivity.this;
+        String dbname = "commitmentBase.db";
+        String goahead = "";
+
+        File dbpath = new File(mContext.getFilesDir().getPath() + dbname);
+         // for Activity, or Service. Otherwise simply get the context.
+        SharedPreferences sp = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        goahead = sp.getString(retrieve, "");
+        File dbtest = mContext.getDatabasePath(dbname);
+        Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
+        if(!goahead.isEmpty()){
+
+            Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
+
+            mDbHelper = new CommitmentHelper(MainActivity.this);
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+            String[] projections = {CommitmentSchema.CommitmentTable.Cols.PROFESSOR,
+                    CommitmentSchema.CommitmentTable.Cols.CNAME,
+                    CommitmentSchema.CommitmentTable.Cols.ID,
+                    CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS,
+                    CommitmentSchema.CommitmentTable.Cols.START,
+                    CommitmentSchema.CommitmentTable.Cols.END
+            };
+            Cursor cursor = db.query(CommitmentSchema.CommitmentTable.NAME, projections,
+                    null, null, null, null, null);
+
+
+            while (cursor.moveToNext()) {
+                Toast.makeText(this,"activated while loop", Toast.LENGTH_SHORT).show();
+                String professor = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.PROFESSOR));
+                String cname = cursor.getString(
+                        cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.CNAME));
+//            String id = cursor.getString(
+//                    cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.ID));
+                String days = cursor.getString(
+                        cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS));
+                //gotta check if i need to convert date to string
+//            String start = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.START));
+//
+//            String end = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.END));
+
+                Commitments obj1 = new Commitments(professor, cname, days);
+                //we need 2 constructors one that takes in arguments to reconstruct the object and
+                //one that just generates the random id by itself
+                // also constructor doesnt have start and end string days being instantiated
+                myCommits.add(obj1);
+                Toast.makeText(this,myCommits.get(0).getProfessor(), Toast.LENGTH_SHORT).show();
+            }
+//            Context context = getApplicationContext();
+//            CharSequence text = "Hello toast!";
+//            int duration = Toast.LENGTH_SHORT;
+//
+//            Toast toast = Toast.makeText(context, text, duration);
+//            toast.show();
+            cursor.close();
+
+        }
+
+
+
+
+
         startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //save icon status (which is one is viewable)
         outState.putBoolean(SAVED_SCHEDULE_VISIBLE, mScheduleVisible);
+
+
     }
 
     //called before menu is shown
@@ -185,7 +269,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits, MainActivity.this);
+        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
+        //myCommits.add(com1);
+        //commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits);
+        mDbHelper = new CommitmentHelper(MainActivity.this);
+        mDatabase = mDbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        for(int i = 0; i<myCommits.size(); ++i){
+            Commitments obj1 = myCommits.get(i);
+            String start = obj1.getStart().toString();
+            String end = obj1.getEnd().toString();
+            String suuid = obj1.getProfessor();
+
+            values.put(CommitmentSchema.CommitmentTable.Cols.PROFESSOR, obj1.getProfessor());
+            values.put(CommitmentSchema.CommitmentTable.Cols.CNAME, obj1.getCname());
+            values.put(CommitmentSchema.CommitmentTable.Cols.ID, suuid);
+            values.put(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS, obj1.getOnTheseDays());
+            values.put(CommitmentSchema.CommitmentTable.Cols.START, start);
+            values.put(CommitmentSchema.CommitmentTable.Cols.END, end);
+            mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, values);
+
+
+        }
+
+        SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(retrieve, "YES");
+        editor.apply();
+//        mContext = context.getApplicationContext();
+        //this is where we are getting the array (mycommmits), need to
+        //1st add those to DB and be able to see, second read thru that array, see if any classes are in db, if not add those classes
+        Toast.makeText(this,myCommits.size() + "", Toast.LENGTH_SHORT).show();
         recyclerView.setAdapter(cCommitmentsAdapter);
     }
 }

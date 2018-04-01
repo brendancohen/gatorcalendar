@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorPrimaryDark"
     >
 
     <TextView
@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
+        android:textStyle="bold|italic"
         android:textColor="@android:color/white"
         android:paddingRight="35sp"/>
 

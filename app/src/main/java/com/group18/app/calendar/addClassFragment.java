@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -49,6 +51,7 @@ public class addClassFragment extends Fragment {
     private static final int TIME_START_PICKED = 2;
     private static final int TIME_END_PICKED = 3;
     public static final String DAYS = "com.group18.app.calendar.addClassFragment";
+    private Toolbar mToolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +77,12 @@ public class addClassFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_class, container, false);
+
+        //create a toolbar so that we can navigate back to MainActivity if user wants to not commit a class anymore
+        mToolbar = (Toolbar) v.findViewById(R.id.myfragmenttoolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity)getActivity()).setTitle(null);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         enterclassname = v.findViewById(R.id.class_name);
         enterprofessor = v.findViewById(R.id.professor_name);

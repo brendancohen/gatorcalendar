@@ -101,4 +101,5 @@
 
     <string name="pref_title_vibrate">Vibrar</string>
     <string name="time_picker_title">Escoja Tiempo de Clase</string>
+    <string name="start_time">Start Time</string>
 </resources>

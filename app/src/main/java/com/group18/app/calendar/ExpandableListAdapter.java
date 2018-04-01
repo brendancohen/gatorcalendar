@@ -84,7 +84,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView lblListHeader = convertView.findViewById(R.id.ListHeader);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
         ImageView indicator = convertView.findViewById(R.id.ivGroupIndicator);
         indicator.setSelected(isExpanded);
@@ -101,6 +100,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_group_item,null);
         }
         TextView txtListChild = convertView.findViewById(R.id.ListHeaderitem);
+        txtListChild.setTypeface(null, Typeface.BOLD);
         txtListChild.setText(childText);
         CheckBox mCheckbox = convertView.findViewById(R.id.checkbox);
 

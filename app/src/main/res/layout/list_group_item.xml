@@ -3,6 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#4077ed"
     >
 
     <CheckBox
@@ -14,6 +15,7 @@
         android:id="@+id/ListHeaderitem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textStyle="bold|italic"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:textSize="16dp"
