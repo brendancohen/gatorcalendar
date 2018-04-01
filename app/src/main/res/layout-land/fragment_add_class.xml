@@ -8,7 +8,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/myfragmenttoolbar"
-        android:layout_width="589dp"
+        android:layout_width="match_parent"
         android:layout_height="37dp"
         android:background="@color/colorPrimary"
         />
