@@ -32,7 +32,7 @@ public class DeleteCommitmentFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        
+
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Delete Commitment?");
@@ -83,7 +83,7 @@ public class DeleteCommitmentFragment extends DialogFragment {
         }
     }
 
-    public boolean sendDeleteBool() {
-        return true;
-    }
+//    public boolean sendDeleteBool() {
+//        return true;
+//    }
 }
