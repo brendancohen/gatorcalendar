@@ -4,18 +4,60 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by eddie on 2/19/18.
  */
 
 //implements parcelable, allows a Commitment object to be put into the extra of an intent
-public class Commitments implements Parcelable{
-    private String professor;
-    private String cname;
-    private String onTheseDays;
-    private Date start;
-    private Date end;
+
+
+public class Commitments implements Parcelable {
+    private String professor, cname, onTheseDays;
+    private Date start, end;
+    private int startHour, endHour, startMinute, endMinute;
+    //we want to be able to uniquely identify this class
+    private UUID primarykey;
+
+    public int getEndMinute() {
+        return endMinute;
+    }
+
+    public void setEndMinute(int endMinute) {
+        this.endMinute = endMinute;
+    }
+
+    public int getStartMinute() {
+
+        return startMinute;
+    }
+
+    public void setStartMinute(int startMinute) {
+        this.startMinute = startMinute;
+    }
+
+    public int getEndHour() {
+
+        return endHour;
+    }
+
+    public void setEndHour(int endHour) {
+        this.endHour = endHour;
+    }
+
+    public int getStartHour() {
+
+        return startHour;
+    }
+
+    public void setStartHour(int startHour) {
+        this.startHour = startHour;
+    }
+
+    public UUID getPrimarykey() {
+        return primarykey;
+    }
 
     public Date getEnd() {
         return end;
@@ -38,6 +80,7 @@ public class Commitments implements Parcelable{
         professor = uprofessor;
         cname = classname;
         onTheseDays = days;
+        primarykey = UUID.randomUUID();
     }
 
     public String getProfessor() {
@@ -64,14 +107,9 @@ public class Commitments implements Parcelable{
         this.onTheseDays = onTheseDays;
     }
 
+
     protected Commitments(Parcel in) {
-        professor = in.readString();
-        cname = in.readString();
-        onTheseDays = in.readString();
-        long tmpStart = in.readLong();
-        start = tmpStart != -1 ? new Date(tmpStart) : null;
-        long tmpEnd = in.readLong();
-        end = tmpEnd != -1 ? new Date(tmpEnd) : null;
+        primarykey = (UUID) in.readValue(UUID.class.getClassLoader());
     }
 
     @Override
@@ -81,11 +119,7 @@ public class Commitments implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(professor);
-        dest.writeString(cname);
-        dest.writeString(onTheseDays);
-        dest.writeLong(start != null ? start.getTime() : -1L);
-        dest.writeLong(end != null ? end.getTime() : -1L);
+        dest.writeValue(primarykey);
     }
 
     @SuppressWarnings("unused")

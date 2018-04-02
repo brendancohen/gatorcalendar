@@ -24,9 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 //this is the Activity that is launched when app is started, see manifest file
@@ -36,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
     private Button startaddClass;
-//    private Button test;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
@@ -51,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
-//        test = findViewById(R.id.test_button);
         mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
@@ -62,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
 
+
         myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
-
         myDrawerLayout = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout,mytoolbar,R.string.open_drawer,R.string.close_drawer);
@@ -80,19 +76,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(intent,AddClassCode);
             }
         });
-
-//        test.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
     }
 
     //called when Activity is being destroyed and relevant data should be saved
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        //save icon status (which is one is viewable)
         outState.putBoolean(SAVED_SCHEDULE_VISIBLE, mScheduleVisible);
     }
 
@@ -180,22 +171,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //@Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //if we receive a bad result from the activity, do nothing
             if(resultCode != Activity.RESULT_OK)
                 return;
+
+            //if the activity reporting back is AddClassActivity, do the following
             if(requestCode == AddClassCode){
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
+
             }
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
-        //myCommits.add(com1);
         commitmentsAdapter cCommitmentsAdapter = new commitmentsAdapter(getApplicationContext(), myCommits, MainActivity.this);
         recyclerView.setAdapter(cCommitmentsAdapter);
     }
-/*
-    public void callDeleteFragment() {
-
-    }
-    */
 }
