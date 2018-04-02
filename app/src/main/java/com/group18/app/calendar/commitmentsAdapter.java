@@ -1,19 +1,14 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.media.midi.MidiDeviceService;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -28,10 +23,6 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
 //    myinterface myinterfacelistener;
     Activity mActivity;
 
-//    public interface myinterface{
-//        void callDeleteFragment();
-//    }
-//    private GestureDetectorCompat myDetector;
 
 //    Constructor
     public commitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
@@ -72,10 +63,12 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
 //          one way that i found is to make an interface and then extend activity to it
 //          but this seems overly complicated -- must be another way
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
+    public class CustomViewHolder extends RecyclerView.ViewHolder implements DeleteCommitmentFragment.OnInputSelected {
         //can add other things to make a custom layout e.g. images or checkboxes
         TextView profName;
         TextView className;
+
+        boolean confirmed;
 
         public CustomViewHolder(View view) {
              super(view);
@@ -85,15 +78,25 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
 
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
-//                    vv this is the code that we are working on right now
-                    boolean confirmed = true;
-                    android.app.FragmentManager mFragmentManager = mActivity.getFragmentManager();
-                    DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
-                    dialog.show(mFragmentManager, "whatever");
-
-                    //myinterfacelistener.callDeleteFragment();
-
-                    return confirmed;
+////                    vv this is the code that we are working on right now
+////                    boolean confirmed;
+//                    android.app.FragmentManager mFragmentManager = mActivity.getFragmentManager();
+//                    DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
+////                    dialog.setTargetFragment(android.app.Fragment.mActivity.this, 1);
+//                    dialog.show(mFragmentManager, "deleteAlert");
+//
+////                    confirmed = dialog.sendDeleteBool();
+//                    Log.i("valueOfBool", "the value of the boolean confirmed = " + confirmed);
+//                    if(confirmed == true) {
+//                        //then delete the commitment
+//                        commitments.remove(getAdapterPosition());
+//                        notifyItemRemoved(getAdapterPosition());
+//                    }
+//                    else {
+//                        //do not delete the commitment
+//                    }
+//
+//                    return true;
 
 
 
@@ -129,12 +132,19 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
 //               .remove deletes commitment when it is clicked
 
 //                    this long click works
-//                    commitments.remove(getAdapterPosition());
-//                    notifyItemRemoved(getAdapterPosition());
-//                    return true;    // <- set to true
+                    commitments.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
+                    return true;    // <- set to true
 //
                 }
             });
+        }
+
+        //interface method
+        @Override
+        public void sendInput(boolean input) {
+            Log.d("CommitmentsAdapterFrag", "SendInput: found incoming input" + input);
+            confirmed = input;
         }
     }
 }

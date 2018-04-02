@@ -23,11 +23,11 @@
         android:layout_gravity="right"
         android:text="Add Class"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:id="@+id/test_button"
-        android:layout_height="wrap_content"
-        android:text="TEST"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:id="@+id/test_button"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="TEST"/>-->
 
     <!--replaced linearLayout with recycleView for scrolling-->
     <android.support.v7.widget.RecyclerView
