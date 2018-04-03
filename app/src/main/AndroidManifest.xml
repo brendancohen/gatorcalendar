@@ -47,6 +47,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.group18.app.calendar.MainActivity" />
         </activity>
+        <activity android:name=".AddReminder" />
     </application>
 
 </manifest>

@@ -12,14 +12,14 @@ import com.group18.app.calendar.database.CommitmentSchema.CommitmentTable;
 public class CommitmentHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String DATABASE_NAME= "commitmentBase.db";
-    private static final String SQL_CREATE_ENTRIES = ("create table "
+    private static final String SQL_CREATE_ENTRIES = "create table "
             + CommitmentTable.NAME
             + "(" + CommitmentTable.Cols.ID
             + ", " + CommitmentTable.Cols.CNAME
             + ", " + CommitmentTable.Cols.PROFESSOR
             + ", " + CommitmentTable.Cols.ONTHESEDAYS
             + ", " + CommitmentTable.Cols.START
-            + ", " + CommitmentTable.Cols.END + ")");
+            + ", " + CommitmentTable.Cols.END + ")";
 
     public CommitmentHelper(Context context){
         super(context, DATABASE_NAME, null,VERSION);

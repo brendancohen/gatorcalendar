@@ -1,19 +1,12 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.media.midi.MidiDeviceService;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 
 import java.util.ArrayList;
 
@@ -22,12 +15,12 @@ import java.util.ArrayList;
  * Created by alysonknowles on 2/25/18.
  */
 
-public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.CustomViewHolder> {
-    Context context;
-    ArrayList<Commitments> commitments;
-    Activity mActivity;
+public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.CustomViewHolder> {
+    private Context context;
+    private ArrayList<Commitments> commitments;
+    private Activity mActivity;
 
-    public commitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
+    public CommitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
         this.context =  context;
         this.commitments = commitments;
         mActivity = mainactivity;

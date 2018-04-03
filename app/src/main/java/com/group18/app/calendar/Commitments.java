@@ -14,10 +14,16 @@ import java.util.UUID;
 
 
 public class Commitments implements Parcelable {
-    private String professor, cname, onTheseDays;
-    private Date start = new Date();
-    private Date end = new Date();
-    private int startHour, endHour, startMinute, endMinute;
+
+    private String professor;
+    private String cname;
+    private String onTheseDays;
+    private Date start;
+    private Date end;
+    private int startHour;
+    private int endHour;
+    private int startMinute;
+    private int endMinute;
 
 
     //we want to be able to uniquely identify this class
@@ -85,6 +91,7 @@ public class Commitments implements Parcelable {
         onTheseDays = days;
         primarykey = UUID.randomUUID();
         start = new Date();
+        end = new Date();
     }
 
     public String getProfessor() {
@@ -111,8 +118,18 @@ public class Commitments implements Parcelable {
         this.onTheseDays = onTheseDays;
     }
 
-
     protected Commitments(Parcel in) {
+        professor = in.readString();
+        cname = in.readString();
+        onTheseDays = in.readString();
+        long tmpStart = in.readLong();
+        start = tmpStart != -1 ? new Date(tmpStart) : null;
+        long tmpEnd = in.readLong();
+        end = tmpEnd != -1 ? new Date(tmpEnd) : null;
+        startHour = in.readInt();
+        endHour = in.readInt();
+        startMinute = in.readInt();
+        endMinute = in.readInt();
         primarykey = (UUID) in.readValue(UUID.class.getClassLoader());
     }
 
@@ -123,6 +140,15 @@ public class Commitments implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(professor);
+        dest.writeString(cname);
+        dest.writeString(onTheseDays);
+        dest.writeLong(start != null ? start.getTime() : -1L);
+        dest.writeLong(end != null ? end.getTime() : -1L);
+        dest.writeInt(startHour);
+        dest.writeInt(endHour);
+        dest.writeInt(startMinute);
+        dest.writeInt(endMinute);
         dest.writeValue(primarykey);
     }
 

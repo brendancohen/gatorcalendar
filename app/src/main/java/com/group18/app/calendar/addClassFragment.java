@@ -151,12 +151,13 @@ public class addClassFragment extends Fragment {
 
              @Override
              public void onTextChanged(CharSequence s, int start, int before, int count) {
-               obj1.setCname(s.toString());
+
              }
 
              @Override
              public void afterTextChanged(Editable s) {
 
+                 obj1.setCname(s.toString());
              }
          });
 
@@ -164,17 +165,15 @@ public class addClassFragment extends Fragment {
          enterprofessor.addTextChangedListener(new TextWatcher() {
              @Override
              public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
              }
 
              @Override
              public void onTextChanged(CharSequence s, int start, int before, int count) {
-                 obj1.setProfessor(s.toString());
              }
 
              @Override
              public void afterTextChanged(Editable s) {
-
+                 obj1.setProfessor(s.toString());
              }
          });
         commit = v.findViewById(R.id.commit);
@@ -183,7 +182,6 @@ public class addClassFragment extends Fragment {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //check to see if user has input a class name, else set Error
                if(enterclassname.getText().toString().length() == 0)
                    enterclassname.setError("Class Name is Required!");
