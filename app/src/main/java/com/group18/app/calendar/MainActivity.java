@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,10 +33,7 @@ import java.util.ArrayList;
 //this is the Activity that is launched when app is started, see manifest file
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private Toolbar mytoolbar;
-    private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
-    private Button startaddClass, startReminder;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
     private boolean mScheduleVisible = true;
 
@@ -44,22 +42,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
     private static final int DeleteFragmentCode = 1;
     private static final int AddReminderCode = 2;
-    private Context mContext;
+    private CommitmentHelper mDbHelper;
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
-    CommitmentHelper mDbHelper;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String retrieve = "ret";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        mDbHelper = new CommitmentHelper(getApplicationContext());
+        mDatabase = mDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
-        mytoolbar = findViewById(R.id.mytoolbar);
+        Toolbar mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
+        mRecyclerView = findViewById(R.id.my_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
         //upon rotation, activity is recreated, retrieve icon status from savedInstanceState
@@ -69,32 +69,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-        myNavView = findViewById(R.id.nav_view);
+        NavigationView myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
         myDrawerLayout = findViewById(R.id.drawer_layout);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout,mytoolbar,R.string.open_drawer,R.string.close_drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout, mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        
+
 
         //startaddClass will start AddClassActivity for result
         //may not be the right path..
-        mContext = MainActivity.this;
 /*
         String dbname = "commitmentBase.db";
         String goahead = "";
 
-        File dbpath = new File(mContext.getFilesDir().getPath() + dbname);
+        File dbpath = new File(this.getFilesDir().getPath() + dbname);
          // for Activity, or Service. Otherwise simply get the context.
         SharedPreferences sp = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
         goahead = sp.getString(retrieve, "");
-        File dbtest = mContext.getDatabasePath(dbname);
+
+        File dbtest = this.getDatabasePath(dbname);
         Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
+
         if(!goahead.isEmpty()){
 
             Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
-
-            mDbHelper = new CommitmentHelper(MainActivity.this);
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
             String[] projections = {CommitmentSchema.CommitmentTable.Cols.PROFESSOR,
@@ -104,8 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     CommitmentSchema.CommitmentTable.Cols.START,
                     CommitmentSchema.CommitmentTable.Cols.END
             };
-            Cursor cursor = db.query(CommitmentSchema.CommitmentTable.NAME, projections,
-                    null, null, null, null, null);
+
 
 
             while (cursor.moveToNext()) {
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 */
-        startaddClass = findViewById(R.id.start_add_class);
+        Button startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,12 +148,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(intent,AddClassCode);
             }
         });
-        startReminder = findViewById(R.id.start_reminder);
+
+        Button startReminder = findViewById(R.id.start_reminder);
         startReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 Intent intent = new Intent(MainActivity.this,AddReminder.class);
                 startActivityForResult(intent, AddReminderCode);
+                */
+                ExecuteMe();
+                RefreshRecyclerView();
             }
         });
     }
@@ -249,10 +254,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onBackPressed();
     }
 
-    //@Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
+    @Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        //if we receive a bad result from the activity, do nothing
+            //if we receive a bad result from the activity, do nothing
             if(resultCode != Activity.RESULT_OK)
                 return;
 
@@ -260,48 +265,85 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(requestCode == AddClassCode){
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
-
-                /*
-                mDbHelper = new CommitmentHelper(MainActivity.this.getApplicationContext());
-                mDatabase = mDbHelper.getWritableDatabase();
-                ContentValues values = new ContentValues();
-
-                for(int i = 0; i< myCommits.size(); i++){
-                    Commitments obj1 = myCommits.get(i);
-                    String start = obj1.getStart().toString();
-                    String end = obj1.getEnd().toString();
-                    String suuid = obj1.getProfessor();
-
-                    values.put(CommitmentSchema.CommitmentTable.Cols.PROFESSOR, obj1.getProfessor());
-                    values.put(CommitmentSchema.CommitmentTable.Cols.CNAME, obj1.getCname());
-                    values.put(CommitmentSchema.CommitmentTable.Cols.ID, suuid);
-                    values.put(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS, obj1.getOnTheseDays());
-                    values.put(CommitmentSchema.CommitmentTable.Cols.START, start);
-                    values.put(CommitmentSchema.CommitmentTable.Cols.END, end);
-                    mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, values);
-
-                }
+                mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
+/*
                 SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(retrieve, "YES");
                 editor.apply();
 */
-                mRecyclerView = findViewById(R.id.my_recycler_view);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-                CommitmentsAdapter cCommitmentsAdapter = new CommitmentsAdapter(getApplicationContext(), myCommits, MainActivity.this);
-                mRecyclerView.setAdapter(cCommitmentsAdapter);
+                RefreshRecyclerView();
+
+
+            }
+    }
+
+    /*
+    method will take a commitment object and insert it into a ContentValues object,
+    it will return a ContentValues object that is ready to be inserted into the database
+    */
+
+    private static ContentValues getContentValues(Commitments my_commitment){
+        ContentValues values = new ContentValues();
+        values.put(CommitmentSchema.CommitmentTable.Cols.PROFESSOR, my_commitment.getProfessor());
+        values.put(CommitmentSchema.CommitmentTable.Cols.CNAME, my_commitment.getCname());
+        values.put(CommitmentSchema.CommitmentTable.Cols.ID, my_commitment.getPrimarykey().toString());
+        values.put(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS, my_commitment.getOnTheseDays());
+        values.put(CommitmentSchema.CommitmentTable.Cols.START, my_commitment.getStart().toString());
+        values.put(CommitmentSchema.CommitmentTable.Cols.END, my_commitment.getEnd().toString());
+        return values;
+    }
+
+    private Cursor queryCommitments(String whereclause, String[] whereArgs){
+        return mDatabase.query(CommitmentSchema.CommitmentTable.NAME,null,whereclause,whereArgs,null,null,null);
+    }
+
+    private void ExecuteMe(){
+
+        Cursor cursor = mDatabase.query(CommitmentSchema.CommitmentTable.NAME, null,
+                null, null, null, null, null);
+        //Toast.makeText(this,"cursor created",Toast.LENGTH_SHORT).show();
+
+            //Toast.makeText(this, "Hells yeah", Toast.LENGTH_SHORT).show();
+            try {
+                cursor.moveToFirst();
+                Log.d("hey",cursor.getCount()+"");
+                while(!cursor.isAfterLast()) {
+
+                    String professor = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.PROFESSOR));
+                    String cname = cursor.getString(
+                            cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.CNAME));
+//            String id = cursor.getString(
+//                    cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.ID));
+                    String days = cursor.getString(
+                            cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS));
+                    //gotta check if i need to convert date to string
+//            String start = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.START));
+//
+//            String end = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.END));
+
+                    Commitments obj1 = new Commitments(professor, cname, days);
+                    //we need 2 constructors one that takes in arguments to reconstruct the object and
+                    //one that just generates the random id by itself
+                    // also constructor doesnt have start and end string days being instantiated
+                    Log.d("hey",cname + "whatup");
+                    myCommits.add(obj1);
+                    //Toast.makeText(this,myCommits.get(myCommits.size()-1).getCname(),Toast.LENGTH_SHORT).show();
+
+                    cursor.moveToNext();
+                }
+            } finally {
+                Log.d("SIZE", myCommits.size()+"");
+                cursor.close();
             }
 
 
-        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
-        //myCommits.add(com1);
-        //CommitmentsAdapter cCommitmentsAdapter = new CommitmentsAdapter(getApplicationContext(), myCommits);
-
-
-//        mContext = context.getApplicationContext();
-        //this is where we are getting the array (mycommmits), need to
-        //1st add those to DB and be able to see, second read thru that array, see if any classes are in db, if not add those classes
-        //Toast.makeText(this,myCommits.size() + "", Toast.LENGTH_SHORT).show();
-
     }
+
+    public void RefreshRecyclerView(){
+        CommitmentsAdapter cCommitmentsAdapter = new CommitmentsAdapter(getApplicationContext(), myCommits, MainActivity.this);
+        mRecyclerView.setAdapter(cCommitmentsAdapter);
+    }
+
+
 }

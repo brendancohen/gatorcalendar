@@ -36,10 +36,8 @@ public class addClassFragment extends Fragment {
 
     private EditText enterclassname, enterprofessor;
     private CheckBox MWF, TR;
-    private Button startdate, enddate, commit, starttime, endtime;
     private Calendar mCalendar = Calendar.getInstance();
     private onFragmentEnd mylistener;
-    private ExpandableListView mListView;
     private ExpandableListAdapter mListAdapter;
     private List<String> mlistDataHeader;
     private HashMap<String, List<String>> mListHashMap;
@@ -51,7 +49,6 @@ public class addClassFragment extends Fragment {
     private static final int TIME_START_PICKED = 2;
     private static final int TIME_END_PICKED = 3;
     public static final String DAYS = "com.group18.app.calendar.addClassFragment";
-    private Toolbar mToolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,17 +76,19 @@ public class addClassFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_class, container, false);
 
         //create a toolbar so that we can navigate back to MainActivity if user wants to not commit a class anymore
-        mToolbar = (Toolbar) v.findViewById(R.id.myfragmenttoolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity)getActivity()).setTitle(null);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.myfragmenttoolbar);
+
+            ((AppCompatActivity) getActivity()).setTitle(null);
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         enterclassname = v.findViewById(R.id.class_name);
         enterprofessor = v.findViewById(R.id.professor_name);
-        startdate = v.findViewById(R.id.start_date_class);
-        enddate = v.findViewById(R.id.end_date_class);
-        starttime = v.findViewById(R.id.time_start_class);
-        endtime = v.findViewById(R.id.time_end_class);
+        Button startdate = v.findViewById(R.id.start_date_class);
+        Button enddate = v.findViewById(R.id.end_date_class);
+        Button starttime = v.findViewById(R.id.time_start_class);
+        Button endtime = v.findViewById(R.id.time_end_class);
         //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
 
 
@@ -176,7 +175,7 @@ public class addClassFragment extends Fragment {
                  obj1.setProfessor(s.toString());
              }
          });
-        commit = v.findViewById(R.id.commit);
+        Button commit = v.findViewById(R.id.commit);
 
         //once commit button is pressed, call interface method sendUFClass (implemented by AddClassActivity)
         commit.setOnClickListener(new View.OnClickListener() {
@@ -194,13 +193,16 @@ public class addClassFragment extends Fragment {
                 if(enterprofessor.getError() != null || enterclassname.getError() != null)
                     return;
 
-               String Days = "";
+               StringBuilder Days = new StringBuilder();
 
-               for(int i = 0 ; i < mListAdapter.getCheckedDays().size(); i++)
-                   Days += mListAdapter.getCheckedDays().get(i) + ",";
+               for(int i = 0 ; i < mListAdapter.getCheckedDays().size(); i++) {
+                   Days.append(mListAdapter.getCheckedDays().get(i));
+                   if(i+1 != mListAdapter.getCheckedDays().size())
+                   Days.append(",");
+               }
 
                  if(Days.length() != 0 )
-                     obj1.setOnTheseDays(Days);
+                     obj1.setOnTheseDays(Days.toString());
                  else {
                      Toast.makeText(getContext(), "Please select Meeting Days in the Dropdown Menu", Toast.LENGTH_SHORT).show();
                      return;
@@ -259,15 +261,15 @@ public class addClassFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListView = (ExpandableListView) view.findViewById(R.id.expandableList);
+        ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.expandableList);
         initializeData();
         if(savedInstanceState != null) {
             mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap, savedInstanceState.getStringArrayList(DAYS));
         }
         else
             mListAdapter = new com.group18.app.calendar.ExpandableListAdapter(this.getContext(), mlistDataHeader, mListHashMap, null);
-        if(mListView != null)
-        mListView.setAdapter(mListAdapter);
+        if(listView != null)
+        listView.setAdapter(mListAdapter);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         final Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,this,hour,minute,
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),this,hour,minute,
                 DateFormat.is24HourFormat(getActivity()));
         timePickerDialog.setTitle(R.string.time_picker_title);
         return  timePickerDialog;
