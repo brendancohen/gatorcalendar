@@ -1,7 +1,9 @@
 package com.group18.app.calendar;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.UUID;
@@ -12,20 +14,64 @@ import java.util.UUID;
 
 //implements parcelable, allows a Commitment object to be put into the extra of an intent
 
-public class Commitments implements Parcelable{
+
+public class Commitments implements Parcelable {
+
     private String professor;
     private String cname;
     private String onTheseDays;
     private Date start;
     private Date end;
+    private int startHour;
+    private int endHour;
+    private int startMinute;
+    private int endMinute;
+
     //we want to be able to uniquely identify this class
     private UUID primarykey;
+
+    public int getEndMinute() {
+        return endMinute;
+    }
+
+    public void setEndMinute(int endMinute) {
+        this.endMinute = endMinute;
+    }
+
+    public int getStartMinute() {
+
+        return startMinute;
+    }
+
+    public int getNotificationMinute() {
+        return startMinute - 5;
+    }
+
+    public void setStartMinute(int startMinute) {
+        this.startMinute = startMinute;
+    }
+
+    public int getEndHour() {
+
+        return endHour;
+    }
+
+    public void setEndHour(int endHour) {
+        this.endHour = endHour;
+    }
+
+    public int getStartHour() {
+
+        return startHour;
+    }
+
+    public void setStartHour(int startHour) {
+        this.startHour = startHour;
+    }
 
     public UUID getPrimarykey() {
         return primarykey;
     }
-
-
 
     public Date getEnd() {
         return end;
@@ -49,6 +95,8 @@ public class Commitments implements Parcelable{
         cname = classname;
         onTheseDays = days;
         primarykey = UUID.randomUUID();
+        start = new Date();
+        end = new Date();
     }
 
     public String getProfessor() {
@@ -75,6 +123,7 @@ public class Commitments implements Parcelable{
         this.onTheseDays = onTheseDays;
     }
 
+    //ISSUE: startHour is being overwritten by startMinute, endHour is being overwritten by endMinute
     protected Commitments(Parcel in) {
         professor = in.readString();
         cname = in.readString();
@@ -83,6 +132,11 @@ public class Commitments implements Parcelable{
         start = tmpStart != -1 ? new Date(tmpStart) : null;
         long tmpEnd = in.readLong();
         end = tmpEnd != -1 ? new Date(tmpEnd) : null;
+        startHour = in.readInt();
+        endHour = in.readInt();
+        startMinute = in.readInt();
+        endMinute = in.readInt();
+        primarykey = (UUID) in.readValue(UUID.class.getClassLoader());
     }
 
     @Override
@@ -97,6 +151,11 @@ public class Commitments implements Parcelable{
         dest.writeString(onTheseDays);
         dest.writeLong(start != null ? start.getTime() : -1L);
         dest.writeLong(end != null ? end.getTime() : -1L);
+        dest.writeInt(startHour);
+        dest.writeInt(endHour);
+        dest.writeInt(startMinute);
+        dest.writeInt(endMinute);
+        dest.writeValue(primarykey);
     }
 
     @SuppressWarnings("unused")

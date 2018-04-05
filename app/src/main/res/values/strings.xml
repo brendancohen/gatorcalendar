@@ -96,4 +96,11 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="time_picker_title">Pick Class Time</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End Time</string>
+    <string name="add_class">Add Class</string>
+    <string name="add_reminder">Add reminder</string>
+    <string name="commit_reminder">Commit</string>
+
 </resources>

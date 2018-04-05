@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#4077ed"
     >
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/ListHeaderitem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textStyle="bold|italic"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:textSize="16dp"
         />
-
 </LinearLayout>

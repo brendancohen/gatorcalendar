@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,19 +10,35 @@
     tools:context="com.group18.app.calendar.MainActivity">
 
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/mytoolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:theme="?attr/actionBarTheme" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mytoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary" />
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <Button
         android:layout_width="wrap_content"
         android:id="@+id/start_add_class"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Add Class"/>
+        android:layout_alignParentStart="true"
+        android:text="@string/add_class"
+        style="?android:attr/borderlessButtonStyle"/>
+
+    <Button
+        android:id="@+id/start_reminder"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="@string/add_reminder" />
+
+</RelativeLayout>
+
 
     <!--replaced linearLayout with recycleView for scrolling-->
     <android.support.v7.widget.RecyclerView

@@ -65,6 +65,9 @@
             </intent-filter>
         </service>
 
+
+        <activity android:name=".AddReminder" />
+
     </application>
 
 </manifest>
