@@ -34,7 +34,15 @@ public class MapActivity extends AppCompatActivity
             @Override
             public void onPlaceSelected(Place place) {
 
-                mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+                mMap.addMarker(
+                        new MarkerOptions()
+                                .position(place.getLatLng())
+                                .title(place.getName().toString())
+                );
+                mMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                        place.getLatLng(), 14.0f)
+                );
             }
 
             @Override
