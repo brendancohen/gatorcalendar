@@ -1,10 +1,14 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,15 +16,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
+//this is the Activity that is launched when app is started, see manifest file
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private Toolbar mytoolbar;
     private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
@@ -28,7 +36,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<Commitments> myCommits = new ArrayList<>();
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
-    private static final int AddClassCode = 0;
+    private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +49,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        //upon rotation, activity is recreated, retrieve icon status from savedInstanceState
         if(savedInstanceState != null){
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
@@ -47,11 +59,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //myCommits.add()
         myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
+
         myDrawerLayout = findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout,mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        //startaddClass will start AddClassActivity for result
         startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,12 +87,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //displayListView();
     }
 
+    //called when Activity is being destroyed and relevant data should be saved
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVED_SCHEDULE_VISIBLE, mScheduleVisible);
     }
 
+    //called before menu is shown
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(!mScheduleVisible)
@@ -85,12 +102,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onPrepareOptionsMenu(menu);
     }
 
+    //create Optionsmenu on toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
+    //what do we do if an item on the menu bar is selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -114,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+//what do we do if an option is selected on the navigation drawer, answer below
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -146,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    //closes drawer after an option is pressed on navigation drawer or if area not on navigation drawer is pressed
     @Override
     public void onBackPressed() {
         if(myDrawerLayout.isDrawerOpen(GravityCompat.START)){

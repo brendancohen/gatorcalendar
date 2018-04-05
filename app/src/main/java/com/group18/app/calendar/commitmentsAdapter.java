@@ -29,14 +29,15 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
         //if you wanted to change the layout you can do so by replacing null with viewType
         //so if viewType == 1 then do this one otherwise do different layout
         //instantiating a view
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view, null, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view, parent, false);
         return new CustomViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         Commitments commitment = commitments.get(position);
-        holder.textView.setText(commitment.professor);
+        holder.profName.setText(commitment.getProfessor());
+        holder.className.setText(commitment.getCname());
     }
 
     @Override
@@ -47,12 +48,14 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         //can add other things to make a custom layout e.g. images or checkboxes
-        TextView textView;
+        TextView profName;
+        TextView className;
 
         public CustomViewHolder(View view) {
              super(view);
              //the layout is being binded to the view
-             textView = (TextView) view.findViewById(R.id.textView);
+            profName = (TextView) view.findViewById(R.id.ProfessorName);
+            className = (TextView) view.findViewById(R.id.ClassName);
 
              view.setOnClickListener(new View.OnClickListener() {
                  @Override

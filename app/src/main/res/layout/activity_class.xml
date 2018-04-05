@@ -30,11 +30,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="400dp"-->
-        <!--android:orientation="vertical"-->
-        <!--android:id="@+id/fragment_container" >-->
-    <!--</LinearLayout>-->
-
 </LinearLayout>
