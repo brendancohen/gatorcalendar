@@ -1,7 +1,9 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,15 +22,16 @@ import java.util.ArrayList;
 public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.CustomViewHolder> {
     Context context;
     ArrayList<Commitments> commitments;
-//    myinterface myinterfacelistener;
     Activity mActivity;
+    boolean confirmed;
 
 
 //    Constructor
     public commitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
         this.context =  context;
         this.commitments = commitments;
-       mActivity = mainactivity;
+        mActivity = mainactivity;
+
     }
 
     @Override
@@ -68,7 +71,7 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
         TextView profName;
         TextView className;
 
-        boolean confirmed;
+
 
         public CustomViewHolder(View view) {
              super(view);
@@ -78,15 +81,23 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
 
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
-////                    vv this is the code that we are working on right now
-////                    boolean confirmed;
-//                    android.app.FragmentManager mFragmentManager = mActivity.getFragmentManager();
-//                    DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
-////                    dialog.setTargetFragment(android.app.Fragment.mActivity.this, 1);
-//                    dialog.show(mFragmentManager, "deleteAlert");
-//
-////                    confirmed = dialog.sendDeleteBool();
-//                    Log.i("valueOfBool", "the value of the boolean confirmed = " + confirmed);
+//                    vv this is the code that we are working on right now
+//                    boolean confirmed;
+                    android.app.FragmentManager mFragmentManager = mActivity.getFragmentManager();
+                    int position = getAdapterPosition();
+
+//                    DeleteCommitmentFragment dialog = new DeleteCommitmentFragment(commitments, position);
+                    DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
+                    Bundle bundledData = new Bundle();
+                    bundledData.putInt("position", position);
+                    bundledData.putParcelableArrayList("commitmentsArray", commitments);
+                    dialog.setArguments(bundledData);
+//                    dialog.setTargetFragment(, 1);
+                    dialog.show(mFragmentManager, "deleteAlert");
+
+//                    confirmed = dialog.sendDeleteBool();
+                    Log.i("valueOfBool", "the value of the boolean confirmed = " + confirmed);
+                    Log.i("adapterPosition", "the value of the adapter position = " + getAdapterPosition());
 //                    if(confirmed == true) {
 //                        //then delete the commitment
 //                        commitments.remove(getAdapterPosition());
@@ -95,8 +106,9 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
 //                    else {
 //                        //do not delete the commitment
 //                    }
-//
-//                    return true;
+                    notifyItemRemoved(getAdapterPosition());
+
+                    return true;
 
 
 
@@ -132,9 +144,9 @@ public class commitmentsAdapter extends RecyclerView.Adapter<commitmentsAdapter.
 //               .remove deletes commitment when it is clicked
 
 //                    this long click works
-                    commitments.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
-                    return true;    // <- set to true
+//                    commitments.remove(getAdapterPosition());
+//                    notifyItemRemoved(getAdapterPosition());
+//                    return true;    // <- set to true
 //
                 }
             });

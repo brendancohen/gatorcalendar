@@ -28,7 +28,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 //this is the Activity that is launched when app is started, see manifest file
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class  MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private Toolbar mytoolbar;
     private NavigationView myNavView;
