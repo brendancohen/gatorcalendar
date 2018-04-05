@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -19,6 +21,7 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
     private Context context;
     private ArrayList<Commitments> commitments;
     private Activity mActivity;
+
 
     public CommitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
         this.context =  context;
@@ -45,6 +48,17 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         Commitments commitment = commitments.get(position);
         holder.profName.setText(commitment.getProfessor());
         holder.className.setText(commitment.getCname());
+        Context c;
+        c = context;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, commitment.getStartHour());
+        calendar.set(Calendar.MINUTE, commitment.getNotificationMinute());
+
+        Toast testing = Toast.makeText(c, "starthour:" + commitment.getStartHour() + ", startminute: " + commitment.getNotificationMinute()
+                + ", endhour: " + commitment.getEndHour() + ", endminute: " + commitment.getEndMinute(), Toast.LENGTH_LONG);
+        testing.show();
     }
 
     @Override
@@ -62,12 +76,15 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         //can add other things to make a custom layout e.g. images or checkboxes
         TextView profName;
         TextView className;
+        //Brooke changes
+        TextView startTime;
 
         public CustomViewHolder(View view) {
              super(view);
              //the layout is being binded to the view
             profName = (TextView) view.findViewById(R.id.ProfessorName);
             className = (TextView) view.findViewById(R.id.ClassName);
+            startTime = (TextView) view.findViewById(R.id.time_start_class);
 
 
             view.setOnLongClickListener(new View.OnLongClickListener() {
