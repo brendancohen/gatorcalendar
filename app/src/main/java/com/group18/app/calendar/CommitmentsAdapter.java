@@ -45,6 +45,9 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         Commitments commitment = commitments.get(position);
         holder.profName.setText(commitment.getProfessor());
         holder.className.setText(commitment.getCname());
+       // holder.startDate.setText(commitment.getStart().toString());
+        holder.startTime.setText(commitment.getStartHour() + ":" + commitment.getStartMinute());
+        holder.endTime.setText(commitment.getEndHour() + ":" + commitment.getEndMinute());
     }
 
     @Override
@@ -62,12 +65,19 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         //can add other things to make a custom layout e.g. images or checkboxes
         TextView profName;
         TextView className;
+        TextView startTime;
+        TextView startDate;
+        TextView endTime;
+        TextView endDate;
 
         public CustomViewHolder(View view) {
              super(view);
              //the layout is being binded to the view
             profName = (TextView) view.findViewById(R.id.ProfessorName);
             className = (TextView) view.findViewById(R.id.ClassName);
+            startTime = view.findViewById(R.id.time_start);
+            startDate = view.findViewById(R.id.date_start);
+            endTime = view.findViewById(R.id.time_end);
 
 
             view.setOnLongClickListener(new View.OnLongClickListener() {

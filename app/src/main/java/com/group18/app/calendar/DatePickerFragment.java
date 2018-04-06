@@ -30,7 +30,7 @@ public class DatePickerFragment extends DialogFragment {
     private DatePicker mDatePicker;
 
     //create a newInstance of DatePicker, called by addClassFragment, calendar is given as an argument by caller
-    public static DatePickerFragment newInstance(Calendar calendar,String StartorEnd){
+    public static DatePickerFragment newInstance(Calendar calendar, String StartorEnd){
      Bundle args = new Bundle();
      if(StartorEnd.equals("Start")) {
          args.putString(ARG_DATE, ARG_DATE_START);

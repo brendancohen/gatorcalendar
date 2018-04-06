@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.TimePicker;
 import java.util.Calendar;
 
@@ -18,8 +19,8 @@ import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
-    public static final String EXTRA_TIME_HOUR = "com.group18.app.calendar.TimePickerFragment.start";
-    public static final String EXTRA_TIME_MINUTE= "com.group18.app.calendar.TimePickerFragment.start";
+    public static final String EXTRA_TIME_HOUR = "com.group18.app.calendar.TimePickerFragment.hour";
+    public static final String EXTRA_TIME_MINUTE= "com.group18.app.calendar.TimePickerFragment.minute";
 
     @NonNull
     @Override

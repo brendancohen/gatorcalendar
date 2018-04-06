@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,6 +46,7 @@ public class addClassFragment extends Fragment {
     Commitments obj1 = new Commitments("","","");
 
     private static final String CLASS_BEGIN_DATE = "BeginDate";
+    private static final String CLASS_END_DATE = "EndDate";
     private static final int START_DATE_PICKED = 1;
     private static final int END_DATE_PICKED = 0;
     private static final int TIME_START_PICKED = 2;
@@ -116,7 +119,7 @@ public class addClassFragment extends Fragment {
                 FragmentManager manager = getFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar, "End");
                 dialog.setTargetFragment(addClassFragment.this, END_DATE_PICKED);
-                dialog.show(manager, CLASS_BEGIN_DATE);
+                dialog.show(manager, CLASS_END_DATE);
             }
         });
 
@@ -227,14 +230,14 @@ public class addClassFragment extends Fragment {
             obj1.setEnd(date);
         }
         if(requestCode == TIME_START_PICKED){
-            int hour = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_HOUR);
-            int minute = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_MINUTE);
+            int hour = data.getIntExtra(TimePickerFragment.EXTRA_TIME_HOUR, -1);
+            int minute = data.getIntExtra(TimePickerFragment.EXTRA_TIME_MINUTE, -1);
             obj1.setStartHour(hour);
             obj1.setStartMinute(minute);
         }
         if(requestCode == TIME_END_PICKED){
-            int hour = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_HOUR);
-            int minute = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_MINUTE);
+            int hour = data.getIntExtra(TimePickerFragment.EXTRA_TIME_HOUR, -1);
+            int minute = data.getIntExtra(TimePickerFragment.EXTRA_TIME_MINUTE, -1);
             obj1.setEndHour(hour);
             obj1.setEndMinute(minute);
         }
