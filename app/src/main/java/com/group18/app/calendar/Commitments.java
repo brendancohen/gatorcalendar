@@ -1,7 +1,9 @@
 package com.group18.app.calendar;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.UUID;
@@ -25,7 +27,6 @@ public class Commitments implements Parcelable {
     private int startMinute;
     private int endMinute;
 
-
     //we want to be able to uniquely identify this class
     private UUID primarykey;
 
@@ -40,6 +41,10 @@ public class Commitments implements Parcelable {
     public int getStartMinute() {
 
         return startMinute;
+    }
+
+    public int getNotificationMinute() {
+        return startMinute - 5;
     }
 
     public void setStartMinute(int startMinute) {
@@ -118,6 +123,7 @@ public class Commitments implements Parcelable {
         this.onTheseDays = onTheseDays;
     }
 
+    //ISSUE: startHour is being overwritten by startMinute, endHour is being overwritten by endMinute
     protected Commitments(Parcel in) {
         professor = in.readString();
         cname = in.readString();

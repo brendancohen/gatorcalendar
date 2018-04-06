@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.group18.app.calendar">
 
+    <!-- Internet and Access Network State Permissions, needed for push notifications !-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -47,7 +51,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.group18.app.calendar.MainActivity" />
         </activity>
+        <!--Needed for Firebase -->
+
+        <service android:name="com.group18.app.calendar.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="com.group18.app.calendar.MyFirebaseInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+
         <activity android:name=".AddReminder" />
+
     </application>
 
 </manifest>
