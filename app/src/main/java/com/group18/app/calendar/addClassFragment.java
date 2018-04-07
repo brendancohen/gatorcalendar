@@ -24,6 +24,7 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,6 +105,7 @@ public class addClassFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mCalendar.set(2018, 0, 8);
+
                 FragmentManager manager = getFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar, "Start");
                 dialog.setTargetFragment(addClassFragment.this, START_DATE_PICKED);
@@ -223,10 +225,12 @@ public class addClassFragment extends Fragment {
             return;
         if(requestCode == START_DATE_PICKED){
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            Log.d("date", date.toString());
             obj1.setStart(date);
         }
         if(requestCode == END_DATE_PICKED){
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            Log.d("date", date.toString());
             obj1.setEnd(date);
         }
         if(requestCode == TIME_START_PICKED){

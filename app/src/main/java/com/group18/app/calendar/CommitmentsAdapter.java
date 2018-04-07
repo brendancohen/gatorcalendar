@@ -2,7 +2,10 @@ package com.group18.app.calendar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +21,14 @@ import java.util.Calendar;
  */
 
 public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.CustomViewHolder> {
-    private Context context;
+
+    public Context context;
     private ArrayList<Commitments> commitments;
-    private Activity mActivity;
 
 
-    public CommitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
+    public CommitmentsAdapter(Context context, ArrayList<Commitments> commitments) {
         this.context =  context;
         this.commitments = commitments;
-        mActivity = mainactivity;
     }
 
     @Override
@@ -48,14 +50,16 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         Commitments commitment = commitments.get(position);
         holder.profName.setText(commitment.getProfessor());
         holder.className.setText(commitment.getCname());
-
         holder.startTime.setText(commitment.getStartHour() + ":" + commitment.getStartMinute());
         holder.endTime.setText(commitment.getEndHour() + ":" + commitment.getEndMinute());
+        String[] date_no_time_start = commitment.getStart().toString().split(" ",0);
+        String[] date_no_time_end = commitment.getStart().toString().split(" ", 0);
+        holder.startDate.setText("Start: "+ date_no_time_start[1] + " " + date_no_time_start[2]);
+        holder.endDate.setText("End:   "+ date_no_time_end[1] + " " + date_no_time_end[2]);
     }
 
     @Override
     public int getItemCount() {
-        //returns the size of the commitments array
         return commitments.size();
     }
 
@@ -81,17 +85,18 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
             className = (TextView) view.findViewById(R.id.ClassName);
             startTime = view.findViewById(R.id.time_start);
             startDate = view.findViewById(R.id.date_start);
+            endDate = view.findViewById(R.id.date_end);
             endTime = view.findViewById(R.id.time_end);
-
-
 
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
 //                    vv this is the code that we are working on right now
+
                     boolean confirmed = true;
-                    android.app.FragmentManager mFragmentManager = mActivity.getFragmentManager();
+                    android.app.FragmentManager mFragmentManager = ((Activity) context).getFragmentManager();
                     DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
-                    dialog.show(mFragmentManager, "whatever");
+                    dialog.show(mFragmentManager, "deleteCommitment");
+
 
                     return confirmed;
 
@@ -120,7 +125,7 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
 //                    AlertDialog alertDialog = builder.create();
 //                    alertDialog.show();
 //
-//                    return confirmed;
+//                    return true;
 
 
 
