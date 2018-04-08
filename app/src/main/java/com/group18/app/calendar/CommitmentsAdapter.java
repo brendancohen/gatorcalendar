@@ -22,12 +22,18 @@ import java.util.Calendar;
 
 public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.CustomViewHolder> {
 
-    public Context context;
+    public Context mcontext;
     private ArrayList<Commitments> commitments;
+    private OnItemClickListener mListener;
 
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+    public void setonItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
 
     public CommitmentsAdapter(Context context, ArrayList<Commitments> commitments) {
-        this.context =  context;
         this.commitments = commitments;
     }
 
@@ -42,7 +48,7 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         //so if viewType == 1 then do this one otherwise do different layout
         //instantiating a view
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view, parent, false);
-        return new CustomViewHolder(view);
+        return new CustomViewHolder(view, mListener);
     }
 
     @Override
@@ -76,17 +82,16 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
 //          one way that i found is to make an interface and then extend activity to it
 //          but this seems overly complicated -- must be another way
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
+    public static class CustomViewHolder extends RecyclerView.ViewHolder {
         //can add other things to make a custom layout e.g. images or checkboxes
         TextView profName;
         TextView className;
-
         TextView startTime;
         TextView startDate;
         TextView endTime;
         TextView endDate;
 
-        public CustomViewHolder(View view) {
+        public CustomViewHolder(View view, OnItemClickListener listener) {
              super(view);
              //the layout is being binded to the view
             profName = (TextView) view.findViewById(R.id.ProfessorName);
@@ -96,6 +101,20 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
             endDate = view.findViewById(R.id.date_end);
             endTime = view.findViewById(R.id.time_end);
 
+           view.setOnLongClickListener(new View.OnLongClickListener() {
+               @Override
+               public boolean onLongClick(View v) {
+                   if(listener != null){
+                       int position = getAdapterPosition();
+                       //make sure position is valid
+                       if(position != RecyclerView.NO_POSITION) {
+                           listener.onItemClick(position);
+                       }
+                   }
+                   return false;
+               }
+           });
+/*
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
 //                    vv this is the code that we are working on right now
@@ -146,8 +165,11 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
 //                    notifyItemRemoved(getAdapterPosition());
 //                    return true;    // <- set to true
 //
+
                 }
+
             });
+            */
         }
     }
 }

@@ -30,13 +30,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 //this is the Activity that is launched when app is started, see manifest file
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteCommitmentFragment.InterfaceCommunicator{
 
     private DrawerLayout myDrawerLayout;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
     private boolean mScheduleVisible = true;
-
-    private static final String SAVED_DATABASE = "database";
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
     private static final int DeleteFragmentCode = 1;
@@ -44,14 +42,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CommitmentHelper mDbHelper;
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    public static final String SHARED_PREFS = "sharedPrefs";
-    public static final String retrieve = "ret";
+    private CommitmentsAdapter mAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+//upon rotation, activity is recreated, retrieve icon status from savedInstanceState
+        if(savedInstanceState != null){
+            mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
+        }
         super.onCreate(savedInstanceState);
+
         mDbHelper = new CommitmentHelper(getApplicationContext());
         mDatabase = mDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
@@ -64,15 +65,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
+
+        mAdapter.setonItemClickListener(new CommitmentsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //android.app.FragmentManager mFragmentManager = getFragmentManager();
+                DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
+                Bundle mybundle = new Bundle();
+                mybundle.putInt("position", position);
+                dialog.setArguments(mybundle);
+                dialog.show(getFragmentManager(), "deleteCommitment");
+            }
+        });
+
         mRecyclerView.setAdapter(mAdapter);
 
         if(myCommits.isEmpty())
             LoadDatabase();
 
-        //upon rotation, activity is recreated, retrieve icon status from savedInstanceState
-        if(savedInstanceState != null){
-            mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
-        }
+
+
 
 
         NavigationView myNavView = findViewById(R.id.nav_view);
@@ -257,7 +269,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } finally {
                 cursor.close();
             }
-
-
     }
+
+    @Override
+    public void sendRequestCode(int code, boolean delete, int position) {
+        if(code == DeleteFragmentCode){
+            if(delete && position != -1){
+                myCommits.remove(position);
+                mAdapter.notifyItemRemoved(position);
+            }
+        }
+    }
+
 }
