@@ -23,7 +23,11 @@ import android.widget.Button;
 import android.widget.Toast;
 import com.group18.app.calendar.database.CommitmentHelper;
 import com.group18.app.calendar.database.CommitmentSchema;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 //this is the Activity that is launched when app is started, see manifest file
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -78,70 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout, mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        
 
-
-        //startaddClass will start AddClassActivity for result
-        //may not be the right path..
-/*
-        String dbname = "commitmentBase.db";
-        String goahead = "";
-
-        File dbpath = new File(this.getFilesDir().getPath() + dbname);
-         // for Activity, or Service. Otherwise simply get the context.
-        SharedPreferences sp = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
-        goahead = sp.getString(retrieve, "");
-
-        File dbtest = this.getDatabasePath(dbname);
-        Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
-
-        if(!goahead.isEmpty()){
-
-            Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
-            SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-            String[] projections = {CommitmentSchema.CommitmentTable.Cols.PROFESSOR,
-                    CommitmentSchema.CommitmentTable.Cols.CNAME,
-                    CommitmentSchema.CommitmentTable.Cols.ID,
-                    CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS,
-                    CommitmentSchema.CommitmentTable.Cols.START,
-                    CommitmentSchema.CommitmentTable.Cols.END
-            };
-
-
-
-            while (cursor.moveToNext()) {
-                Toast.makeText(this,"activated while loop", Toast.LENGTH_SHORT).show();
-                String professor = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.PROFESSOR));
-                String cname = cursor.getString(
-                        cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.CNAME));
-//            String id = cursor.getString(
-//                    cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.ID));
-                String days = cursor.getString(
-                        cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS));
-                //gotta check if i need to convert date to string
-//            String start = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.START));
-//
-//            String end = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.END));
-
-                Commitments obj1 = new Commitments(professor, cname, days);
-                //we need 2 constructors one that takes in arguments to reconstruct the object and
-                //one that just generates the random id by itself
-                // also constructor doesnt have start and end string days being instantiated
-                myCommits.add(obj1);
-                Toast.makeText(this,myCommits.get(0).getProfessor(), Toast.LENGTH_SHORT).show();
-            }
-
-//            Context context = getApplicationContext();
-//            CharSequence text = "Hello toast!";
-//            int duration = Toast.LENGTH_SHORT;
-//
-//            Toast toast = Toast.makeText(context, text, duration);
-//            toast.show();
-            cursor.close();
-
-        }
-*/
         Button startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,25 +238,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     String cname = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.CNAME));
                     String id = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ID));
                     String days = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS));
-//            String start = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.START));
-//
-//            String end = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.END));
+                    String start = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.START));
+                    String end = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.END));
+
+                    SimpleDateFormat stringformatter = new SimpleDateFormat("E MMM dd HH:mm:ss z YYYY");
+                    Date startdate = stringformatter.parse(start);
+                    Date enddate = stringformatter.parse(end);
 
                     Commitments obj1 = new Commitments(professor, cname, days);
+                    obj1.setPrimarykey(id);
+                    obj1.setStart(startdate);
+                    obj1.setEnd(enddate);
                     myCommits.add(obj1);
                     cursor.moveToNext();
                 }
+            } catch (ParseException e) {
+                e.printStackTrace();
             } finally {
                 cursor.close();
             }
 
 
     }
-
-    public void RefreshRecyclerView(){
-        CommitmentsAdapter cCommitmentsAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
-        mRecyclerView.setAdapter(cCommitmentsAdapter);
-    }
-
-
 }

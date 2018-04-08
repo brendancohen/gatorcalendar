@@ -206,6 +206,14 @@ public class addClassFragment extends Fragment {
                    Days.append(",");
                }
 
+               if(obj1.getStartHour() == 0 && obj1.getStartMinute() == 0) {
+                    Toast.makeText(getContext(), "Please select a Start Time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(obj1.getEndHour() == 0 && obj1.getEndMinute() == 0) {
+                    Toast.makeText(getContext(), "Please select an End Time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                  if(Days.length() != 0 )
                      obj1.setOnTheseDays(Days.toString());
                  else {
