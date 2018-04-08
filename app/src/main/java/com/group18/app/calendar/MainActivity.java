@@ -275,10 +275,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void sendRequestCode(int code, boolean delete, int position) {
         if(code == DeleteFragmentCode){
             if(delete && position != -1){
+                String primarykey = myCommits.get(position).getPrimarykey().toString();
                 myCommits.remove(position);
                 mAdapter.notifyItemRemoved(position);
+                DeletefromDatabase(primarykey);
             }
         }
+    }
+
+    private void DeletefromDatabase(String primarykey) {
+        mDatabase.delete(CommitmentSchema.CommitmentTable.NAME, CommitmentSchema.CommitmentTable.Cols.ID + " = ?",
+                new String[] {primarykey});
+
     }
 
 }
