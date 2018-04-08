@@ -42,9 +42,6 @@ public class DeleteCommitmentFragment extends DialogFragment {
             }
         });
 
-//        AlertDialog alertDialog = builder.create();
-//        alertDialog.show();
-        // Create the AlertDialog object and return it
         return builder.create();
     }
 
@@ -53,13 +50,5 @@ public class DeleteCommitmentFragment extends DialogFragment {
         super.onAttach(context);
         mInterfaceCommunicator = (InterfaceCommunicator) context;
     }
-    //    private void sendResult(int resultCode, Date date){
-//        if(getTargetFragment() == null){
-//            return;
-//        }
-//        Intent intent = new Intent();
-////        intent.putExtra(EXTRA_DATE, date);
-//        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
-//    }
 
 }

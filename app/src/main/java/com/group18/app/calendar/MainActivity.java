@@ -234,6 +234,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         values.put(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS, my_commitment.getOnTheseDays());
         values.put(CommitmentSchema.CommitmentTable.Cols.START, my_commitment.getStart().toString());
         values.put(CommitmentSchema.CommitmentTable.Cols.END, my_commitment.getEnd().toString());
+        values.put(CommitmentSchema.CommitmentTable.Cols.START_HOUR, String.valueOf(my_commitment.getStartHour()));
+        values.put(CommitmentSchema.CommitmentTable.Cols.START_MINUTE, String.valueOf(my_commitment.getStartMinute()));
+        values.put(CommitmentSchema.CommitmentTable.Cols.END_HOUR, String.valueOf(my_commitment.getEndHour()));
+        values.put(CommitmentSchema.CommitmentTable.Cols.END_MINUTE, String.valueOf(my_commitment.getEndMinute()));
+
         return values;
     }
 
@@ -253,6 +258,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     String start = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.START));
                     String end = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.END));
 
+                    String start_hour = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.START_HOUR));
+                    String start_minute = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.START_MINUTE));
+                    String end_hour = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.END_HOUR));
+                    String end_minute = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.END_MINUTE));
+
                     SimpleDateFormat stringformatter = new SimpleDateFormat("E MMM dd HH:mm:ss z YYYY");
                     Date startdate = stringformatter.parse(start);
                     Date enddate = stringformatter.parse(end);
@@ -261,6 +271,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     obj1.setPrimarykey(id);
                     obj1.setStart(startdate);
                     obj1.setEnd(enddate);
+                    obj1.setStartHour(Integer.parseInt(start_hour));
+                    obj1.setEndHour(Integer.parseInt(end_hour));
+                    obj1.setEndMinute(Integer.parseInt(end_minute));
+                    obj1.setStartMinute(Integer.parseInt(start_minute));
                     myCommits.add(obj1);
                     cursor.moveToNext();
                 }

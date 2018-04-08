@@ -19,6 +19,11 @@ public class CommitmentSchema {
             public static final String START = "DateStart";
             public static final String END = "DateEnd";
             public static final String ID ="ID";
+            public static final String START_HOUR = "HourStart";
+            public static final String END_HOUR = "HourEnd";
+            public static final String START_MINUTE = "MinuteStart";
+            public static final String END_MINUTE = "MinuteEnd";
+
         }
     }
 }

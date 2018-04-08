@@ -10,8 +10,10 @@ import com.group18.app.calendar.database.CommitmentSchema.CommitmentTable;
  */
 
 public class CommitmentHelper extends SQLiteOpenHelper {
+
     private static final int VERSION = 1;
-    private static final String DATABASE_NAME= "commitmentBase.db";
+    private static final String DATABASE_NAME = "commitmentBase.db";
+
     private static final String SQL_CREATE_ENTRIES = "create table "
             + CommitmentTable.NAME
             + "(" + CommitmentTable.Cols.ID
@@ -19,7 +21,12 @@ public class CommitmentHelper extends SQLiteOpenHelper {
             + ", " + CommitmentTable.Cols.PROFESSOR
             + ", " + CommitmentTable.Cols.ONTHESEDAYS
             + ", " + CommitmentTable.Cols.START
-            + ", " + CommitmentTable.Cols.END + ")";
+            + ", " + CommitmentTable.Cols.END
+            + ", " + CommitmentTable.Cols.START_HOUR
+            + ", " + CommitmentTable.Cols.START_MINUTE
+            + ", " + CommitmentTable.Cols.END_HOUR
+            + ", " + CommitmentTable.Cols.END_MINUTE
+            + ")";
 
     public CommitmentHelper(Context context){
         super(context, DATABASE_NAME, null,VERSION);
@@ -35,4 +42,5 @@ public class CommitmentHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + CommitmentTable.NAME);
         onCreate(db);
     }
+
 }

@@ -1,19 +1,14 @@
 package com.group18.app.calendar;
 
-import android.app.Activity;
+
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.Calendar;
+
 
 
 /**
@@ -22,7 +17,6 @@ import java.util.Calendar;
 
 public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.CustomViewHolder> {
 
-    public Context mcontext;
     private ArrayList<Commitments> commitments;
     private OnItemClickListener mListener;
 
@@ -114,62 +108,6 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
                    return false;
                }
            });
-/*
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                public boolean onLongClick(View arg0) {
-//                    vv this is the code that we are working on right now
-
-                    boolean confirmed = true;
-                    android.app.FragmentManager mFragmentManager = ((Activity) context).getFragmentManager();
-                    DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
-                    dialog.show(mFragmentManager, "deleteCommitment");
-
-
-                    return confirmed;
-
-
-
-//                    vvv this is the code from DeleteCommitmentFragment.java
-//                    boolean confirmed = true;
-//
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                    builder.setTitle("Delete Commitment?");
-//                    builder.setMessage("Are you sure you want to delete this commitment?");
-//                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            // delete commitment
-//                            commitments.remove(getAdapterPosition());
-//                            notifyItemRemoved(getAdapterPosition());
-//
-//                        }
-//                    });
-//                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            // User cancelled the dialog
-//                        }
-//                    });
-//
-//                    AlertDialog alertDialog = builder.create();
-//                    alertDialog.show();
-//
-//                    return true;
-
-
-
-
-//               when the commitment is longClicked (aka. pressed for a couple of seconds) it will delete using .remove
-//               .remove deletes commitment when it is clicked
-
-//                    this long click works
-//                    commitments.remove(getAdapterPosition());
-//                    notifyItemRemoved(getAdapterPosition());
-//                    return true;    // <- set to true
-//
-
-                }
-
-            });
-            */
         }
     }
 }
