@@ -15,7 +15,7 @@
     <string name="home">Casa</string>
     <string name="open_drawer">Abre Cajon</string>
     <string name="close_drawer">Cierra Cajon</string>
-    <string name="welcome_name">Bienvenidos [Nombre]</string>
+    <string name="welcome_name">Bienvenidos %s</string>
     <string name="mwf">LMV</string>
     <string name="t_r">M/J</string>
     <string name="start_time">Tiempo Comienzo</string>

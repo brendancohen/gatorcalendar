@@ -38,7 +38,6 @@ import java.util.List;
 public class addClassFragment extends Fragment {
 
     private EditText enterclassname, enterprofessor;
-    private CheckBox MWF, TR;
     private Calendar mCalendar = Calendar.getInstance();
     private onFragmentEnd mylistener;
     private ExpandableListAdapter mListAdapter;
@@ -93,12 +92,6 @@ public class addClassFragment extends Fragment {
         Button enddate = v.findViewById(R.id.end_date_class);
         Button starttime = v.findViewById(R.id.time_start_class);
         Button endtime = v.findViewById(R.id.time_end_class);
-        //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
-
-
-        //mListView.expandGroup(0,true);
-
-
 
         //start DatePickerFragment so that user selects start date of commitment
         startdate.setOnClickListener(new View.OnClickListener() {

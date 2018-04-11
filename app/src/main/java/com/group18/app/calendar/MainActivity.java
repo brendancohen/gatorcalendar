@@ -2,7 +2,10 @@ package com.group18.app.calendar;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +24,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.group18.app.calendar.database.CommitmentHelper;
 import com.group18.app.calendar.database.CommitmentSchema;
@@ -52,7 +57,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
         super.onCreate(savedInstanceState);
+        SharedPreferences pref = getSharedPreferences("queryname", MODE_PRIVATE);
+        boolean askForName = pref.getBoolean("Name", true);
 
+        if(askForName)
+            showDialog();
+        Resources res = getResources();
+
+        String username = pref.getString("username","John Doe");
+        String what = getString(R.string.welcome_name);
         mDbHelper = new CommitmentHelper(getApplicationContext());
         mDatabase = mDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
@@ -112,6 +125,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(intent, AddReminderCode);
             }
         });
+    }
+
+    private void showDialog() {
+        SharedPreferences prefs = getSharedPreferences("queryname",MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_query_name, null);
+        EditText name = mView.findViewById(R.id.user_name);
+        mBuilder.setView(mView);
+        Button saveName = mView.findViewById(R.id.name_button);
+        AlertDialog dialog = mBuilder.create();
+
+        saveName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(name.getText().toString().isEmpty())
+                    name.setError("Enter name to proceed");
+                else
+                {
+                    editor.putString("username",name.getText().toString());
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        dialog.show();
+        //so the user now can't press the back key to get out of this dialog
+        dialog.setCancelable(false);
+        //so the user now can't click outside of this dialog to dismiss it
+        dialog.setCanceledOnTouchOutside(false);
+        editor.putBoolean("Name",false);
+        editor.apply();
     }
 
     //called when Activity is being destroyed and relevant data should be saved

@@ -53,11 +53,6 @@ public class DatePickerFragment extends DialogFragment {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        /*
-        calendar.clear(Calendar.HOUR);
-        calendar.clear(Calendar.MINUTE);
-        calendar.clear(Calendar.MILLISECOND);
-        */
         String title = getArguments().getString(ARG_DATE);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date,null);
 

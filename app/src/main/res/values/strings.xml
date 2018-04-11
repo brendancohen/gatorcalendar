@@ -13,7 +13,7 @@
     <string name="home">Home</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
-    <string name="welcome_name">Welcome [Name]</string>
+    <string name="welcome_name">Welcome %s</string>
     <string name="mwf">MWF</string>
     <string name="t_r">T/R</string>
     <string name="ask_prof">Enter Professor name</string>
@@ -102,5 +102,7 @@
     <string name="add_class">Add Class</string>
     <string name="add_reminder">Add Reminder</string>
     <string name="commit_reminder">Commit</string>
+    <string name="welcome_to_your_calendar_app">Welcome to your Calendar app</string>
+    <string name="enter_your_name">Enter Your Name:</string>
 
 </resources>
