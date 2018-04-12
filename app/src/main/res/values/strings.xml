@@ -24,6 +24,10 @@
     <string name="commit">Commit</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_map">Map</string>
+    <!--These two (below) need to be translated into spanish-->
+    <string name ="ask_commitment">Enter Commitment Name</string>
+    <string name ="ask_notes">Enter Notes</string>
+
 
     <!-- Strings related to Settings -->
 

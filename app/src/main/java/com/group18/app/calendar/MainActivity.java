@@ -2,7 +2,9 @@ package com.group18.app.calendar;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -21,8 +23,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
+
 import com.group18.app.calendar.database.CommitmentHelper;
 import com.group18.app.calendar.database.CommitmentSchema;
+
+import java.io.File;
 import java.util.ArrayList;
 
 //this is the Activity that is launched when app is started, see manifest file
@@ -36,11 +41,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
     private static final int DeleteFragmentCode = 1;
-    private static final int AddReminderCode = 2;
+    private static final int AddCommitmentCode = 2;
     private CommitmentHelper mDbHelper;
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String retrieve = "ret";
 
@@ -55,19 +59,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
         mRecyclerView = findViewById(R.id.my_recycler_view);
-
-        //this improves performance of Recyclerview
-        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
-        mRecyclerView.setAdapter(mAdapter);
 
-        if(myCommits.isEmpty())
-            LoadDatabase();
 
         //upon rotation, activity is recreated, retrieve icon status from savedInstanceState
         if(savedInstanceState != null){
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
+
         }
 
 
@@ -155,8 +153,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,AddReminder.class);
-                startActivityForResult(intent, AddReminderCode);
+
+                Intent intent = new Intent(MainActivity.this, AddCommitmentFragment.class);
+                startActivityForResult(intent, AddCommitmentCode);
+
+//                ExecuteMe();
+//                RefreshRecyclerView();
             }
         });
     }
@@ -168,6 +170,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //save icon status (which is one is viewable)
         outState.putBoolean(SAVED_SCHEDULE_VISIBLE, mScheduleVisible);
+        outState.putParcelableArrayList("myCommitsArray", myCommits);
+        Log.i("onSave", "myCommits array is = " + myCommits);
+    }
+
+    //takes the bundled myCommits array from onSaveInstanceState and restores the current array
+    //into the recyclerView (when the orientation changes)
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        myCommits = savedInstanceState.getParcelableArrayList("myCommitsArray");
+        RefreshRecyclerView();
     }
 
     //called before menu is shown
@@ -264,7 +277,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
                 mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
-                mAdapter.notifyItemInserted(myCommits.size()-1);
+/*
+                SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(retrieve, "YES");
+                editor.apply();
+*/
+                RefreshRecyclerView();
+
+
             }
     }
 
@@ -284,28 +305,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return values;
     }
 
-    private void LoadDatabase(){
+    private Cursor queryCommitments(String whereclause, String[] whereArgs){
+        return mDatabase.query(CommitmentSchema.CommitmentTable.NAME,null,whereclause,whereArgs,null,null,null);
+    }
+
+    private void ExecuteMe(){
 
         Cursor cursor = mDatabase.query(CommitmentSchema.CommitmentTable.NAME, null,
                 null, null, null, null, null);
+        //Toast.makeText(this,"cursor created",Toast.LENGTH_SHORT).show();
 
+            //Toast.makeText(this, "Hells yeah", Toast.LENGTH_SHORT).show();
             try {
                 cursor.moveToFirst();
+                Log.d("hey",cursor.getCount()+"");
                 while(!cursor.isAfterLast()) {
 
                     String professor = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.PROFESSOR));
-                    String cname = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.CNAME));
-                    String id = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ID));
-                    String days = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS));
+                    String cname = cursor.getString(
+                            cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.CNAME));
+//            String id = cursor.getString(
+//                    cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.ID));
+                    String days = cursor.getString(
+                            cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS));
+                    //gotta check if i need to convert date to string
 //            String start = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.START));
 //
 //            String end = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.END));
 
                     Commitments obj1 = new Commitments(professor, cname, days);
+                    //we need 2 constructors one that takes in arguments to reconstruct the object and
+                    //one that just generates the random id by itself
+                    // also constructor doesnt have start and end string days being instantiated
+                    Log.d("hey",cname + "whatup");
                     myCommits.add(obj1);
+                    //Toast.makeText(this,myCommits.get(myCommits.size()-1).getCname(),Toast.LENGTH_SHORT).show();
+
                     cursor.moveToNext();
                 }
             } finally {
+                Log.d("SIZE", myCommits.size()+"");
                 cursor.close();
             }
 
@@ -313,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void RefreshRecyclerView(){
-        CommitmentsAdapter cCommitmentsAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
+        CommitmentsAdapter cCommitmentsAdapter = new CommitmentsAdapter(getApplicationContext(), myCommits, MainActivity.this);
         mRecyclerView.setAdapter(cCommitmentsAdapter);
     }
 
