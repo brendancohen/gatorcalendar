@@ -1,7 +1,14 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -55,6 +63,46 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, commitment.getStartHour());
         calendar.set(Calendar.MINUTE, commitment.getNotificationMinute());
+        int dayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+
+        String channel_id = "gc_channel";
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+            String channel_name = "gator_calendar_notifications";
+            String channel_description = "notifications for gator calendar app";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channel_id, channel_name, importance);
+            channel.setDescription(channel_description);
+            //fun things
+            channel.enableLights(true);
+            channel.setLightColor(Color.BLUE);
+            // Register the channel with the system
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        //Make notification
+        String textTitle = "Better Hurry! Your class starts in 5 minutes!";
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channel_id)
+                .setSmallIcon(R.drawable.gc_png)
+                .setContentTitle(textTitle)
+                .setContentText(commitment.getCname() + " with " + commitment.getProfessor() + " at " + commitment.getStartHour() + ":" + commitment.getStartMinute())
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        //Show notification (if the start time is 5 minutes before the current time)
+        //Check the current day of the week
+        for(int i = 0; i < commitment.getClassesPerWeek(); i++ ) {
+            if(dayOfTheWeek == commitment.getClassesPerWeek()) {
+                //check if the time is 5 minutes of the current time
+            }
+        }
+
+
+        notificationManager.notify(0, notificationBuilder.build());
 
         Toast testing = Toast.makeText(c, "starthour:" + commitment.getStartHour() + ", startminute: " + commitment.getNotificationMinute()
                 + ", endhour: " + commitment.getEndHour() + ", endminute: " + commitment.getEndMinute(), Toast.LENGTH_LONG);

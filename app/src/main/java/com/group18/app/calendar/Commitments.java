@@ -119,6 +119,8 @@ public class Commitments implements Parcelable {
         return onTheseDays;
     }
 
+    public int getClassesPerWeek() { return onTheseDays.length(); }
+
     public void setOnTheseDays(String onTheseDays) {
         this.onTheseDays = onTheseDays;
     }
