@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 //this is the Activity that is launched when app is started, see manifest file
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteCommitmentFragment.InterfaceCommunicator{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteCommitmentFragment.InterfaceCommunicator, addClassFragment.CheckDuplicate{
 
     private DrawerLayout myDrawerLayout;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
@@ -56,16 +56,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(savedInstanceState != null){
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
+        Global.getInstance().setContext(this);
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("queryname", MODE_PRIVATE);
         boolean askForName = pref.getBoolean("Name", true);
 
-        //if(askForName)
+        if(askForName)
             showDialog();
         Resources res = getResources();
 
+
         String username = pref.getString("username","John Doe");
-        String what = getString(R.string.welcome_name);
+        getResources().getString(R.string.welcome_name).replace("%s",username);
         mDbHelper = new CommitmentHelper(getApplicationContext());
         mDatabase = mDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
@@ -349,4 +351,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    //implementing interface method for AddClassFragment
+    @Override
+    public boolean Check(String classname) {
+        for(int i = 0; i < myCommits.size(); ++i){
+            if(classname.equals(myCommits.get(i).getCname()))
+                return true;
+        }
+        return false;
+    }
 }

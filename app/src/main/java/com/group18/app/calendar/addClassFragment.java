@@ -42,6 +42,7 @@ public class addClassFragment extends Fragment {
     private EditText enterclassname, enterprofessor;
     private Calendar mCalendar = GregorianCalendar.getInstance(Locale.ENGLISH);
     private onFragmentEnd mylistener;
+    private CheckDuplicate mCheckDuplicate;
     private ExpandableListAdapter mListAdapter;
     private List<String> mlistDataHeader;
     private HashMap<String, List<String>> mListHashMap;
@@ -68,11 +69,16 @@ public class addClassFragment extends Fragment {
         void sendUFClass(Commitments ufclass);
     }
 
+    public interface CheckDuplicate{
+        boolean Check(String classname);
+    }
+
     //called once fragment is associated with its activity
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mylistener = (onFragmentEnd) context;
+        mCheckDuplicate = (MainActivity) Global.getInstance().getContext();
     }
 
     @Nullable
@@ -181,6 +187,13 @@ public class addClassFragment extends Fragment {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //checking if we have the class already, calling interface method
+                if(mCheckDuplicate.Check(enterclassname.getText().toString())){
+                    Toast.makeText(getContext(), "Duplicate Class Entered, try again", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //check to see if user has input a class name, else set Error
                if(enterclassname.getText().toString().length() == 0)
                    enterclassname.setError("Class Name is Required!");
