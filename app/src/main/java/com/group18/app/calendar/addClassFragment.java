@@ -28,8 +28,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by eddie on 2/21/18.
@@ -38,7 +40,7 @@ import java.util.List;
 public class addClassFragment extends Fragment {
 
     private EditText enterclassname, enterprofessor;
-    private Calendar mCalendar = Calendar.getInstance();
+    private Calendar mCalendar = GregorianCalendar.getInstance(Locale.ENGLISH);
     private onFragmentEnd mylistener;
     private ExpandableListAdapter mListAdapter;
     private List<String> mlistDataHeader;

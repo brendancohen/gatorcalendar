@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences pref = getSharedPreferences("queryname", MODE_PRIVATE);
         boolean askForName = pref.getBoolean("Name", true);
 
-        if(askForName)
+        //if(askForName)
             showDialog();
         Resources res = getResources();
 
