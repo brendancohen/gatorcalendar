@@ -49,19 +49,14 @@ public class DatePickerFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Calendar calendar = (Calendar) getArguments().getSerializable(ARG_CALENDAR);
+        GregorianCalendar calendar = (GregorianCalendar) getArguments().getSerializable(ARG_CALENDAR);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        /*
-        calendar.clear(Calendar.HOUR);
-        calendar.clear(Calendar.MINUTE);
-        calendar.clear(Calendar.MILLISECOND);
-        */
         String title = getArguments().getString(ARG_DATE);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date,null);
 
-        mDatePicker = (DatePicker) v.findViewById(R.id.dialog_date_picker);
+        mDatePicker = v.findViewById(R.id.dialog_date_picker);
         mDatePicker.init(year,month,day,null);
         return new AlertDialog.Builder(getActivity()).setView(v).setTitle(title)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- spanish strings -->
 <resources>
+    <string name="first_day_switch">Haz click aquí para empezar la semana en lunes en lugar de domingo</string>
+    <string name="first_day_switcher">Configuración de la semana</string>
+    <string name="helloandwelcome">Hola! Gracias por usar nuestra aplicación</string>
+    <string name="ifyouhavequestions">Si tienes cualquier duda, escribenos </string>
+    <string name="email">a gatorcalendar@ufl.edu.</string>
+    <string name="ProfessorName">Nombre de Profesor</string>
+    <string name="ClassName">Nombre de clase</string>
+    <string name="ToggleView">Vista toggle</string>
     <string name="app_name">Calendario</string>
     <string name="action_settings">Ajustes</string>
-    <string name="intro_string">Calendario App</string>
+    <string name="intro_string">Calendario</string>
     <string name="users">Usuarios</string>
     <string name="about_us">Sobre Nosotros</string>
     <string name="help">Ayuda</string>
-    <string name="settings">Configuracion</string>
-    <string name="commute">Conmutar</string>
-    <string name="tasks">Asignaciones</string>
+    <string name="settings">Configuración</string>
+    <string name="commute">Transporte</string>
+    <string name="tasks">Tareas</string>
     <string name="classes">Clases</string>
-    <string name="calendar_view">Panorama de Calendario</string>
+    <string name="calendar_view">Vista de Calendario</string>
     <string name="home">Casa</string>
-    <string name="open_drawer">Abre Cajon</string>
-    <string name="close_drawer">Cierra Cajon</string>
-    <string name="welcome_name">Bienvenidos [Nombre]</string>
+    <string name="open_drawer">Abrir Cajon</string>
+    <string name="close_drawer">Cerrar Cajon</string>
+    <string name="welcome_name">Bienvenido [Nombre]</string>
     <string name="mwf">LMV</string>
     <string name="t_r">M/J</string>
-    <string name="start_time">Tiempo Comienzo</string>
-    <string name="end_time">Tiempo Termino</string>
-    <string name="ask_prof">Ingrese Nombre de Profesor</string>
-    <string name="ask_class">Ingrese Nombre de Clase</string>
-    <string name="date_picker_title">Fecha de comienzo de Clase:</string>
-    <string name="end_date">Fecha Termino</string>
-    <string name="start_date">Fecha Comienzo</string>
+    <string name="start_time">Tiempo de comienzo</string>
+    <string name="end_time">Tiempo final</string>
+    <string name="ask_prof">Ingrese el nombre del profesor</string>
+    <string name="ask_class">Ingrese el nombre de la clase</string>
+    <string name="date_picker_title">Fecha de comienzo de la clase:</string>
+    <string name="end_date">Fecha final</string>
+    <string name="start_date">Fecha de comienzo</string>
     <string name="commit">Aceptar</string>
-    <string name="add_class">A\u0148adir Clase</string>
-    <string name="title_activity_settings">Configuracion</string>
+    <string name="add_class">Añadir Clase</string>
+    <string name="title_activity_settings">Configuración</string>
     <string name="title_activity_map">Mapa</string>
 
     <!-- Strings related to Settings -->
@@ -35,9 +43,9 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">Permitir recomendaciones sociales</string>
-    <string name="pref_description_social_recommendations">Recommendaciones para contacto basado en historial de mensaje
-    </string>
+    <string name="language_switcher_text">Ajustes de idioma</string>
+    <string name="language_switcher">Cambia la aplicación a español haciendo click aquí
+   </string>
 
     <string name="pref_title_display_name">Desplegar nombre</string>
     <string name="pref_default_display_name">John Smith</string>

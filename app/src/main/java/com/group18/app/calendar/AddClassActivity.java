@@ -23,7 +23,6 @@ public class AddClassActivity extends AppCompatActivity implements addClassFragm
     */
     @Override
     public void sendUFClass(Commitments ufclass) {
-        Log.v("AddClassActivity", "sendUFClass called");
         Commitments myobj = ufclass;
         Intent myIntent = new Intent();
         myIntent.putExtra("retrieveUFClass", myobj);

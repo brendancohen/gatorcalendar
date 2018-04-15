@@ -28,8 +28,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by eddie on 2/21/18.
@@ -38,8 +40,7 @@ import java.util.List;
 public class addClassFragment extends Fragment {
 
     private EditText enterclassname, enterprofessor;
-    private CheckBox MWF, TR;
-    private Calendar mCalendar = Calendar.getInstance();
+    private Calendar mCalendar = GregorianCalendar.getInstance(Locale.ENGLISH);
     private onFragmentEnd mylistener;
     private ExpandableListAdapter mListAdapter;
     private List<String> mlistDataHeader;
@@ -93,12 +94,6 @@ public class addClassFragment extends Fragment {
         Button enddate = v.findViewById(R.id.end_date_class);
         Button starttime = v.findViewById(R.id.time_start_class);
         Button endtime = v.findViewById(R.id.time_end_class);
-        //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
-
-
-        //mListView.expandGroup(0,true);
-
-
 
         //start DatePickerFragment so that user selects start date of commitment
         startdate.setOnClickListener(new View.OnClickListener() {
@@ -206,6 +201,14 @@ public class addClassFragment extends Fragment {
                    Days.append(",");
                }
 
+               if(obj1.getStartHour() == 0 && obj1.getStartMinute() == 0) {
+                    Toast.makeText(getContext(), "Please select a Start Time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(obj1.getEndHour() == 0 && obj1.getEndMinute() == 0) {
+                    Toast.makeText(getContext(), "Please select an End Time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                  if(Days.length() != 0 )
                      obj1.setOnTheseDays(Days.toString());
                  else {
