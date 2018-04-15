@@ -1,4 +1,13 @@
 <resources>
+    <string name="first_day_switch">Click here to start the week on Mondays instead of Sundays</string>
+    <string name="first_day_switcher">Week settings</string>
+
+    <string name="helloandwelcome">Hello! Thank you for using our application.</string>
+    <string name="ifyouhavequestions">If you have any questions email us</string>
+    <string name="email">at gatorcalendar@ufl.edu.</string>
+    <string name="ProfessorName">ProfessorName</string>
+    <string name="ClassName">ClassName</string>
+    <string name="ToggleView">Toggle View</string>
     <string name="app_name">Calendar</string>
     <string name="action_settings">Settings</string>
     <string name="intro_string">Calendar App</string>
@@ -24,16 +33,14 @@
     <string name="commit">Commit</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_map">Map</string>
-
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
+    <string name="language_switcher_text">Language settings</string>
+    <string name="language_switcher"> Switch the app to Spanish by clicking here.
+   </string>
 
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
