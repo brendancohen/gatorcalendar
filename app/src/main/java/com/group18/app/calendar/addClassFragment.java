@@ -22,11 +22,18 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by eddie on 2/21/18.
@@ -48,6 +55,7 @@ public class addClassFragment extends Fragment {
     private static final int END_DATE_PICKED = 0;
     private static final int TIME_START_PICKED = 2;
     private static final int TIME_END_PICKED = 3;
+    private static final int COMMIT_LOCATION_PICKED = 4;
     public static final String DAYS = "com.group18.app.calendar.addClassFragment";
 
     @Override
@@ -89,6 +97,7 @@ public class addClassFragment extends Fragment {
         Button enddate = v.findViewById(R.id.end_date_class);
         Button starttime = v.findViewById(R.id.time_start_class);
         Button endtime = v.findViewById(R.id.time_end_class);
+        Button commitlocation = v.findViewById(R.id.commit_location);
         //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
 
 
@@ -136,6 +145,24 @@ public class addClassFragment extends Fragment {
                 DialogFragment dialogFragment = new TimePickerFragment();
                 dialogFragment.setTargetFragment(addClassFragment.this,TIME_END_PICKED);
                 dialogFragment.show(getFragmentManager(),"TimePicker" );
+            }
+        });
+
+        commitlocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                try {
+                    Intent intent = builder.build(getActivity());
+                    startActivityForResult(intent, COMMIT_LOCATION_PICKED);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -216,7 +243,7 @@ public class addClassFragment extends Fragment {
     //receive information from DatePicker Fragment (dates)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != Activity.RESULT_OK)
+        if(resultCode != RESULT_OK)
             return;
         if(requestCode == START_DATE_PICKED){
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
@@ -238,7 +265,16 @@ public class addClassFragment extends Fragment {
             obj1.setEndHour(hour);
             obj1.setEndMinute(minute);
         }
+        if (requestCode == COMMIT_LOCATION_PICKED) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(getActivity(), data);
+                final String placeId = place.getId();
+                obj1.setPlaceID(placeId);
+            }
+        }
     }
+
+
 
 
     public void initializeData(){

@@ -16,6 +16,7 @@
     <string name="welcome_name">Welcome [Name]</string>
     <string name="mwf">MWF</string>
     <string name="t_r">T/R</string>
+    <string name="commit_location">Commitment Location</string>
     <string name="ask_prof">Enter Professor name</string>
     <string name="ask_class">Enter class name</string>
     <string name="date_picker_title">Start date of Class:</string>

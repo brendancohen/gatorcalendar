@@ -19,6 +19,7 @@ public class CommitmentSchema {
             public static final String START = "DateStart";
             public static final String END = "DateEnd";
             public static final String ID ="ID";
+            public static final String PLACEID ="placeID";
         }
     }
 }
