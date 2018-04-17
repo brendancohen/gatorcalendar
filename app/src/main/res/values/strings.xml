@@ -25,6 +25,7 @@
     <string name="welcome_name">Welcome %s</string>
     <string name="mwf">MWF</string>
     <string name="t_r">T/R</string>
+    <string name="commit_location">Commitment Location</string>
     <string name="ask_prof">Enter Professor name</string>
     <string name="ask_class">Enter class name</string>
     <string name="date_picker_title">Start date of Class:</string>
@@ -34,6 +35,11 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_map">Map</string>
     <!-- Strings related to Settings -->
+    <!--Strings that need to be translated to spanish-->
+    <string name="ask_commitment">Enter Event name</string>
+    <string name="ask_notes">Enter Notes </string>
+    <string name="reminder_time">Time</string>
+    <string name="reminder_date">Date</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>

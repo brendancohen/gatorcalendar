@@ -20,6 +20,7 @@ public class Commitments implements Parcelable {
     private String professor;
     private String cname;
     private String onTheseDays;
+    private String placeID;
     private Date start;
     private Date end;
     private int startHour;
@@ -110,6 +111,12 @@ public class Commitments implements Parcelable {
     public void setProfessor(String professor) {
         this.professor = professor;
     }
+
+    public void setPlaceID(String placeID){
+        this.placeID = placeID;
+    }
+
+    public String getPlaceID(){return placeID;}
 
     public String getCname() {
         return cname;

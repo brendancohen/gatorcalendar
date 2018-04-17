@@ -5,6 +5,7 @@ import java.util.UUID;
 
 /**
  * Created by eddie on 2/27/18.
+ * Edited by brendan on 4/15.
  */
 
 public class CommitmentSchema {
@@ -24,6 +25,7 @@ public class CommitmentSchema {
             public static final String START_MINUTE = "MinuteStart";
             public static final String END_MINUTE = "MinuteEnd";
 
+            public static final String PLACEID ="placeID";
         }
     }
 

@@ -7,6 +7,7 @@ import com.group18.app.calendar.database.CommitmentSchema.CommitmentTable;
 
 /**
  * Created by eddie on 2/28/18.
+ * Edited by Brendan on 4/15
  */
 
 public class CommitmentHelper extends SQLiteOpenHelper {
@@ -26,7 +27,7 @@ public class CommitmentHelper extends SQLiteOpenHelper {
             + ", " + CommitmentTable.Cols.START_MINUTE
             + ", " + CommitmentTable.Cols.END_HOUR
             + ", " + CommitmentTable.Cols.END_MINUTE
-            + ")";
+            + ", " + CommitmentTable.Cols.PLACEID+")";
 
     public CommitmentHelper(Context context){
         super(context, DATABASE_NAME, null,VERSION);
@@ -42,5 +43,4 @@ public class CommitmentHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + CommitmentTable.NAME);
         onCreate(db);
     }
-
 }

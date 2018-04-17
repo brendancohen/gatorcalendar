@@ -23,6 +23,10 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,6 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by eddie on 2/21/18.
  */
@@ -42,6 +48,7 @@ public class addClassFragment extends Fragment {
     private EditText enterclassname, enterprofessor;
     private Calendar mCalendar = GregorianCalendar.getInstance(Locale.ENGLISH);
     private onFragmentEnd mylistener;
+    private CheckDuplicate mCheckDuplicate;
     private ExpandableListAdapter mListAdapter;
     private List<String> mlistDataHeader;
     private HashMap<String, List<String>> mListHashMap;
@@ -53,6 +60,7 @@ public class addClassFragment extends Fragment {
     private static final int END_DATE_PICKED = 0;
     private static final int TIME_START_PICKED = 2;
     private static final int TIME_END_PICKED = 3;
+    private static final int COMMIT_LOCATION_PICKED = 4;
     public static final String DAYS = "com.group18.app.calendar.addClassFragment";
 
     @Override
@@ -68,11 +76,16 @@ public class addClassFragment extends Fragment {
         void sendUFClass(Commitments ufclass);
     }
 
+    public interface CheckDuplicate{
+        boolean Check(String classname);
+    }
+
     //called once fragment is associated with its activity
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mylistener = (onFragmentEnd) context;
+        mCheckDuplicate = (MainActivity) Global.getInstance().getContext();
     }
 
     @Nullable
@@ -94,6 +107,13 @@ public class addClassFragment extends Fragment {
         Button enddate = v.findViewById(R.id.end_date_class);
         Button starttime = v.findViewById(R.id.time_start_class);
         Button endtime = v.findViewById(R.id.time_end_class);
+        Button commitlocation = v.findViewById(R.id.commit_location);
+        //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
+
+
+        //mListView.expandGroup(0,true);
+
+
 
         //start DatePickerFragment so that user selects start date of commitment
         startdate.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +159,24 @@ public class addClassFragment extends Fragment {
             }
         });
 
+        commitlocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                try {
+                    Intent intent = builder.build(getActivity());
+                    startActivityForResult(intent, COMMIT_LOCATION_PICKED);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
          //adding listener, taking in user input as to class name
          enterclassname.addTextChangedListener(new TextWatcher() {
 
@@ -181,6 +219,13 @@ public class addClassFragment extends Fragment {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //checking if we have the class already, calling interface method
+                if(mCheckDuplicate.Check(enterclassname.getText().toString())){
+                    Toast.makeText(getContext(), "Duplicate Class Entered, try again", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //check to see if user has input a class name, else set Error
                if(enterclassname.getText().toString().length() == 0)
                    enterclassname.setError("Class Name is Required!");
@@ -247,6 +292,13 @@ public class addClassFragment extends Fragment {
             int minute = data.getIntExtra(TimePickerFragment.EXTRA_TIME_MINUTE, -1);
             obj1.setEndHour(hour);
             obj1.setEndMinute(minute);
+        }
+        if (requestCode == COMMIT_LOCATION_PICKED) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(getActivity(), data);
+                final String placeId = place.getId();
+                obj1.setPlaceID(placeId);
+            }
         }
     }
 

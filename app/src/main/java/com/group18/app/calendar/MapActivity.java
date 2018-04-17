@@ -77,4 +77,5 @@ public class MapActivity extends AppCompatActivity
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(gainesville, 14.0f) );
         mUiSettings.setZoomControlsEnabled(true);
     }
+
 }

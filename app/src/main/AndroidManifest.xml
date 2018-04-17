@@ -51,22 +51,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.group18.app.calendar.MainActivity" />
         </activity>
+        <!--<activity-->
+            <!--android:name=".AddCommitmentActivity"-->
+            <!--android:parentActivityName=".MainActivity"-->
+            <!--android:windowSoftInputMode="adjustPan"-->
+            <!--/>-->
         <!--Needed for Firebase -->
 
-        <service android:name="com.group18.app.calendar.MyFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
-        <service android:name="com.group18.app.calendar.MyFirebaseInstanceIdService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-
-
-        <activity android:name=".AddReminder" />
+        <activity
+            android:name=".AddReminder"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
     </application>
 
