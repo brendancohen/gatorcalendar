@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.group18.app.calendar.database.CommitmentHelper;
 import com.group18.app.calendar.database.CommitmentSchema;
@@ -33,6 +34,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 //this is the Activity that is launched when app is started, see manifest file
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteCommitmentFragment.InterfaceCommunicator, addClassFragment.CheckDuplicate{
@@ -47,7 +50,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CommitmentHelper mDbHelper;
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
+    private NavigationView myNavView;
+    private TextView welcome;
     private CommitmentsAdapter mAdapter;
+    private Map<String, ArrayList<Commitments>> SortedCommitments = new HashMap<String, ArrayList<Commitments>>();
 
 
     @Override
@@ -57,20 +63,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
         Global.getInstance().setContext(this);
+
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("queryname", MODE_PRIVATE);
-        boolean askForName = pref.getBoolean("Name", true);
+        boolean askForName = pref.getBoolean("Name", false);
 
-        if(askForName)
+        if(!askForName)
             showDialog();
-        Resources res = getResources();
 
-
-        String username = pref.getString("username","John Doe");
-        getResources().getString(R.string.welcome_name).replace("%s",username);
         mDbHelper = new CommitmentHelper(getApplicationContext());
         mDatabase = mDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
+
         Toolbar mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
@@ -97,18 +101,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(myCommits.isEmpty())
             LoadDatabase();
+        SortByWeekDay();
 
-
-
-
-
-        NavigationView myNavView = findViewById(R.id.nav_view);
+        myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
         myDrawerLayout = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout, mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        welcome = myNavView.getHeaderView(0).findViewById(R.id.nav_header_string);
+        String username = pref.getString("username","John Doe");
+        welcome.setText(getResources().getString(R.string.welcome_name).replace("%s",username));
 
         Button startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
@@ -143,12 +147,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         saveName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(name.getText().toString().isEmpty())
+                if(name.getText().toString().isEmpty()) {
                     name.setError("Enter name to proceed");
+                }
                 else
                 {
                     editor.putString("username",name.getText().toString());
+                    editor.apply();
                     dialog.dismiss();
+                    welcome.setText(getResources().getString(R.string.welcome_name).replace("%s",name.getText().toString()));
+                    editor.putBoolean("Name",true);
+                    editor.apply();
                 }
             }
         });
@@ -158,8 +167,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.setCancelable(false);
         //so the user now can't click outside of this dialog to dismiss it
         dialog.setCanceledOnTouchOutside(false);
-        editor.putBoolean("Name",false);
-        editor.apply();
     }
 
     //called when Activity is being destroyed and relevant data should be saved
@@ -169,6 +176,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //save icon status (which is one is viewable)
         outState.putBoolean(SAVED_SCHEDULE_VISIBLE, mScheduleVisible);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     //called before menu is shown
@@ -359,5 +371,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
         }
         return false;
+    }
+
+    private void SortByWeekDay() {
+
+        String[] Days = new String[7];
+        String Day;
+        ArrayList<Commitments> commits;
+        SortedCommitments.put("Monday", null);
+        SortedCommitments.put("Tuesday", null);
+        SortedCommitments.put("Wednesday", null);
+        SortedCommitments.put("Thursday", null);
+        SortedCommitments.put("Friday", null);
+        SortedCommitments.put("Saturday", null);
+        SortedCommitments.put("Sunday", null);
+
+        if(!myCommits.isEmpty()){
+            Log.d("Sort", "mycommits is not empty");
+            for(int i = 0; i < myCommits.size() ; ++i){
+                Days = myCommits.get(i).getOnTheseDays().split(",");
+
+                for(int j = 0; j < Days.length; ++j){
+                    Day = Days[j];
+                    if(SortedCommitments.get(Day) == null){
+                        commits = new ArrayList<Commitments>();
+                        commits.add(myCommits.get(i));
+
+                    }
+                    else{
+                        commits = SortedCommitments.get(Day);
+                        commits.add(myCommits.get(i));
+
+                    }
+                    SortedCommitments.put(Day,commits);
+                }
+            }
+        }
+     printme();
+    }
+
+    private void printme() {
+
+            if(SortedCommitments.get("Monday") != null)
+            Log.d("Sort", SortedCommitments.get("Monday").get(0).getCname());
+
     }
 }
