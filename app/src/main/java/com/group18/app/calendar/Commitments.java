@@ -31,6 +31,10 @@ public class Commitments implements Parcelable {
     //we want to be able to uniquely identify this class
     private UUID primarykey;
 
+    public void setPrimarykey(String primarykey) {
+        this.primarykey = UUID.fromString(primarykey);
+    }
+
     public int getEndMinute() {
         return endMinute;
     }

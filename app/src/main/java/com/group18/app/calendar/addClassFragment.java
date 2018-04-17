@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +27,15 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -42,15 +46,16 @@ import static android.app.Activity.RESULT_OK;
 public class addClassFragment extends Fragment {
 
     private EditText enterclassname, enterprofessor;
-    private CheckBox MWF, TR;
-    private Calendar mCalendar = Calendar.getInstance();
+    private Calendar mCalendar = GregorianCalendar.getInstance(Locale.ENGLISH);
     private onFragmentEnd mylistener;
+    private CheckDuplicate mCheckDuplicate;
     private ExpandableListAdapter mListAdapter;
     private List<String> mlistDataHeader;
     private HashMap<String, List<String>> mListHashMap;
     Commitments obj1 = new Commitments("","","");
 
     private static final String CLASS_BEGIN_DATE = "BeginDate";
+    private static final String CLASS_END_DATE = "EndDate";
     private static final int START_DATE_PICKED = 1;
     private static final int END_DATE_PICKED = 0;
     private static final int TIME_START_PICKED = 2;
@@ -71,11 +76,16 @@ public class addClassFragment extends Fragment {
         void sendUFClass(Commitments ufclass);
     }
 
+    public interface CheckDuplicate{
+        boolean Check(String classname);
+    }
+
     //called once fragment is associated with its activity
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mylistener = (onFragmentEnd) context;
+        mCheckDuplicate = (MainActivity) Global.getInstance().getContext();
     }
 
     @Nullable
@@ -110,6 +120,7 @@ public class addClassFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mCalendar.set(2018, 0, 8);
+
                 FragmentManager manager = getFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar, "Start");
                 dialog.setTargetFragment(addClassFragment.this, START_DATE_PICKED);
@@ -125,7 +136,7 @@ public class addClassFragment extends Fragment {
                 FragmentManager manager = getFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCalendar, "End");
                 dialog.setTargetFragment(addClassFragment.this, END_DATE_PICKED);
-                dialog.show(manager, CLASS_BEGIN_DATE);
+                dialog.show(manager, CLASS_END_DATE);
             }
         });
 
@@ -208,6 +219,13 @@ public class addClassFragment extends Fragment {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //checking if we have the class already, calling interface method
+                if(mCheckDuplicate.Check(enterclassname.getText().toString())){
+                    Toast.makeText(getContext(), "Duplicate Class Entered, try again", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //check to see if user has input a class name, else set Error
                if(enterclassname.getText().toString().length() == 0)
                    enterclassname.setError("Class Name is Required!");
@@ -228,6 +246,14 @@ public class addClassFragment extends Fragment {
                    Days.append(",");
                }
 
+               if(obj1.getStartHour() == 0 && obj1.getStartMinute() == 0) {
+                    Toast.makeText(getContext(), "Please select a Start Time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(obj1.getEndHour() == 0 && obj1.getEndMinute() == 0) {
+                    Toast.makeText(getContext(), "Please select an End Time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                  if(Days.length() != 0 )
                      obj1.setOnTheseDays(Days.toString());
                  else {
@@ -243,25 +269,27 @@ public class addClassFragment extends Fragment {
     //receive information from DatePicker Fragment (dates)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != RESULT_OK)
+        if(resultCode != Activity.RESULT_OK)
             return;
         if(requestCode == START_DATE_PICKED){
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            Log.d("date", date.toString());
             obj1.setStart(date);
         }
         if(requestCode == END_DATE_PICKED){
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            Log.d("date", date.toString());
             obj1.setEnd(date);
         }
         if(requestCode == TIME_START_PICKED){
-            int hour = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_HOUR);
-            int minute = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_MINUTE);
+            int hour = data.getIntExtra(TimePickerFragment.EXTRA_TIME_HOUR, -1);
+            int minute = data.getIntExtra(TimePickerFragment.EXTRA_TIME_MINUTE, -1);
             obj1.setStartHour(hour);
             obj1.setStartMinute(minute);
         }
         if(requestCode == TIME_END_PICKED){
-            int hour = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_HOUR);
-            int minute = (int) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME_MINUTE);
+            int hour = data.getIntExtra(TimePickerFragment.EXTRA_TIME_HOUR, -1);
+            int minute = data.getIntExtra(TimePickerFragment.EXTRA_TIME_MINUTE, -1);
             obj1.setEndHour(hour);
             obj1.setEndMinute(minute);
         }
@@ -273,8 +301,6 @@ public class addClassFragment extends Fragment {
             }
         }
     }
-
-
 
 
     public void initializeData(){

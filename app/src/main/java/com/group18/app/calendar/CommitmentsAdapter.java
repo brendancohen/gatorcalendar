@@ -1,16 +1,17 @@
 package com.group18.app.calendar;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import java.util.ArrayList;
-import java.util.Calendar;
+
 
 
 /**
@@ -18,16 +19,25 @@ import java.util.Calendar;
  */
 
 public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.CustomViewHolder> {
-    private Context context;
+
     private ArrayList<Commitments> commitments;
-    private Activity mActivity;
 
 
-    public CommitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
-        this.context =  context;
-        this.commitments = commitments;
-        mActivity = mainactivity;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
     }
+    public void setonItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
+
+    public CommitmentsAdapter(Context context, ArrayList<Commitments> commitments) {
+        this.commitments = commitments;
+
+    }
+
+
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -40,7 +50,7 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         //so if viewType == 1 then do this one otherwise do different layout
         //instantiating a view
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view, parent, false);
-        return new CustomViewHolder(view);
+        return new CustomViewHolder(view, mListener);
     }
 
     @Override
@@ -48,22 +58,24 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         Commitments commitment = commitments.get(position);
         holder.profName.setText(commitment.getProfessor());
         holder.className.setText(commitment.getCname());
-        Context c;
-        c = context;
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, commitment.getStartHour());
-        calendar.set(Calendar.MINUTE, commitment.getNotificationMinute());
-
-        Toast testing = Toast.makeText(c, "starthour:" + commitment.getStartHour() + ", startminute: " + commitment.getNotificationMinute()
-                + ", endhour: " + commitment.getEndHour() + ", endminute: " + commitment.getEndMinute(), Toast.LENGTH_LONG);
-        testing.show();
+        if(commitment.getStartMinute() == 0) {
+            holder.startTime.setText(commitment.getStartHour() + ":" + commitment.getStartMinute()+"0");
+        }
+        else
+            holder.startTime.setText(commitment.getStartHour() + ":" + commitment.getStartMinute());
+        if(commitment.getEndMinute() == 0) {
+            holder.endTime.setText(commitment.getEndHour() + ":" + commitment.getEndMinute() + "0");
+        }
+        else
+            holder.endTime.setText(commitment.getEndHour() + ":" + commitment.getEndMinute());
+        String[] date_no_time_start = commitment.getStart().toString().split(" ",0);
+        String[] date_no_time_end = commitment.getStart().toString().split(" ", 0);
+        holder.startDate.setText("Start: "+ date_no_time_start[1] + " " + date_no_time_start[2]);
+        holder.endDate.setText("End:   "+ date_no_time_end[1] + " " + date_no_time_end[2]);
     }
 
     @Override
     public int getItemCount() {
-        //returns the size of the commitments array
         return commitments.size();
     }
 
@@ -72,71 +84,38 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
 //          one way that i found is to make an interface and then extend activity to it
 //          but this seems overly complicated -- must be another way
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
+    public static class CustomViewHolder extends RecyclerView.ViewHolder {
         //can add other things to make a custom layout e.g. images or checkboxes
         TextView profName;
         TextView className;
-        //Brooke changes
         TextView startTime;
+        TextView startDate;
+        TextView endTime;
+        TextView endDate;
 
-        public CustomViewHolder(View view) {
+        public CustomViewHolder(View view, OnItemClickListener listener) {
              super(view);
              //the layout is being binded to the view
             profName = (TextView) view.findViewById(R.id.ProfessorName);
             className = (TextView) view.findViewById(R.id.ClassName);
-            startTime = (TextView) view.findViewById(R.id.time_start_class);
+            startTime = view.findViewById(R.id.time_start);
+            startDate = view.findViewById(R.id.date_start);
+            endDate = view.findViewById(R.id.date_end);
+            endTime = view.findViewById(R.id.time_end);
 
-
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                public boolean onLongClick(View arg0) {
-//                    vv this is the code that we are working on right now
-                    boolean confirmed = true;
-                    android.app.FragmentManager mFragmentManager = mActivity.getFragmentManager();
-                    DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
-                    dialog.show(mFragmentManager, "whatever");
-
-                    return confirmed;
-
-
-
-//                    vvv this is the code from DeleteCommitmentFragment.java
-//                    boolean confirmed = true;
-//
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                    builder.setTitle("Delete Commitment?");
-//                    builder.setMessage("Are you sure you want to delete this commitment?");
-//                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            // delete commitment
-//                            commitments.remove(getAdapterPosition());
-//                            notifyItemRemoved(getAdapterPosition());
-//
-//                        }
-//                    });
-//                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            // User cancelled the dialog
-//                        }
-//                    });
-//
-//                    AlertDialog alertDialog = builder.create();
-//                    alertDialog.show();
-//
-//                    return confirmed;
-
-
-
-
-//               when the commitment is longClicked (aka. pressed for a couple of seconds) it will delete using .remove
-//               .remove deletes commitment when it is clicked
-
-//                    this long click works
-//                    commitments.remove(getAdapterPosition());
-//                    notifyItemRemoved(getAdapterPosition());
-//                    return true;    // <- set to true
-//
-                }
-            });
+           view.setOnLongClickListener(new View.OnLongClickListener() {
+               @Override
+               public boolean onLongClick(View v) {
+                   if(listener != null){
+                       int position = getAdapterPosition();
+                       //make sure position is valid
+                       if(position != RecyclerView.NO_POSITION) {
+                           listener.onItemClick(position);
+                       }
+                   }
+                   return false;
+               }
+           });
         }
     }
 }
