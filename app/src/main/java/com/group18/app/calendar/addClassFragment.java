@@ -1,14 +1,22 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -94,8 +102,6 @@ public class addClassFragment extends Fragment {
         Button starttime = v.findViewById(R.id.time_start_class);
         Button endtime = v.findViewById(R.id.time_end_class);
         //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
-
-
         //mListView.expandGroup(0,true);
 
 
@@ -212,6 +218,41 @@ public class addClassFragment extends Fragment {
                      Toast.makeText(getContext(), "Please select Meeting Days in the Dropdown Menu", Toast.LENGTH_SHORT).show();
                      return;
                  }
+
+                String content = obj1.getCname() + " with " + obj1.getProfessor() + " at "
+                        + obj1.getStartHour() + ":" + obj1.getStartMinute();
+                String days = obj1.getOnTheseDays();
+                String[] split = days.split(",");
+                for(int i = 0; i < split.length; i++) {
+                    int dayVal = 0;
+                    switch(split[i]) {
+                        case "Sunday":
+                            dayVal = 1;
+                            break;
+                        case "Monday":
+                            dayVal = 2;
+                            break;
+                        case "Tuesday":
+                            dayVal = 3;
+                            break;
+                        case "Wednesday":
+                            dayVal = 4;
+                            break;
+                        case "Thursday":
+                            dayVal = 5;
+                            break;
+                        case "Friday":
+                            dayVal = 6;
+                            break;
+                        case "Saturday":
+                            dayVal = 7;
+                            break;
+                    }
+
+            //        Toast.makeText(getContext(), "Scheduled " + obj1.getStartHour() + ":" + obj1.getStartMinute() + ", day: " + dayVal, Toast.LENGTH_LONG).show();
+                    scheduleNotification(obj1.getStartHour(), obj1.getNotificationMinute(), dayVal, content);
+                }
+
                  mylistener.sendUFClass(obj1);
             }
         });
@@ -284,5 +325,118 @@ public class addClassFragment extends Fragment {
         if(!mListAdapter.getCheckedDays().isEmpty())
         outState.putStringArrayList(DAYS, mListAdapter.getCheckedDays());
         super.onSaveInstanceState(outState);
+    }
+
+    private void scheduleNotification(int startHour, int startMinute, int dayOfWeek, String content) {
+
+        //Build channel
+        Context context = getContext();
+        String channel_id = "gc_channel";
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+            String channel_name = "gator_calendar_notifications";
+            String channel_description = "notifications for gator calendar app";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channel_id, channel_name, importance);
+            channel.setDescription(channel_description);
+            //fun things
+            channel.enableLights(true);
+            channel.setLightColor(Color.BLUE);
+            // Register the channel with the system
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        //Build notification
+        String textTitle = "Better Hurry! Your class starts in 5 minutes!";
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channel_id)
+                .setSmallIcon(R.drawable.gc_png)
+                .setContentTitle(textTitle)
+                .setContentText(content)
+                // .setContentText(className + " with " + profName + " at " + startTime)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        //Set intent
+        Intent intent = new Intent(context, addClassFragment.class);
+        PendingIntent activity = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        notificationBuilder.setContentIntent(activity);
+
+        Notification notification = notificationBuilder.build();
+
+        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        if(startMinute < 5) {
+            int leftoverMinutes = 5-startMinute;
+            startMinute = 60-leftoverMinutes;
+            startHour--;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, startHour);
+        calendar.set(Calendar.MINUTE, startMinute);
+        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+
+        Toast testing = Toast.makeText(context, "set for " + startHour + ":"
+                + startMinute + ", day: " + dayOfWeek, Toast.LENGTH_LONG);
+        testing.show();
+
+        //check to see if setting isn't in the past (would trigger alarm)
+        if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 7);
+        }
+
+        //set alarm
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+
+    }
+
+    private Notification getNotification(String content) {
+
+        Context context = getContext();
+        String channel_id = "gc_channel";
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+            String channel_name = "gator_calendar_notifications";
+            String channel_description = "notifications for gator calendar app";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channel_id, channel_name, importance);
+            channel.setDescription(channel_description);
+            //fun things
+            channel.enableLights(true);
+            channel.setLightColor(Color.BLUE);
+            // Register the channel with the system
+            notificationManager.createNotificationChannel(channel);
+        }
+/*
+        TextView profName = (TextView) v.findViewById(R.id.ProfessorName);
+        TextView className = (TextView) v.findViewById(R.id.ClassName);
+        TextView startTime = v.findViewById(R.id.time_start);
+        TextView startDate = v.findViewById(R.id.date_start);
+        TextView endDate = v.findViewById(R.id.date_end);
+        TextView endTime = v.findViewById(R.id.time_end);
+*/
+        //Make notification
+        String textTitle = "Better Hurry! Your class starts in 5 minutes!";
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channel_id)
+                .setSmallIcon(R.drawable.gc_png)
+                .setContentTitle(textTitle)
+                .setContentText(content)
+                // .setContentText(className + " with " + profName + " at " + startTime)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        return notificationBuilder.build();
+
     }
 }
