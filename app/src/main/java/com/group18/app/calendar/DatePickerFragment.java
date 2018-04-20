@@ -30,7 +30,7 @@ public class DatePickerFragment extends DialogFragment {
     private DatePicker mDatePicker;
 
     //create a newInstance of DatePicker, called by addClassFragment, calendar is given as an argument by caller
-    public static DatePickerFragment newInstance(Calendar calendar,String StartorEnd){
+    public static DatePickerFragment newInstance(Calendar calendar, String StartorEnd){
      Bundle args = new Bundle();
      if(StartorEnd.equals("Start")) {
          args.putString(ARG_DATE, ARG_DATE_START);
@@ -53,6 +53,11 @@ public class DatePickerFragment extends DialogFragment {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+        /*
+        calendar.clear(Calendar.HOUR);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.MILLISECOND);
+        */
         String title = getArguments().getString(ARG_DATE);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date,null);
 
@@ -65,6 +70,7 @@ public class DatePickerFragment extends DialogFragment {
                         int year = mDatePicker.getYear();
                         int month = mDatePicker.getMonth();
                         int day = mDatePicker.getDayOfMonth();
+
                         Date date = new GregorianCalendar(year,month,day).getTime();
                         sendResult(Activity.RESULT_OK, date);
                     }

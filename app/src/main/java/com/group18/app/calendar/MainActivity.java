@@ -2,9 +2,7 @@ package com.group18.app.calendar;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -17,25 +15,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.group18.app.calendar.database.CommitmentHelper;
 import com.group18.app.calendar.database.CommitmentSchema;
-
-import java.io.File;
 import java.util.ArrayList;
 
 //this is the Activity that is launched when app is started, see manifest file
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private Toolbar mytoolbar;
-    private NavigationView myNavView;
     private DrawerLayout myDrawerLayout;
-    private Button startaddClass, startReminder;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
     private boolean mScheduleVisible = true;
 
@@ -44,57 +37,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
     private static final int DeleteFragmentCode = 1;
     private static final int AddReminderCode = 2;
-    private Context mContext;
+    private CommitmentHelper mDbHelper;
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
-    CommitmentHelper mDbHelper;
+    private RecyclerView.Adapter mAdapter;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String retrieve = "ret";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        mDbHelper = new CommitmentHelper(getApplicationContext());
+        mDatabase = mDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
-        mytoolbar = findViewById(R.id.mytoolbar);
+        Toolbar mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
+        mRecyclerView = findViewById(R.id.my_recycler_view);
 
+        //this improves performance of Recyclerview
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
+        mRecyclerView.setAdapter(mAdapter);
+
+        if(myCommits.isEmpty())
+            LoadDatabase();
 
         //upon rotation, activity is recreated, retrieve icon status from savedInstanceState
         if(savedInstanceState != null){
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
-
         }
 
 
-        myNavView = findViewById(R.id.nav_view);
+        NavigationView myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
         myDrawerLayout = findViewById(R.id.drawer_layout);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout,mytoolbar,R.string.open_drawer,R.string.close_drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout, mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        
+
 
         //startaddClass will start AddClassActivity for result
         //may not be the right path..
-        mContext = MainActivity.this;
 /*
         String dbname = "commitmentBase.db";
         String goahead = "";
 
-        File dbpath = new File(mContext.getFilesDir().getPath() + dbname);
+        File dbpath = new File(this.getFilesDir().getPath() + dbname);
          // for Activity, or Service. Otherwise simply get the context.
         SharedPreferences sp = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
         goahead = sp.getString(retrieve, "");
-        File dbtest = mContext.getDatabasePath(dbname);
+
+        File dbtest = this.getDatabasePath(dbname);
         Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
+
         if(!goahead.isEmpty()){
 
             Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
-
-            mDbHelper = new CommitmentHelper(MainActivity.this);
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
             String[] projections = {CommitmentSchema.CommitmentTable.Cols.PROFESSOR,
@@ -104,8 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     CommitmentSchema.CommitmentTable.Cols.START,
                     CommitmentSchema.CommitmentTable.Cols.END
             };
-            Cursor cursor = db.query(CommitmentSchema.CommitmentTable.NAME, projections,
-                    null, null, null, null, null);
+
 
 
             while (cursor.moveToNext()) {
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 */
-        startaddClass = findViewById(R.id.start_add_class);
+        Button startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +150,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(intent,AddClassCode);
             }
         });
-        startReminder = findViewById(R.id.start_reminder);
+
+        Button startReminder = findViewById(R.id.start_reminder);
         startReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,10 +252,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onBackPressed();
     }
 
-    //@Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
+    @Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        //if we receive a bad result from the activity, do nothing
+            //if we receive a bad result from the activity, do nothing
             if(resultCode != Activity.RESULT_OK)
                 return;
 
@@ -260,48 +263,59 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(requestCode == AddClassCode){
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
+                mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
+                mAdapter.notifyItemInserted(myCommits.size()-1);
+            }
+    }
 
-                /*
-                mDbHelper = new CommitmentHelper(MainActivity.this.getApplicationContext());
-                mDatabase = mDbHelper.getWritableDatabase();
-                ContentValues values = new ContentValues();
+    /*
+    method will take a commitment object and insert it into a ContentValues object,
+    it will return a ContentValues object that is ready to be inserted into the database
+    */
 
-                for(int i = 0; i< myCommits.size(); i++){
-                    Commitments obj1 = myCommits.get(i);
-                    String start = obj1.getStart().toString();
-                    String end = obj1.getEnd().toString();
-                    String suuid = obj1.getProfessor();
+    private static ContentValues getContentValues(Commitments my_commitment){
+        ContentValues values = new ContentValues();
+        values.put(CommitmentSchema.CommitmentTable.Cols.PROFESSOR, my_commitment.getProfessor());
+        values.put(CommitmentSchema.CommitmentTable.Cols.CNAME, my_commitment.getCname());
+        values.put(CommitmentSchema.CommitmentTable.Cols.ID, my_commitment.getPrimarykey().toString());
+        values.put(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS, my_commitment.getOnTheseDays());
+        values.put(CommitmentSchema.CommitmentTable.Cols.START, my_commitment.getStart().toString());
+        values.put(CommitmentSchema.CommitmentTable.Cols.END, my_commitment.getEnd().toString());
+        return values;
+    }
 
-                    values.put(CommitmentSchema.CommitmentTable.Cols.PROFESSOR, obj1.getProfessor());
-                    values.put(CommitmentSchema.CommitmentTable.Cols.CNAME, obj1.getCname());
-                    values.put(CommitmentSchema.CommitmentTable.Cols.ID, suuid);
-                    values.put(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS, obj1.getOnTheseDays());
-                    values.put(CommitmentSchema.CommitmentTable.Cols.START, start);
-                    values.put(CommitmentSchema.CommitmentTable.Cols.END, end);
-                    mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, values);
+    private void LoadDatabase(){
 
+        Cursor cursor = mDatabase.query(CommitmentSchema.CommitmentTable.NAME, null,
+                null, null, null, null, null);
+
+            try {
+                cursor.moveToFirst();
+                while(!cursor.isAfterLast()) {
+
+                    String professor = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.PROFESSOR));
+                    String cname = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.CNAME));
+                    String id = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ID));
+                    String days = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ONTHESEDAYS));
+//            String start = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.START));
+//
+//            String end = cursor.getString(cursor.getColumnIndexOrThrow(CommitmentSchema.CommitmentTable.Cols.END));
+
+                    Commitments obj1 = new Commitments(professor, cname, days);
+                    myCommits.add(obj1);
+                    cursor.moveToNext();
                 }
-                SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putString(retrieve, "YES");
-                editor.apply();
-*/
-                mRecyclerView = findViewById(R.id.my_recycler_view);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-                CommitmentsAdapter cCommitmentsAdapter = new CommitmentsAdapter(getApplicationContext(), myCommits, MainActivity.this);
-                mRecyclerView.setAdapter(cCommitmentsAdapter);
+            } finally {
+                cursor.close();
             }
 
 
-        //Commitments com1 = new Commitments("Fox", "Soft Eng", "MWF");
-        //myCommits.add(com1);
-        //CommitmentsAdapter cCommitmentsAdapter = new CommitmentsAdapter(getApplicationContext(), myCommits);
-
-
-//        mContext = context.getApplicationContext();
-        //this is where we are getting the array (mycommmits), need to
-        //1st add those to DB and be able to see, second read thru that array, see if any classes are in db, if not add those classes
-        //Toast.makeText(this,myCommits.size() + "", Toast.LENGTH_SHORT).show();
-
     }
+
+    public void RefreshRecyclerView(){
+        CommitmentsAdapter cCommitmentsAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
+        mRecyclerView.setAdapter(cCommitmentsAdapter);
+    }
+
+
 }

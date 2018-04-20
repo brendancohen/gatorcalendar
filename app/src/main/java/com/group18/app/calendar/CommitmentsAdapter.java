@@ -9,7 +9,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +31,11 @@ import java.util.Calendar;
 public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.CustomViewHolder> {
     private Context context;
     private ArrayList<Commitments> commitments;
-    private Activity mActivity;
 
 
-    public CommitmentsAdapter(Context context, ArrayList<Commitments> commitments, Activity mainactivity) {
+    public CommitmentsAdapter(Context context, ArrayList<Commitments> commitments) {
         this.context =  context;
         this.commitments = commitments;
-        mActivity = mainactivity;
     }
 
     @Override
@@ -59,7 +60,7 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         Context c;
         c = context;
 
-        Calendar calendar = Calendar.getInstance();
+      /*  Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, commitment.getStartHour());
         calendar.set(Calendar.MINUTE, commitment.getNotificationMinute());
@@ -107,11 +108,17 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         Toast testing = Toast.makeText(c, "starthour:" + commitment.getStartHour() + ", startminute: " + commitment.getNotificationMinute()
                 + ", endhour: " + commitment.getEndHour() + ", endminute: " + commitment.getEndMinute(), Toast.LENGTH_LONG);
         testing.show();
+        holder.startTime.setText(commitment.getStartHour() + ":" + commitment.getStartMinute());
+        holder.endTime.setText(commitment.getEndHour() + ":" + commitment.getEndMinute());
+        String[] date_no_time_start = commitment.getStart().toString().split(" ",0);
+        String[] date_no_time_end = commitment.getStart().toString().split(" ", 0);
+        holder.startDate.setText("Start: "+ date_no_time_start[1] + " " + date_no_time_start[2]);
+        holder.endDate.setText("End:   "+ date_no_time_end[1] + " " + date_no_time_end[2]);
+   */
     }
 
     @Override
     public int getItemCount() {
-        //returns the size of the commitments array
         return commitments.size();
     }
 
@@ -126,22 +133,29 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         TextView className;
         //Brooke changes
         TextView startTime;
+        TextView startDate;
+        TextView endTime;
+        TextView endDate;
 
         public CustomViewHolder(View view) {
              super(view);
              //the layout is being binded to the view
             profName = (TextView) view.findViewById(R.id.ProfessorName);
             className = (TextView) view.findViewById(R.id.ClassName);
-            startTime = (TextView) view.findViewById(R.id.time_start_class);
-
+            startTime = view.findViewById(R.id.time_start);
+            startDate = view.findViewById(R.id.date_start);
+            endDate = view.findViewById(R.id.date_end);
+            endTime = view.findViewById(R.id.time_end);
 
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
 //                    vv this is the code that we are working on right now
+
                     boolean confirmed = true;
-                    android.app.FragmentManager mFragmentManager = mActivity.getFragmentManager();
+                    android.app.FragmentManager mFragmentManager = ((Activity) context).getFragmentManager();
                     DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
-                    dialog.show(mFragmentManager, "whatever");
+                    dialog.show(mFragmentManager, "deleteCommitment");
+
 
                     return confirmed;
 
@@ -170,7 +184,7 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
 //                    AlertDialog alertDialog = builder.create();
 //                    alertDialog.show();
 //
-//                    return confirmed;
+//                    return true;
 
 
 

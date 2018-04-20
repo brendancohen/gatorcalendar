@@ -100,7 +100,7 @@
     <string name="start_time">Start time</string>
     <string name="end_time">End Time</string>
     <string name="add_class">Add Class</string>
-    <string name="add_reminder">Add reminder</string>
+    <string name="add_reminder">Load Classes</string>
     <string name="commit_reminder">Commit</string>
 
 </resources>

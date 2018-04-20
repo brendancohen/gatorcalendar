@@ -18,15 +18,13 @@ import java.util.Date;
 
 public class AddClassActivity extends AppCompatActivity implements addClassFragment.onFragmentEnd {
 
-    private Commitments myobj;
-
     /*implemented method in onFragmentEnd interface, this will receive the commitment object in addClassFragment
     and send it to MainActivity
     */
     @Override
     public void sendUFClass(Commitments ufclass) {
         Log.v("AddClassActivity", "sendUFClass called");
-        myobj = ufclass;
+        Commitments myobj = ufclass;
         Intent myIntent = new Intent();
         myIntent.putExtra("retrieveUFClass", myobj);
         setResult(Activity.RESULT_OK, myIntent);
