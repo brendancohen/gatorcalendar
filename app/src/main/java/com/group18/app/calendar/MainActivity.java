@@ -235,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav:
                 Intent intent = new Intent (this, MapActivity.class);
                 startActivity(intent);
-                Toast.makeText(this, "We are still building this ", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.schedule:
                 Toast.makeText(this, "What setting are we including here? ", Toast.LENGTH_SHORT).show();

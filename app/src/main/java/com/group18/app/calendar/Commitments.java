@@ -21,8 +21,8 @@ public class Commitments implements Parcelable {
     private String professor;
     private String cname;
     private String onTheseDays;
-    private Double lat;
-    private Double lng;
+    private Double lat = 0.0;
+    private Double lng = 0.0;
     private Date start;
     private Date end;
     private int startHour;

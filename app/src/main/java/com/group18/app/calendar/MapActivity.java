@@ -91,8 +91,10 @@ public class MapActivity extends AppCompatActivity
                 String cname = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.CNAME));
                 Double mLat = cursor.getDouble(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.LAT));
                 Double mLong = cursor.getDouble(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.LONG));
-                LatLng temp = new LatLng(mLat,mLong);
-                mMap.addMarker(new MarkerOptions().position(temp).title(cname));
+                if(mLat != 0.0 && mLong != 0.0) {
+                    LatLng temp = new LatLng(mLat, mLong);
+                    mMap.addMarker(new MarkerOptions().position(temp).title(cname));
+                }
                 cursor.moveToNext();
             }
         }catch (Exception e) {
