@@ -109,26 +109,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //also need to re-adjust the activity_class.xml to display my_recycler_view2
         //in the lower half of the screen
 
-//        mRecyclerView2 = findViewById(R.id.my_recycler_view2);
-//
-//        //this improves performance of RecyclerView
-//        mRecyclerView2.setHasFixedSize(true);
-//        mRecyclerView2.setLayoutManager(new LinearLayoutManager(this));
-//        mAdapter2 = new RemindersAdapter(MainActivity.this, myReminders);
-//
-//        mAdapter2.setonItemClickListener(new RemindersAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(int position) {
-//                //android.app.FragmentManager mFragmentManager = getFragmentManager();
-//                DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
-//                Bundle mybundle = new Bundle();
-//                mybundle.putInt("position", position);
-//                dialog.setArguments(mybundle);
-//                dialog.show(getFragmentManager(), "deleteCommitment");
-//            }
-//        });
-//
-//        mRecyclerView2.setAdapter(mAdapter2);
+        mRecyclerView2 = findViewById(R.id.my_recycler_view2);
+
+        //this improves performance of RecyclerView
+        mRecyclerView2.setHasFixedSize(true);
+        mRecyclerView2.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter2 = new RemindersAdapter(MainActivity.this, myReminders);
+
+        mAdapter2.setonItemClickListener(new RemindersAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //android.app.FragmentManager mFragmentManager = getFragmentManager();
+                DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
+                Bundle mybundle = new Bundle();
+                mybundle.putInt("position", position);
+                dialog.setArguments(mybundle);
+                dialog.show(getFragmentManager(), "deleteCommitment");
+            }
+        });
+
+        mRecyclerView2.setAdapter(mAdapter2);
 //
 //        if(myReminders.isEmpty())
 //            LoadDatabase();
@@ -304,6 +304,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 myCommits.add(tempclass);
                 mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
                 mAdapter.notifyItemInserted(myCommits.size()-1);
+            }
+            if(requestCode == AddReminderCode){
+                Log.d("Sort", "eadfdadfs");
+                Reminders reminder = data.getParcelableExtra("reminderObj");
+                myReminders.add(reminder);
+                mAdapter2.notifyItemInserted(myReminders.size()-1);
             }
     }
 

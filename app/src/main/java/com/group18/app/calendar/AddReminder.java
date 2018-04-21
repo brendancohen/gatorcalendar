@@ -1,5 +1,6 @@
 package com.group18.app.calendar;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -37,7 +38,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
     public int hour;
     public int min;
     private String name, notes;
-    Reminders reminderObj = new Reminders("","","");
+    Reminders reminderObj = new Reminders("","",new Date());
 
 
     @Override
@@ -127,7 +128,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
                 if(reminderName.getError() != null || reminderNotes.getError() != null)
                     return;
 
-                if(reminderObj.getHour() == 0 && reminderObj.getMinute() == 0) {
+                if(reminderObj.getHour() == 0 && reminderObj.getMin() == 0) {
                     Toast.makeText(AddReminder.this, "Please select a Start Time", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -145,7 +146,8 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
                 //when i was testing to see if the name and notes would go to MainActivity = the answer is YES
 //                intent.putExtra("Reminder Name", reminderName.getText().toString());
 //                intent.putExtra("Reminder Notes", reminderNotes.getText().toString());
-                startActivity(intent);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
     }
@@ -160,7 +162,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
         Date date = new GregorianCalendar(year,month,day).getTime();
 
         //place the values into the reminderObj object
-        reminderObj.setStart(date);
+        reminderObj.setDate(date);
     }
 
     @Override
@@ -172,6 +174,6 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
 
         //place the values into the reminderObj object
         reminderObj.setHour(hourOfDay);
-        reminderObj.setMinute(minute);
+        reminderObj.setMin(minute);
     }
 }

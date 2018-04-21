@@ -43,13 +43,14 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Cust
         public void onBindViewHolder(com.group18.app.calendar.RemindersAdapter.CustomViewHolder holder, int position) {
             Reminders reminder = reminders.get(position);
             holder.remName.setText(reminder.getName());
+            if(reminder.getNotes().length() != 0)
             holder.remNotes.setText(reminder.getNotes());
-            if(reminder.getMinute() == 0) {
-                holder.startTime.setText(reminder.getHour() + ":" + reminder.getMinute()+"0");
+            if(reminder.getMin() == 0) {
+                holder.startTime.setText(reminder.getHour() + ":" + reminder.getMin()+"0");
             }
             else
-                holder.startTime.setText(reminder.getHour() + ":" + reminder.getMinute());
-            String[] date_no_time_start = reminder.getStart().toString().split(" ",0);
+                holder.startTime.setText(reminder.getHour() + ":" + reminder.getMin());
+            String[] date_no_time_start = reminder.getDate().toString().split(" ",0);
             holder.startDate.setText("Start: "+ date_no_time_start[1] + " " + date_no_time_start[2]);
         }
 
