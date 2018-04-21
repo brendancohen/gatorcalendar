@@ -2,6 +2,7 @@ package com.group18.app.calendar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,13 +26,19 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class AddReminder extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+public class AddReminder extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private EditText reminderName, reminderNotes;
     private Button reminderTime, reminderDate;
     private Calendar mCalendar = GregorianCalendar.getInstance(Locale.ENGLISH);
-    Bundle mbundle = new Bundle();
-    public static final String EXTRA_DATE = "com.group18.app.calendar.date";
+    public int year;
+    public int month;
+    public int day;
+    public int hour;
+    public int min;
+    private String name, notes;
+    Reminders reminderObj = new Reminders("","","");
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,12 +46,11 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
 
         setContentView(R.layout.activity_reminder);
 
-        //create a toolbar so that we can navigate back to MainActivity if user wants to not commit a class anymore
+        //create a toolbar so that we can navigate back to MainActivity if user wants to not commit a reminder anymore
         Toolbar toolbar = (Toolbar) findViewById(R.id.remindertoolbar);
 
         setSupportActionBar(toolbar);
         toolbar.setTitle(null);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //initializing the values of the textboxes and the buttons
@@ -69,11 +75,12 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
 
             @Override
             public void afterTextChanged(Editable s) {
-                mbundle.putString("reminderName", reminderName.getText().toString());
-                Log.i("ads", "reminder Name = " + mbundle.getString("reminderName"));
+                name = reminderName.getText().toString();
             }
         });
 
+        //i'm not sure if this is necessary (need to test with better
+        //computer and see if object makes it to main activity)
         reminderNotes.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -87,8 +94,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
 
             @Override
             public void afterTextChanged(Editable s) {
-                mbundle.putString("reminderNotes", reminderNotes.getText().toString());
-//                Log.i("aly", "ReminderName = " + mbundle.getString("reminderName") + "reminderNotes = " + mbundle.getString("   reminderNotes"));
+                notes = reminderNotes.getText().toString();
             }
         });
 
@@ -109,45 +115,63 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
 
         Button commit = findViewById(R.id.reminder_commit);
 
-        //once commit button is pressed, call interface method sendUFClass (implemented by AddClassActivity)
+        //once commit button is pressed, check inputs, set values of name and notes & send object to MainActivity.java
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //check to see if user has input a Reminder name, else set Error
-//                Log.i("aly1", "reminderName = " + reminderName);
-//                Log.i("alyy2", "reminderName.getText() = " + reminderName.getText());
-//                Log.i("alyyy3", "reminderName.getText().toString() = " + reminderName.getText().toString());
                 if(reminderName.getText().toString().length() == 0)
                     reminderName.setError("Class Name is Required!");
 
-                Log.i("aly", "reminderName from the actual thing = " + reminderName.getText().toString());
+                //if EditText error, do not proceed
+                if(reminderName.getError() != null || reminderNotes.getError() != null)
+                    return;
+
+                if(reminderObj.getHour() == 0 && reminderObj.getMinute() == 0) {
+                    Toast.makeText(AddReminder.this, "Please select a Start Time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //places the name and notes into the reminderObj object
+                reminderObj.setName(reminderName.getText().toString());
+                reminderObj.setNotes(reminderNotes.getText().toString());
+
+                //checks to make sure proper values are being placed into the object
+//                Log.i("aly", "reminderName = " + reminderName.getText().toString());
+//                Log.i("aly", "reminderNotes = " + reminderNotes.getText().toString());
+                Intent intent = new Intent(AddReminder.this, MainActivity.class);
+                intent.putExtra("reminderObj", reminderObj);
+
+                //when i was testing to see if the name and notes would go to MainActivity = the answer is YES
+//                intent.putExtra("Reminder Name", reminderName.getText().toString());
+//                intent.putExtra("Reminder Notes", reminderNotes.getText().toString());
+                startActivity(intent);
             }
         });
-        Log.i("ads2", "reminder Name = " + mbundle.getString("reminderName"));
-        Intent intent = new Intent(this, MainActivity.class);
-        Log.i("aly", "ReminderName = " + mbundle.getString("reminderName") + "reminderNotes = " + mbundle.getString("   reminderNotes"));
-        intent.putExtra("reminderValues", mbundle);
-
     }
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        //the date that was chosen is sent here, i can do whatever i want with the date
-        Log.i("aly", "the date picker info = " + year + " , " + month + " , " + dayOfMonth);
-//        Bundle mbundle = new Bundle();
-        mbundle.putInt("year", year);
-        mbundle.putInt("month", month);
-        mbundle.putInt("day", dayOfMonth);
-//        Intent intent = new Intent();
-//        intent.putExtra("date", mbundle);
+
+    public void onDateSet(DatePicker view, int y, int m, int dayOfMonth) {
+        //time is sent from ReminderDatePicker
+        //initialize values
+        year = y;
+        month = m;
+        day = dayOfMonth;
+        //change the information into the same format as the class Date
+        Date date = new GregorianCalendar(year,month,day).getTime();
+
+        //place the values into the reminderObj object
+        reminderObj.setStart(date);
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        //the time that was chosen is sent here, i can do whatever i want with the time
-        Log.i("aly", "the time picker info = " + hourOfDay + " , " + minute);
-        mbundle.putInt("hour", hourOfDay);
-        mbundle.putInt("minute", minute);
+        //time is sent from ReminderTimePicker
+        //initialize values
+        this.hour = hourOfDay;
+        this.min = minute;
 
+        //place the values into the reminderObj object
+        reminderObj.setHour(hourOfDay);
+        reminderObj.setMinute(minute);
     }
-
-
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class ReminderDatePicker extends DialogFragment {
 

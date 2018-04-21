@@ -25,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.group18.app.calendar.database.CommitmentHelper;
 import com.group18.app.calendar.database.CommitmentSchema;
@@ -34,14 +33,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 //this is the Activity that is launched when app is started, see manifest file
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteCommitmentFragment.InterfaceCommunicator, addClassFragment.CheckDuplicate{
 
     private DrawerLayout myDrawerLayout;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
+    private ArrayList<Reminders> myReminders = new ArrayList<>();
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
@@ -50,10 +48,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CommitmentHelper mDbHelper;
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
-    private NavigationView myNavView;
-    private TextView welcome;
     private CommitmentsAdapter mAdapter;
-    private Map<String, ArrayList<Commitments>> SortedCommitments = new HashMap<String, ArrayList<Commitments>>();
+    private RecyclerView mRecyclerView2;
+    private RemindersAdapter mAdapter2;
 
 
     @Override
@@ -63,24 +60,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mScheduleVisible = savedInstanceState.getBoolean(SAVED_SCHEDULE_VISIBLE);
         }
         Global.getInstance().setContext(this);
-
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("queryname", MODE_PRIVATE);
-        boolean askForName = pref.getBoolean("Name", false);
+        boolean askForName = pref.getBoolean("Name", true);
 
-        if(!askForName)
+        if(askForName)
             showDialog();
+        Resources res = getResources();
 
+
+        String username = pref.getString("username","John Doe");
+        getResources().getString(R.string.welcome_name).replace("%s",username);
         mDbHelper = new CommitmentHelper(getApplicationContext());
         mDatabase = mDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
-
         Toolbar mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
+
         mRecyclerView = findViewById(R.id.my_recycler_view);
 
-        //this improves performance of Recyclerview
+        //this improves performance of RecyclerView
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
@@ -101,18 +101,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(myCommits.isEmpty())
             LoadDatabase();
-        SortByWeekDay();
 
-        myNavView = findViewById(R.id.nav_view);
+
+        //Reminders adapter and RecyclerView
+        //this whole commented out section is for the second recycler view
+        //should only need to create the arrayList for this to work
+        //also need to re-adjust the activity_class.xml to display my_recycler_view2
+        //in the lower half of the screen
+
+//        mRecyclerView2 = findViewById(R.id.my_recycler_view2);
+//
+//        //this improves performance of RecyclerView
+//        mRecyclerView2.setHasFixedSize(true);
+//        mRecyclerView2.setLayoutManager(new LinearLayoutManager(this));
+//        mAdapter2 = new RemindersAdapter(MainActivity.this, myReminders);
+//
+//        mAdapter2.setonItemClickListener(new RemindersAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(int position) {
+//                //android.app.FragmentManager mFragmentManager = getFragmentManager();
+//                DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
+//                Bundle mybundle = new Bundle();
+//                mybundle.putInt("position", position);
+//                dialog.setArguments(mybundle);
+//                dialog.show(getFragmentManager(), "deleteCommitment");
+//            }
+//        });
+//
+//        mRecyclerView2.setAdapter(mAdapter2);
+//
+//        if(myReminders.isEmpty())
+//            LoadDatabase();
+
+
+        NavigationView myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
         myDrawerLayout = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout, mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        welcome = myNavView.getHeaderView(0).findViewById(R.id.nav_header_string);
-        String username = pref.getString("username","John Doe");
-        welcome.setText(getResources().getString(R.string.welcome_name).replace("%s",username));
 
         Button startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
@@ -127,10 +155,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,AddReminder.class);
+                Intent intent = new Intent(MainActivity.this, AddReminder.class);
                 startActivityForResult(intent, AddReminderCode);
+//                String remName = getIntent().getExtras().getString("Reminder Name");
+//                Log.i("hello", "did it work? i wonder. the name = " + remName);
             }
         });
+        Log.i("RemindersInfo", "The object should properly send the info to main activity but I can't figure out how to turn it into an arrayList");
+
+
+
     }
 
     private void showDialog() {
@@ -147,17 +181,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         saveName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(name.getText().toString().isEmpty()) {
+                if(name.getText().toString().isEmpty())
                     name.setError("Enter name to proceed");
-                }
                 else
                 {
                     editor.putString("username",name.getText().toString());
-                    editor.apply();
                     dialog.dismiss();
-                    welcome.setText(getResources().getString(R.string.welcome_name).replace("%s",name.getText().toString()));
-                    editor.putBoolean("Name",true);
-                    editor.apply();
                 }
             }
         });
@@ -167,6 +196,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.setCancelable(false);
         //so the user now can't click outside of this dialog to dismiss it
         dialog.setCanceledOnTouchOutside(false);
+        editor.putBoolean("Name",false);
+        editor.apply();
     }
 
     //called when Activity is being destroyed and relevant data should be saved
@@ -176,11 +207,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //save icon status (which is one is viewable)
         outState.putBoolean(SAVED_SCHEDULE_VISIBLE, mScheduleVisible);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     //called before menu is shown
@@ -281,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
     }
 
+
     /*
     method will take a commitment object and insert it into a ContentValues object,
     it will return a ContentValues object that is ready to be inserted into the database
@@ -371,49 +398,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
         }
         return false;
-    }
-
-    private void SortByWeekDay() {
-
-        String[] Days = new String[7];
-        String Day;
-        ArrayList<Commitments> commits;
-        SortedCommitments.put("Monday", null);
-        SortedCommitments.put("Tuesday", null);
-        SortedCommitments.put("Wednesday", null);
-        SortedCommitments.put("Thursday", null);
-        SortedCommitments.put("Friday", null);
-        SortedCommitments.put("Saturday", null);
-        SortedCommitments.put("Sunday", null);
-
-        if(!myCommits.isEmpty()){
-            Log.d("Sort", "mycommits is not empty");
-            for(int i = 0; i < myCommits.size() ; ++i){
-                Days = myCommits.get(i).getOnTheseDays().split(",");
-
-                for(int j = 0; j < Days.length; ++j){
-                    Day = Days[j];
-                    if(SortedCommitments.get(Day) == null){
-                        commits = new ArrayList<Commitments>();
-                        commits.add(myCommits.get(i));
-
-                    }
-                    else{
-                        commits = SortedCommitments.get(Day);
-                        commits.add(myCommits.get(i));
-
-                    }
-                    SortedCommitments.put(Day,commits);
-                }
-            }
-        }
-     printme();
-    }
-
-    private void printme() {
-
-            if(SortedCommitments.get("Monday") != null)
-            Log.d("Sort", SortedCommitments.get("Monday").get(0).getCname());
-
     }
 }
