@@ -1,7 +1,5 @@
 package com.group18.app.calendar.database;
 
-import java.util.Date;
-import java.util.UUID;
 
 /**
  * Created by eddie on 2/27/18.
@@ -24,8 +22,8 @@ public class CommitmentSchema {
             public static final String END_HOUR = "HourEnd";
             public static final String START_MINUTE = "MinuteStart";
             public static final String END_MINUTE = "MinuteEnd";
-
-            public static final String PLACEID ="placeID";
+            public static final String LAT ="lat";
+            public static final String LONG ="long";
         }
     }
 

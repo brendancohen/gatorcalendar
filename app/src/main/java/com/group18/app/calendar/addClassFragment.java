@@ -35,6 +35,8 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -116,8 +118,7 @@ public class addClassFragment extends Fragment {
         Button starttime = v.findViewById(R.id.time_start_class);
         Button endtime = v.findViewById(R.id.time_end_class);
         Button commitlocation = v.findViewById(R.id.commit_location);
-        //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
-        //mListView.expandGroup(0,true);
+
 
 
 
@@ -338,11 +339,13 @@ public class addClassFragment extends Fragment {
             obj1.setEndMinute(minute);
         }
         if (requestCode == COMMIT_LOCATION_PICKED) {
-            if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(getActivity(), data);
-                final String placeId = place.getId();
-                obj1.setPlaceID(placeId);
-            }
+                final LatLng mLatLng = place.getLatLng();
+                double lat = mLatLng.latitude;
+                double lng = mLatLng.longitude;
+                obj1.setLat(lat);
+                obj1.setLng(lng);
+
         }
     }
 
