@@ -3,6 +3,7 @@ package com.group18.app.calendar;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -93,6 +94,7 @@ public class Commitments implements Parcelable {
 
     public void setStart(Date start) {
         this.start = start;
+        Log.i("date", "the date start = " + start);
     }
 
     public Commitments(String uprofessor, String classname, String days){
