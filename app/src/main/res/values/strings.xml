@@ -1,6 +1,8 @@
 <resources>
     <string name="first_day_switch">Click here to start the week on Mondays instead of Sundays</string>
     <string name="first_day_switcher">Week settings</string>
+    <string name="today">Today</string>
+    <string name="reminders">Reminders</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
     <string name="wednesday">Wednesday</string>

@@ -6,6 +6,8 @@
     <string name="helloandwelcome">Hola! Gracias por usar nuestra aplicación</string>
     <string name="ifyouhavequestions">Si tienes cualquier duda, escribenos </string>
     <string name="email">a gatorcalendar@ufl.edu.</string>
+    <string name="reminders">Recordatorios</string>
+    <string name="today">Hoy</string>
     <string name="monday">Lunes</string>
     <string name="tuesday">Martes</string>
     <string name="wednesday">Miercoles</string>
