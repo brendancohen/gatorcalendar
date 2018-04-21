@@ -56,7 +56,7 @@
             <!--android:parentActivityName=".MainActivity"-->
             <!--android:windowSoftInputMode="adjustPan"-->
             <!--/>-->
-        <!--Needed for Firebase -->
+    <!--    Remove firebase
 
         <service android:name="com.group18.app.calendar.MyFirebaseMessagingService">
             <intent-filter>
@@ -69,6 +69,8 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        -->
 
         <activity
             android:name=".AddReminder"
