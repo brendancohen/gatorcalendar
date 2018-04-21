@@ -21,11 +21,7 @@
         android:id="@+id/tasks"
         android:icon="@drawable/alarm">
     </item>
-    <item
-        android:title="@string/commute"
-        android:id="@+id/commute"
-        android:icon="@drawable/rts">
-    </item>
+
 <item
     android:title="">
     <menu>
