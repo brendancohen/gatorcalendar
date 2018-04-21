@@ -1,4 +1,13 @@
 <resources>
+    <string name="first_day_switch">Click here to start the week on Mondays instead of Sundays</string>
+    <string name="first_day_switcher">Week settings</string>
+
+    <string name="helloandwelcome">Hello! Thank you for using our application.</string>
+    <string name="ifyouhavequestions">If you have any questions email us</string>
+    <string name="email">at gatorcalendar@ufl.edu.</string>
+    <string name="ProfessorName">ProfessorName</string>
+    <string name="ClassName">ClassName</string>
+    <string name="ToggleView">Toggle View</string>
     <string name="app_name">Calendar</string>
     <string name="action_settings">Settings</string>
     <string name="intro_string">Calendar App</string>
@@ -13,9 +22,10 @@
     <string name="home">Home</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
-    <string name="welcome_name">Welcome [Name]</string>
+    <string name="welcome_name">Welcome %s</string>
     <string name="mwf">MWF</string>
     <string name="t_r">T/R</string>
+    <string name="commit_location">Commitment Location</string>
     <string name="ask_prof">Enter Professor name</string>
     <string name="ask_class">Enter class name</string>
     <string name="date_picker_title">Start date of Class:</string>
@@ -24,16 +34,19 @@
     <string name="commit">Commit</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_map">Map</string>
-
     <!-- Strings related to Settings -->
+    <!--Strings that need to be translated to spanish-->
+    <string name="ask_commitment">Enter Event name</string>
+    <string name="ask_notes">Enter Notes </string>
+    <string name="reminder_time">Time</string>
+    <string name="reminder_date">Date</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
+    <string name="language_switcher_text">Language settings</string>
+    <string name="language_switcher"> Switch the app to Spanish by clicking here.
+   </string>
 
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
@@ -100,7 +113,9 @@
     <string name="start_time">Start time</string>
     <string name="end_time">End Time</string>
     <string name="add_class">Add Class</string>
-    <string name="add_reminder">Load Classes</string>
+    <string name="add_reminder">Add Reminder</string>
     <string name="commit_reminder">Commit</string>
+    <string name="welcome_to_your_calendar_app">Welcome to your Calendar app</string>
+    <string name="enter_your_name">Enter Your Name:</string>
 
 </resources>

@@ -17,8 +17,8 @@
 
     <TextView
         android:layout_width="wrap_content"
+        android:id="@+id/nav_header_string"
         android:layout_height="wrap_content"
-        android:text="@string/welcome_name"
         android:paddingTop="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         />

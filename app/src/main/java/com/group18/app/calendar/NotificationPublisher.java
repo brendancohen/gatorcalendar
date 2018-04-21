@@ -19,10 +19,6 @@ public class NotificationPublisher extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         Context c;
         c = context;
-
-        Toast testing = Toast.makeText(c, "publisher received", Toast.LENGTH_LONG);
-        testing.show();
-
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 

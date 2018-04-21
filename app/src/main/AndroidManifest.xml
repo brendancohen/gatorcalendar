@@ -51,6 +51,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.group18.app.calendar.MainActivity" />
         </activity>
+        <!--<activity-->
+            <!--android:name=".AddCommitmentActivity"-->
+            <!--android:parentActivityName=".MainActivity"-->
+            <!--android:windowSoftInputMode="adjustPan"-->
+            <!--/>-->
         <!--Needed for Firebase -->
 
         <service android:name="com.group18.app.calendar.MyFirebaseMessagingService">
@@ -65,7 +70,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".AddReminder" />
+        <activity
+            android:name=".AddReminder"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <receiver android:name=".NotificationPublisher" />
 
     </application>
