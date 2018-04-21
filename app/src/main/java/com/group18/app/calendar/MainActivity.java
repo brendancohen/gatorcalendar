@@ -26,6 +26,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.group18.app.calendar.database.CommitmentHelper;
 import com.group18.app.calendar.database.CommitmentSchema;
 
@@ -331,6 +333,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         values.put(CommitmentSchema.CommitmentTable.Cols.START_MINUTE, String.valueOf(my_commitment.getStartMinute()));
         values.put(CommitmentSchema.CommitmentTable.Cols.END_HOUR, String.valueOf(my_commitment.getEndHour()));
         values.put(CommitmentSchema.CommitmentTable.Cols.END_MINUTE, String.valueOf(my_commitment.getEndMinute()));
+        values.put(CommitmentSchema.CommitmentTable.Cols.LAT, String.valueOf(my_commitment.getLat()));
+        values.put(CommitmentSchema.CommitmentTable.Cols.LONG, String.valueOf((my_commitment.getLng())));
 
         return values;
     }
@@ -355,6 +359,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     String start_minute = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.START_MINUTE));
                     String end_hour = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.END_HOUR));
                     String end_minute = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.END_MINUTE));
+                    Double lat = cursor.getDouble((cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.LAT)));
+                    Double lng = cursor.getDouble((cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.LONG)));
 
                     SimpleDateFormat stringformatter = new SimpleDateFormat("E MMM dd HH:mm:ss z YYYY");
                     Date startdate = stringformatter.parse(start);
@@ -368,6 +374,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     obj1.setEndHour(Integer.parseInt(end_hour));
                     obj1.setEndMinute(Integer.parseInt(end_minute));
                     obj1.setStartMinute(Integer.parseInt(start_minute));
+                    obj1.setLat(lat);
+                    obj1.setLng(lng);
                     myCommits.add(obj1);
                     cursor.moveToNext();
                 }
