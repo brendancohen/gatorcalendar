@@ -17,59 +17,48 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/ProfessorName"
-            android:layout_width="355dp"
+            android:id="@+id/notes"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginStart="8dp"
-            android:text="ProfessorName"
+            android:layout_marginStart="16dp"
+            android:text="Notes"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.611"
             app:layout_constraintStart_toEndOf="@+id/time_end"
             app:layout_constraintTop_toBottomOf="@+id/commitment_name"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/commitment_name"
-            android:layout_width="356dp"
+            android:layout_width="181dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="ClassName"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="ReminderName"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/time_start"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/date_start"
-            android:layout_width="115dp"
+            android:layout_width="103dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:text="Start Date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/date_end"
-            android:layout_width="117dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="8dp"
-            android:text="End Date"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/date_start" />
-
-        <TextView
             android:id="@+id/time_start"
-            android:layout_width="wrap_content"
+            android:layout_width="67dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="Start Time"
             app:layout_constraintStart_toEndOf="@+id/date_start"
@@ -77,13 +66,12 @@
 
         <TextView
             android:id="@+id/time_end"
-            android:layout_width="66dp"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
             android:text="End time"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/date_end" />
+            tools:layout_editor_absoluteX="122dp" />
 
     </android.support.constraint.ConstraintLayout>
 

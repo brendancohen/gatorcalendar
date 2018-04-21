@@ -26,7 +26,7 @@ public class Reminders implements Parcelable {
     }
 
 
-    public int getMinute() {
+    public int getMin() {
         return min;
     }
 
@@ -34,7 +34,7 @@ public class Reminders implements Parcelable {
         return min - 5;
     }
 
-    public void setMinute(int min) {
+    public void setMin(int min) {
         this.min = min;
     }
 
@@ -51,12 +51,12 @@ public class Reminders implements Parcelable {
         return primarykey;
     }
 
-    public Date getStart() {
+    public Date getDate() {
         return date;
     }
 
 
-    public void setStart(Date start) {
+    public void setDate(Date start) {
         this.date = start;
         Log.i("date Rem", "the date start = " + start);
     }

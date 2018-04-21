@@ -35,7 +35,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Cust
             //if you wanted to change the layout you can do so by replacing null with viewType
             //so if viewType == 1 then do this one otherwise do different layout
             //instantiating a view
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reminder_row_view, parent, false);
             return new com.group18.app.calendar.RemindersAdapter.CustomViewHolder(view, mListener);
         }
 
@@ -75,7 +75,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Cust
                 super(view);
                 //the layout is being binded to the view
                 remName = (TextView) view.findViewById(R.id.ProfessorName);
-                remName = (TextView) view.findViewById(R.id.ClassName);
+                remName = (TextView) view.findViewById(R.id.commitment_name);
                 startTime = view.findViewById(R.id.time_start);
                 startDate = view.findViewById(R.id.date_start);
 

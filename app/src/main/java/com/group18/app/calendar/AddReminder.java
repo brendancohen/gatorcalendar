@@ -128,7 +128,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
                 if(reminderName.getError() != null || reminderNotes.getError() != null)
                     return;
 
-                if(reminderObj.getHour() == 0 && reminderObj.getMinute() == 0) {
+                if(reminderObj.getHour() == 0 && reminderObj.getMin() == 0) {
                     Toast.makeText(AddReminder.this, "Please select a Start Time", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -163,7 +163,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
         Date date = new GregorianCalendar(year,month,day).getTime();
 
         //place the values into the reminderObj object
-        reminderObj.setStart(date);
+        reminderObj.setDate(date);
     }
 
     @Override
@@ -175,6 +175,6 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
 
         //place the values into the reminderObj object
         reminderObj.setHour(hourOfDay);
-        reminderObj.setMinute(minute);
+        reminderObj.setMin(minute);
     }
 }

@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -51,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
     private CommitmentsAdapter mAdapter;
-
+    private NavigationView myNavView;
+    private TextView welcome;
     private RecyclerView mRecyclerView2;
     private RemindersAdapter mAdapter2;
 
@@ -65,15 +67,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Global.getInstance().setContext(this);
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("queryname", MODE_PRIVATE);
-        boolean askForName = pref.getBoolean("Name", true);
+        boolean askForName = pref.getBoolean("Name", false);
 
-        if(askForName)
+        if(!askForName)
             showDialog();
-        Resources res = getResources();
 
 
-        String username = pref.getString("username","John Doe");
-        getResources().getString(R.string.welcome_name).replace("%s",username);
+
+
+
         mDbHelper = new CommitmentHelper(getApplicationContext());
         mDatabase = mDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
@@ -108,9 +110,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Reminders adapter and RecyclerView
         //this whole commented out section is for the second recycler view
-        //should only need to create the arrayList for this to work
-        //also need to re-adjust the activity_class.xml to display my_recycler_view2
-        //in the lower half of the screen
 
         mRecyclerView2 = findViewById(R.id.my_recycler_view2);
 
@@ -137,13 +136,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             LoadDatabase();
 
 
-        NavigationView myNavView = findViewById(R.id.nav_view);
+        myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
         myDrawerLayout = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout, mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        welcome = myNavView.getHeaderView(0).findViewById(R.id.nav_header_string);
+        String username = pref.getString("username","John Doe");
+        welcome.setText(getResources().getString(R.string.welcome_name).replace("%s",username));
 
         Button startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
@@ -160,13 +163,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddReminder.class);
                 startActivityForResult(intent, AddReminderCode);
-//                String remName = getIntent().getExtras().getString("Reminder Name");
-//                Log.i("hello", "did it work? i wonder. the name = " + remName);
             }
         });
-        Log.i("RemindersInfo", "The object should properly send the info to main activity but I can't figure out how to turn it into an arrayList");
 
-//        Log.i("ReminderInfo", "in onCreate() remName = " + getIntent().getExtras().getString("Reminder Name"));
 
 
     }
@@ -189,8 +188,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     name.setError("Enter name to proceed");
                 else
                 {
+//                    editor.putString("username",name.getText().toString());
+//                    dialog.dismiss();
                     editor.putString("username",name.getText().toString());
+                    editor.apply();
                     dialog.dismiss();
+                    welcome.setText(getResources().getString(R.string.welcome_name).replace("%s",name.getText().toString()));
+                    editor.putBoolean("Name",true);
+                    editor.apply();
                 }
             }
         });
@@ -200,8 +205,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.setCancelable(false);
         //so the user now can't click outside of this dialog to dismiss it
         dialog.setCanceledOnTouchOutside(false);
-        editor.putBoolean("Name",false);
-        editor.apply();
+//        editor.putBoolean("Name",false);
+//        editor.apply();
     }
 
     //called when Activity is being destroyed and relevant data should be saved
