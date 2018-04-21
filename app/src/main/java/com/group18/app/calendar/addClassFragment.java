@@ -441,9 +441,9 @@ public class addClassFragment extends Fragment {
         calendar.set(Calendar.MINUTE, startMinute);
         calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
 
-        Toast testing = Toast.makeText(context, "set for " + startHour + ":"
-                + startMinute + ", day: " + dayOfWeek, Toast.LENGTH_LONG);
-        testing.show();
+  //      Toast testing = Toast.makeText(context, "set for " + startHour + ":"
+  //              + startMinute + ", day: " + dayOfWeek, Toast.LENGTH_LONG);
+   //     testing.show();
 
         //check to see if setting isn't in the past (would trigger alarm)
         if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
