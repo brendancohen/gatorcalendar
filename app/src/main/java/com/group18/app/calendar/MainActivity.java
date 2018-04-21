@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this,"Classes",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tasks:
-                Toast.makeText(this,"Tasks",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Reminders",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings_id:
                 Intent intent = new Intent (this, SettingsActivity.class);
@@ -399,6 +399,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mAdapter.notifyItemRemoved(position);
                 DeletefromDatabase(primarykey);
             }
+            //have to figure out which array we are deleting from ... the myReminders arrayList or the myCommits arrayList or Iago's new one
         }
     }
 

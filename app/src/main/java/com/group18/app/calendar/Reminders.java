@@ -52,19 +52,21 @@ public class Reminders implements Parcelable {
     }
 
     public Date getDate() {
+        Log.i("date Rem", "getDate: the date start = " + date);
         return date;
     }
 
 
     public void setDate(Date start) {
-        this.date = start;
-        Log.i("date Rem", "the date start = " + start);
+        date = start;
+        Log.i("date Rem", "setDate: the date start = " + start);
     }
 
-    public Reminders(String remName, String remNotes, Date userDate){
+    public Reminders(String remName, String remNotes){
         name = remName;
         notes = remNotes;
-        date = userDate;
+//        date = userDate;
+        date = new Date();
         primarykey = UUID.randomUUID();
         date = new Date();
     }
@@ -97,11 +99,8 @@ public class Reminders implements Parcelable {
     protected Reminders(Parcel in) {
         name = in.readString();
         notes = in.readString();
-//        onTheseDays = in.readString();
         long tmpStart = in.readLong();
-//        start = tmpStart != -1 ? new Date(tmpStart) : null;
-        long tmpEnd = in.readLong();
-        date = tmpEnd != -1 ? new Date(tmpEnd) : null;
+        date = tmpStart != -1 ? new Date(tmpStart) : null;
         hour = in.readInt();
         min = in.readInt();
         primarykey = (UUID) in.readValue(UUID.class.getClassLoader());

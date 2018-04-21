@@ -3,6 +3,7 @@ package com.group18.app.calendar;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +69,9 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         }
         else
             holder.endTime.setText(commitment.getEndHour() + ":" + commitment.getEndMinute());
+
         String[] date_no_time_start = commitment.getStart().toString().split(" ",0);
-        String[] date_no_time_end = commitment.getStart().toString().split(" ", 0);
+        String[] date_no_time_end = commitment.getEnd().toString().split(" ", 0);
         holder.startDate.setText("Start: "+ date_no_time_start[1] + " " + date_no_time_start[2]);
         holder.endDate.setText("End:   "+ date_no_time_end[1] + " " + date_no_time_end[2]);
     }
@@ -79,10 +81,6 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         return commitments.size();
     }
 
-
-//        i may need to extend Activity to this class but i can't extend more than one class
-//          one way that i found is to make an interface and then extend activity to it
-//          but this seems overly complicated -- must be another way
 
     public static class CustomViewHolder extends RecyclerView.ViewHolder {
         //can add other things to make a custom layout e.g. images or checkboxes

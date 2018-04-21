@@ -38,7 +38,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
     public int hour;
     public int min;
     private String name, notes;
-    Reminders reminderObj = new Reminders("","",new Date());
+    Reminders reminderObj = new Reminders("","");
 
 
     @Override
@@ -161,6 +161,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
         day = dayOfMonth;
         //change the information into the same format as the class Date
         Date date = new GregorianCalendar(year,month,day).getTime();
+//        Log.i("addReminder", "the date = " + date);
 
         //place the values into the reminderObj object
         reminderObj.setDate(date);
