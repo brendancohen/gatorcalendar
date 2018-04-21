@@ -1,7 +1,17 @@
 package com.group18.app.calendar;
 
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -10,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -19,6 +30,7 @@ import java.util.ArrayList;
  */
 
 public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.CustomViewHolder> {
+    private Context context;
 
     private ArrayList<Commitments> commitments;
 

@@ -132,6 +132,8 @@ public class Commitments implements Parcelable {
         return onTheseDays;
     }
 
+    public int getClassesPerWeek() { return onTheseDays.length(); }
+
     public void setOnTheseDays(String onTheseDays) {
         this.onTheseDays = onTheseDays;
     }
@@ -150,6 +152,8 @@ public class Commitments implements Parcelable {
         startMinute = in.readInt();
         endMinute = in.readInt();
         primarykey = (UUID) in.readValue(UUID.class.getClassLoader());
+
+
     }
 
     @Override
@@ -169,6 +173,7 @@ public class Commitments implements Parcelable {
         dest.writeInt(startMinute);
         dest.writeInt(endMinute);
         dest.writeValue(primarykey);
+
     }
 
     @SuppressWarnings("unused")
