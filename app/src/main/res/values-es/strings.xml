@@ -6,6 +6,13 @@
     <string name="helloandwelcome">Hola! Gracias por usar nuestra aplicación</string>
     <string name="ifyouhavequestions">Si tienes cualquier duda, escribenos </string>
     <string name="email">a gatorcalendar@ufl.edu.</string>
+    <string name="monday">Lunes</string>
+    <string name="tuesday">Martes</string>
+    <string name="wednesday">Miercoles</string>
+    <string name="thursday">Jueves</string>
+    <string name="friday">Viernes</string>
+    <string name="saturday">Sábado</string>
+    <string name="sunday">Domingo</string>
     <string name="ProfessorName">Nombre de Profesor</string>
     <string name="ClassName">Nombre de clase</string>
     <string name="ToggleView">Vista toggle</string>

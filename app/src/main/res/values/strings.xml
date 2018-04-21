@@ -1,7 +1,13 @@
 <resources>
     <string name="first_day_switch">Click here to start the week on Mondays instead of Sundays</string>
     <string name="first_day_switcher">Week settings</string>
-
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
     <string name="helloandwelcome">Hello! Thank you for using our application.</string>
     <string name="ifyouhavequestions">If you have any questions email us</string>
     <string name="email">at gatorcalendar@ufl.edu.</string>
