@@ -122,13 +122,13 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
             public void onClick(View v) {
                 //check to see if user has input a Reminder name, else set Error
                 if(reminderName.getText().toString().length() == 0)
-                    reminderName.setError("Class Name is Required!");
+                    reminderName.setError("Event Name is Required!");
 
                 //if EditText error, do not proceed
                 if(reminderName.getError() != null || reminderNotes.getError() != null)
                     return;
 
-                if(reminderObj.getHour() == 0 && reminderObj.getMin() == 0) {
+                if(reminderObj.getHour() == 0 && reminderObj.getMinute() == 0) {
                     Toast.makeText(AddReminder.this, "Please select a Start Time", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -146,6 +146,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
                 //when i was testing to see if the name and notes would go to MainActivity = the answer is YES
 //                intent.putExtra("Reminder Name", reminderName.getText().toString());
 //                intent.putExtra("Reminder Notes", reminderNotes.getText().toString());
+
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             }
@@ -162,7 +163,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
         Date date = new GregorianCalendar(year,month,day).getTime();
 
         //place the values into the reminderObj object
-        reminderObj.setDate(date);
+        reminderObj.setStart(date);
     }
 
     @Override
@@ -174,6 +175,6 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
 
         //place the values into the reminderObj object
         reminderObj.setHour(hourOfDay);
-        reminderObj.setMin(minute);
+        reminderObj.setMinute(minute);
     }
 }

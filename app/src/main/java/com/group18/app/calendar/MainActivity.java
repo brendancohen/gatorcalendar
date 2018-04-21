@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
     private CommitmentsAdapter mAdapter;
+
     private RecyclerView mRecyclerView2;
     private RemindersAdapter mAdapter2;
 
@@ -129,9 +130,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         mRecyclerView2.setAdapter(mAdapter2);
-//
-//        if(myReminders.isEmpty())
-//            LoadDatabase();
+
+        if(myReminders.isEmpty())
+            LoadDatabase();
 
 
         NavigationView myNavView = findViewById(R.id.nav_view);
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         Log.i("RemindersInfo", "The object should properly send the info to main activity but I can't figure out how to turn it into an arrayList");
 
+//        Log.i("ReminderInfo", "in onCreate() remName = " + getIntent().getExtras().getString("Reminder Name"));
 
 
     }
@@ -301,12 +303,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 myCommits.add(tempclass);
                 mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
                 mAdapter.notifyItemInserted(myCommits.size()-1);
+                Log.i("hello", "this is called!!!!");
             }
-            if(requestCode == AddReminderCode){
-                Log.d("Sort", "eadfdadfs");
+            if(requestCode == AddReminderCode) {
                 Reminders reminder = data.getParcelableExtra("reminderObj");
                 myReminders.add(reminder);
                 mAdapter2.notifyItemInserted(myReminders.size()-1);
+                Log.i("hello", "reminder = " + reminder.getName());
             }
     }
 
