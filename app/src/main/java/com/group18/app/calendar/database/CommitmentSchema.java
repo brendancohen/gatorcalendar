@@ -36,6 +36,7 @@ public class CommitmentSchema {
             public static final String HOUR = "hour";
             public static final String MIN = "minute";
             public static final String DATE = "date";
+            public static final String ID ="ID";
         }
     }
 }

@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 //this is the Activity that is launched when app is started, see manifest file
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteCommitmentFragment.InterfaceCommunicator, addClassFragment.CheckDuplicate{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteDialogFragment.InterfaceCommunicator, addClassFragment.CheckDuplicate{
 
     private DrawerLayout myDrawerLayout;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
-    private static final int DeleteFragmentCode = 1;
+    private static final int DeleteCommitmentCode = 1;
+    private static final int DeleteReminderCode = 5;
     private static final int AddReminderCode = 2;
     private CommitmentHelper mCommitmentDbHelper;
     private ReminderHelper mReminderDbHelper;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(int position) {
                 //android.app.FragmentManager mFragmentManager = getFragmentManager();
-                DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
+                DeleteDialogFragment dialog = new DeleteDialogFragment();
                 Bundle mybundle = new Bundle();
                 mybundle.putInt("position", position);
                 dialog.setArguments(mybundle);
@@ -104,8 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         mRecyclerView.setAdapter(mAdapter);
-
-
             LoadCommitmentDatabase();
             LoadReminderDatabase();
 
@@ -124,8 +123,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(int position) {
                 //android.app.FragmentManager mFragmentManager = getFragmentManager();
-                DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
+                DeleteDialogFragment dialog = new DeleteDialogFragment();
                 Bundle mybundle = new Bundle();
+                mybundle.putString("ReminderAdapter", "true");
                 mybundle.putInt("position", position);
                 dialog.setArguments(mybundle);
                 dialog.show(getFragmentManager(), "deleteCommitment");
@@ -353,6 +353,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         values.put(CommitmentSchema.ReminderTable.Cols.DATE, my_reminder.getDate().toString());
         values.put(CommitmentSchema.ReminderTable.Cols.HOUR, String.valueOf(my_reminder.getHour()));
         values.put(CommitmentSchema.ReminderTable.Cols.MIN, String.valueOf(my_reminder.getMin()));
+        values.put(CommitmentSchema.CommitmentTable.Cols.ID, my_reminder.getPrimarykey().toString());
         return values;
     }
 
@@ -416,6 +417,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String date = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.DATE));
                 String hour = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.HOUR));
                 String min = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.MIN));
+                String id = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ID));
 
                 SimpleDateFormat stringformatter = new SimpleDateFormat("E MMM dd HH:mm:ss z YYYY");
                 Date startdate = stringformatter.parse(date);
@@ -424,6 +426,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 obj1.setDate(startdate);
                 obj1.setHour(Integer.valueOf(hour));
                 obj1.setMin(Integer.valueOf(min));
+                obj1.setPrimarykey(id);
                 myReminders.add(obj1);
                 cursor.moveToNext();
             }
@@ -436,14 +439,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void sendRequestCode(int code, boolean delete, int position) {
-        if(code == DeleteFragmentCode){
+        if(code == DeleteCommitmentCode){
             if(delete && position != -1){
                 String primarykey = myCommits.get(position).getPrimarykey().toString();
                 myCommits.remove(position);
                 mAdapter.notifyItemRemoved(position);
                 DeletefromDatabase(primarykey);
             }
+
             //have to figure out which array we are deleting from ... the myReminders arrayList or the myCommits arrayList or Iago's new one
+        }
+        else{
+            if(delete && position != -1){
+                String primarykey = myReminders.get(position).getPrimarykey().toString();
+                myReminders.remove(position);
+                mAdapter2.notifyItemRemoved(position);
+                DeletefromDatabase(primarykey);
+            }
         }
     }
 
