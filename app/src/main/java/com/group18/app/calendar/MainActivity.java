@@ -591,7 +591,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         myCommits.remove(i);
                     }
                 }
-                DeletefromDatabase(primarykey);
+                DeletefromDatabase(primarykey,CommitmentSchema.CommitmentTable.NAME);
             }
 
             //have to figure out which array we are deleting from ... the myReminders arrayList or the myCommits arrayList or Iago's new one
@@ -601,14 +601,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String primarykey = myReminders.get(position).getPrimarykey().toString();
                 myReminders.remove(position);
                 mAdapter2.notifyItemRemoved(position);
-                DeletefromDatabase(primarykey);
+                DeletefromDatabase(primarykey, CommitmentSchema.ReminderTable.NAME);
             }
         }
     }
 
-    private void DeletefromDatabase(String primarykey) {
-        mCommitmentDatabase.delete(CommitmentSchema.CommitmentTable.NAME, CommitmentSchema.CommitmentTable.Cols.ID + " = ?",
-                new String[] {primarykey});
+    private void DeletefromDatabase(String primarykey, String name) {
+
+        if(name == CommitmentSchema.CommitmentTable.NAME) {
+            mCommitmentDatabase.delete(CommitmentSchema.CommitmentTable.NAME, CommitmentSchema.CommitmentTable.Cols.ID + " = ?",
+                    new String[]{primarykey});
+        }
+        else{
+            mReminderDatabase.delete(CommitmentSchema.ReminderTable.NAME, CommitmentSchema.ReminderTable.Cols.ID + " = ?",
+                    new String[]{primarykey});
+        }
 
     }
 
