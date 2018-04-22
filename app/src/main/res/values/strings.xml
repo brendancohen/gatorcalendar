@@ -27,7 +27,7 @@
     <string name="commute">Commute</string>
     <string name="tasks">Reminders</string>
     <string name="classes">Classes</string>
-    <string name="calendar_view">Calendar View</string>
+    <string name="calendar_view">Weekly View</string>
     <string name="home">Home</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
@@ -43,16 +43,41 @@
     <string name="commit">Commit</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_map">Map</string>
-    <string name="title_activity_help">Help</string>
-    <string name="title_activity_weekly_view">Weekly View</string>
 
     <!-- Strings related to Settings -->
     <!--Strings that need to be translated to spanish-->
+    <string name="title_activity_weekly_view">Weekly View</string>
+    <string name="title_activity_help">Help</string>
     <string name="ask_commitment">Enter Event name</string>
     <string name="ask_notes">Enter Notes </string>
     <string name="reminder_time">Time</string>
     <string name="reminder_date">Date</string>
+    <string name="faqs">Frequently Asked Questions</string>
+    <string name="question_1">I accidentally misspelled my name. How can I fix it?</string>
+    <string name="answer_1">You can reset the app to its beginning state through System Settings > Apps > Calendar > Storage > Clear Data. Keep in mind this will also erase all classes and reminders.</string>
+    <string name="question_2">Is it possible to change the language of the app?</string>
+    <string name="answer_2">Yes, the app is supported in English and Spanish. The language options can be toggled through Settings > General > Language Settings.</string>
+    <string name="question_3">How can I turn off notifications?</string>
+    <string name="answer_3">Go to System Settings > Notifications > Calendar. There you can choose “Block All”
+so that notifications never show, or “Show Silently” to turn off notification sounds and
+vibrations.</string>
+    <string name="question_4">How do I add a class in the app?</string>
+    <string name="answer_4">On the home screen, press the “ADD CLASS” button. There, insert your class
+information in the appropriate fields, and press “COMMIT” at the bottom of the screen to
+submit the class. Your class card will now appear on the home screen.</string>
+    <string name="question_5">How do I delete a class in the app?</string>
+    <string name="answer_5">Long Click on the card for the class you want to delete and select “YES” when asked
+if you would like to delete the commitment.</string>
+    <string name="question_6">If I clear my app’s data, what will happen to my classes?</string>
+    <string name="answer_6">If you clear the app’s data, data will be deleted from the local database. Only clear
+the data on your app if you wish to reset the app to its beginning state. If you want to
+clear up space, go to System Settings > Apps > Calendar > Storage > Clear Cache.</string>
+    <string name="question_7">How can I find out where my next class is?</string>
+    <string name="answer_7">On the home screen, press the pointer icon in the upper right. This opens the
+commute screen, where you can search for the location of your next class usingGoogle. If you select directions, the app will open Google Maps and show directions
+from your current location to your class.</string>
 
+    <!-- Strings related to Settings -->
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 

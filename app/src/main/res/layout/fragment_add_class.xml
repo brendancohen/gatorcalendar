@@ -9,9 +9,8 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/myfragmenttoolbar"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:background="@color/colorPrimary"
-         />
+        android:layout_height="58dp"
+        android:background="@color/colorPrimary" />
 
     <Button
         android:id="@+id/time_end_class"
@@ -33,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="68dp"
         android:ems="10"
         android:hint="@string/ask_class"
         android:inputType="textPersonName"
