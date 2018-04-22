@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -24,9 +23,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.group18.app.calendar.database.CommitmentHelper;
 import com.group18.app.calendar.database.CommitmentSchema;
+import com.group18.app.calendar.database.ReminderHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +37,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 //this is the Activity that is launched when app is started, see manifest file
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteCommitmentFragment.InterfaceCommunicator, addClassFragment.CheckDuplicate{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteDialogFragment.InterfaceCommunicator, addClassFragment.CheckDuplicate{
 
     private DrawerLayout myDrawerLayout;
     private ArrayList<Commitments> myCommits = new ArrayList<>();
@@ -43,12 +45,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
-    private static final int DeleteFragmentCode = 1;
+    private static final int DeleteCommitmentCode = 1;
+    private static final int DeleteReminderCode = 5;
     private static final int AddReminderCode = 2;
-    private CommitmentHelper mDbHelper;
-    private SQLiteDatabase mDatabase;
+    private CommitmentHelper mCommitmentDbHelper;
+    private ReminderHelper mReminderDbHelper;
+    private SQLiteDatabase mCommitmentDatabase;
+    private SQLiteDatabase mReminderDatabase;
     private RecyclerView mRecyclerView;
     private CommitmentsAdapter dailyClassAdapter;
+    private CommitmentsAdapter mAdapter;
+    private NavigationView myNavView;
+    private TextView welcome;
     private RecyclerView mRecyclerView2;
     private RemindersAdapter mAdapter2;
 
@@ -62,29 +70,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Global.getInstance().setContext(this);
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("queryname", MODE_PRIVATE);
-        boolean askForName = pref.getBoolean("Name", true);
+        boolean askForName = pref.getBoolean("Name", false);
 
-        if(askForName)
+        if(!askForName)
             showDialog();
-        Resources res = getResources();
 
 
-        String username = pref.getString("username","John Doe");
-        getResources().getString(R.string.welcome_name).replace("%s",username);
-        mDbHelper = new CommitmentHelper(getApplicationContext());
-        mDatabase = mDbHelper.getWritableDatabase();
+
+
+
+        mCommitmentDbHelper = new CommitmentHelper(getApplicationContext());
+        mReminderDbHelper = new ReminderHelper(getApplicationContext());
+        mCommitmentDatabase = mCommitmentDbHelper.getWritableDatabase();
+        mReminderDatabase = mReminderDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
         Toolbar mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
 
         mRecyclerView = findViewById(R.id.my_recycler_view);
-
         //this improves performance of RecyclerView
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            LoadDatabase();
 
         dailyClassAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
 
@@ -92,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(int position) {
                 //android.app.FragmentManager mFragmentManager = getFragmentManager();
-                DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
+                DeleteDialogFragment dialog = new DeleteDialogFragment();
                 Bundle mybundle = new Bundle();
                 mybundle.putInt("position", position);
                 dialog.setArguments(mybundle);
@@ -100,47 +108,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+
         mRecyclerView.setAdapter(dailyClassAdapter);
+
+        mRecyclerView.setAdapter(mAdapter);
+            LoadCommitmentDatabase();
+            LoadReminderDatabase();
+
 
 
         //Reminders adapter and RecyclerView
         //this whole commented out section is for the second recycler view
-        //should only need to create the arrayList for this to work
-        //also need to re-adjust the activity_class.xml to display my_recycler_view2
-        //in the lower half of the screen
 
-//        mRecyclerView2 = findViewById(R.id.my_recycler_view2);
-//
-//        //this improves performance of RecyclerView
-//        mRecyclerView2.setHasFixedSize(true);
-//        mRecyclerView2.setLayoutManager(new LinearLayoutManager(this));
-//        mAdapter2 = new RemindersAdapter(MainActivity.this, myReminders);
-//
-//        mAdapter2.setonItemClickListener(new RemindersAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(int position) {
-//                //android.app.FragmentManager mFragmentManager = getFragmentManager();
-//                DeleteCommitmentFragment dialog = new DeleteCommitmentFragment();
-//                Bundle mybundle = new Bundle();
-//                mybundle.putInt("position", position);
-//                dialog.setArguments(mybundle);
-//                dialog.show(getFragmentManager(), "deleteCommitment");
-//            }
-//        });
-//
-//        mRecyclerView2.setAdapter(mAdapter2);
-//
-//        if(myReminders.isEmpty())
-//            LoadDatabase();
+        mRecyclerView2 = findViewById(R.id.my_recycler_view2);
+
+        //this improves performance of RecyclerView
+        mRecyclerView2.setHasFixedSize(true);
+        mRecyclerView2.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter2 = new RemindersAdapter(MainActivity.this, myReminders);
+
+        mAdapter2.setonItemClickListener(new RemindersAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //android.app.FragmentManager mFragmentManager = getFragmentManager();
+                DeleteDialogFragment dialog = new DeleteDialogFragment();
+                Bundle mybundle = new Bundle();
+                mybundle.putString("ReminderAdapter", "true");
+                mybundle.putInt("position", position);
+                dialog.setArguments(mybundle);
+                dialog.show(getFragmentManager(), "deleteCommitment");
+            }
+        });
+
+        mRecyclerView2.setAdapter(mAdapter2);
 
 
-        NavigationView myNavView = findViewById(R.id.nav_view);
+        myNavView = findViewById(R.id.nav_view);
         myNavView.setNavigationItemSelectedListener(this);
         myDrawerLayout = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,myDrawerLayout, mytoolbar,R.string.open_drawer,R.string.close_drawer);
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        welcome = myNavView.getHeaderView(0).findViewById(R.id.nav_header_string);
+        String username = pref.getString("username","John Doe");
+        welcome.setText(getResources().getString(R.string.welcome_name).replace("%s",username));
 
         Button startaddClass = findViewById(R.id.start_add_class);
         startaddClass.setOnClickListener(new View.OnClickListener() {
@@ -157,11 +170,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddReminder.class);
                 startActivityForResult(intent, AddReminderCode);
-//                String remName = getIntent().getExtras().getString("Reminder Name");
-//                Log.i("hello", "did it work? i wonder. the name = " + remName);
             }
         });
-        Log.i("RemindersInfo", "The object should properly send the info to main activity but I can't figure out how to turn it into an arrayList");
 
 
 
@@ -185,8 +195,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     name.setError("Enter name to proceed");
                 else
                 {
+//                    editor.putString("username",name.getText().toString());
+//                    dialog.dismiss();
                     editor.putString("username",name.getText().toString());
+                    editor.apply();
                     dialog.dismiss();
+                    welcome.setText(getResources().getString(R.string.welcome_name).replace("%s",name.getText().toString()));
+                    editor.putBoolean("Name",true);
+                    editor.apply();
                 }
             }
         });
@@ -196,8 +212,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.setCancelable(false);
         //so the user now can't click outside of this dialog to dismiss it
         dialog.setCanceledOnTouchOutside(false);
-        editor.putBoolean("Name",false);
-        editor.apply();
+//        editor.putBoolean("Name",false);
+//        editor.apply();
     }
 
     //called when Activity is being destroyed and relevant data should be saved
@@ -233,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav:
                 Intent intent = new Intent (this, MapActivity.class);
                 startActivity(intent);
-                Toast.makeText(this, "We are still building this ", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.schedule:
                 Toast.makeText(this, "What setting are we including here? ", Toast.LENGTH_SHORT).show();
@@ -263,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this,"Classes",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tasks:
-                Toast.makeText(this,"Tasks",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Reminders",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings_id:
                 Intent intent = new Intent (this, SettingsActivity.class);
@@ -298,11 +313,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(requestCode == AddClassCode){
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
-                mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
+
+                mCommitmentDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
                 int should_i_notify = daily_class_view_add_notification(tempclass);
                 if (should_i_notify != -1){
                     dailyClassAdapter.notifyItemInserted(should_i_notify);
                 }
+
+                mCommitmentDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
+                mAdapter.notifyItemInserted(myCommits.size()-1);
+                Log.i("hello", "this is called!!!!");
+            }
+            if(requestCode == AddReminderCode) {
+                Reminders reminder = data.getParcelableExtra("reminderObj");
+                myReminders.add(reminder);
+                mReminderDatabase.insert(CommitmentSchema.ReminderTable.NAME,null,getContentValues(reminder));
+                mAdapter2.notifyItemInserted(myReminders.size()-1);
+                Log.i("hello", "reminder = " + reminder.getName());
+
             }
     }
 
@@ -451,13 +479,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         values.put(CommitmentSchema.CommitmentTable.Cols.START_MINUTE, String.valueOf(my_commitment.getStartMinute()));
         values.put(CommitmentSchema.CommitmentTable.Cols.END_HOUR, String.valueOf(my_commitment.getEndHour()));
         values.put(CommitmentSchema.CommitmentTable.Cols.END_MINUTE, String.valueOf(my_commitment.getEndMinute()));
+        values.put(CommitmentSchema.CommitmentTable.Cols.LAT, String.valueOf(my_commitment.getLat()));
+        values.put(CommitmentSchema.CommitmentTable.Cols.LONG, String.valueOf((my_commitment.getLng())));
 
         return values;
     }
 
-    private void LoadDatabase(){
-        Log.i("database", "the database has been called!");
-        Cursor cursor = mDatabase.query(CommitmentSchema.CommitmentTable.NAME, null,
+
+
+
+    private static ContentValues getContentValues(Reminders my_reminder){
+        ContentValues values = new ContentValues();
+        values.put(CommitmentSchema.ReminderTable.Cols.EVENT, my_reminder.getName());
+        values.put(CommitmentSchema.ReminderTable.Cols.NOTES, my_reminder.getNotes());
+        values.put(CommitmentSchema.ReminderTable.Cols.DATE, my_reminder.getDate().toString());
+        values.put(CommitmentSchema.ReminderTable.Cols.HOUR, String.valueOf(my_reminder.getHour()));
+        values.put(CommitmentSchema.ReminderTable.Cols.MIN, String.valueOf(my_reminder.getMin()));
+        values.put(CommitmentSchema.CommitmentTable.Cols.ID, my_reminder.getPrimarykey().toString());
+        return values;
+    }
+
+    private void LoadCommitmentDatabase(){
+
+        Cursor cursor = mCommitmentDatabase.query(CommitmentSchema.CommitmentTable.NAME, null,
+
                 null, null, null, null, null);
 
             try {
@@ -475,6 +520,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     String start_minute = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.START_MINUTE));
                     String end_hour = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.END_HOUR));
                     String end_minute = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.END_MINUTE));
+                    Double lat = cursor.getDouble((cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.LAT)));
+                    Double lng = cursor.getDouble((cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.LONG)));
 
                     SimpleDateFormat stringformatter = new SimpleDateFormat("E MMM dd HH:mm:ss z YYYY");
                     Date startdate = stringformatter.parse(start);
@@ -488,6 +535,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     obj1.setEndHour(Integer.parseInt(end_hour));
                     obj1.setEndMinute(Integer.parseInt(end_minute));
                     obj1.setStartMinute(Integer.parseInt(start_minute));
+                    obj1.setLat(lat);
+                    obj1.setLng(lng);
                     myCommits.add(obj1);
                     cursor.moveToNext();
                 }
@@ -498,9 +547,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
     }
 
+    private void LoadReminderDatabase() {
+        Cursor cursor = mReminderDatabase.query(CommitmentSchema.ReminderTable.NAME, null,
+                null, null, null, null, null);
+
+        try {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()) {
+
+                String event = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.EVENT));
+                String notes = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.NOTES));
+                String date = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.DATE));
+                String hour = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.HOUR));
+                String min = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.MIN));
+                String id = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ID));
+
+                SimpleDateFormat stringformatter = new SimpleDateFormat("E MMM dd HH:mm:ss z YYYY");
+                Date startdate = stringformatter.parse(date);
+
+                Reminders obj1 = new Reminders(event,notes);
+                obj1.setDate(startdate);
+                obj1.setHour(Integer.valueOf(hour));
+                obj1.setMin(Integer.valueOf(min));
+                obj1.setPrimarykey(id);
+                myReminders.add(obj1);
+                cursor.moveToNext();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+    }
+
     @Override
     public void sendRequestCode(int code, boolean delete, int position) {
-        if(code == DeleteFragmentCode){
+        if(code == DeleteCommitmentCode){
             if(delete && position != -1){
                 String primarykey = dailyClassAdapter.daily_commitments.get(position).getPrimarykey().toString();
                 dailyClassAdapter.daily_commitments.remove(position);
@@ -512,11 +594,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 DeletefromDatabase(primarykey);
             }
+
+            //have to figure out which array we are deleting from ... the myReminders arrayList or the myCommits arrayList or Iago's new one
+        }
+        else{
+            if(delete && position != -1){
+                String primarykey = myReminders.get(position).getPrimarykey().toString();
+                myReminders.remove(position);
+                mAdapter2.notifyItemRemoved(position);
+                DeletefromDatabase(primarykey);
+            }
         }
     }
 
     private void DeletefromDatabase(String primarykey) {
-        mDatabase.delete(CommitmentSchema.CommitmentTable.NAME, CommitmentSchema.CommitmentTable.Cols.ID + " = ?",
+        mCommitmentDatabase.delete(CommitmentSchema.CommitmentTable.NAME, CommitmentSchema.CommitmentTable.Cols.ID + " = ?",
                 new String[] {primarykey});
 
     }

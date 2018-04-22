@@ -11,22 +11,22 @@ public class Reminders implements Parcelable {
     private String name;
     private String notes;
     private Date date;
-    private int year;
-    private int month;
-    private int day;
     private int hour;
     private int min;
-    private String onTheseDays;
+    private UUID primarykey;
+
 
     //we want to be able to uniquely identify this class
-    private UUID primarykey;
 
     public void setPrimarykey(String primarykey) {
         this.primarykey = UUID.fromString(primarykey);
     }
 
+    public UUID getPrimarykey() {
+        return primarykey;
+    }
 
-    public int getMinute() {
+    public int getMin() {
         return min;
     }
 
@@ -34,7 +34,7 @@ public class Reminders implements Parcelable {
         return min - 5;
     }
 
-    public void setMinute(int min) {
+    public void setMin(int min) {
         this.min = min;
     }
 
@@ -47,26 +47,23 @@ public class Reminders implements Parcelable {
         this.hour = hour;
     }
 
-    public UUID getPrimarykey() {
-        return primarykey;
-    }
-
-    public Date getStart() {
+    public Date getDate() {
+        Log.i("date Rem", "getDate: the date start = " + date);
         return date;
     }
 
 
-    public void setStart(Date start) {
-        this.date = start;
-        Log.i("date Rem", "the date start = " + start);
+    public void setDate(Date start) {
+        date = start;
+        Log.i("date Rem", "setDate: the date start = " + start);
     }
 
-    public Reminders(String remName, String remNotes, String days){
+    public Reminders(String remName, String remNotes){
         name = remName;
         notes = remNotes;
-        onTheseDays = days;
-        primarykey = UUID.randomUUID();
         date = new Date();
+        primarykey = UUID.randomUUID();
+
     }
 
     public String getName() {
@@ -85,23 +82,13 @@ public class Reminders implements Parcelable {
         this.notes = notes;
     }
 
-    public String getOnTheseDays() {
-        return onTheseDays;
-    }
 
-    public void setOnTheseDays(String onTheseDays) {
-        this.onTheseDays = onTheseDays;
-    }
 
-    //ISSUE: startHour is being overwritten by startMinute, endHour is being overwritten by endMinute
     protected Reminders(Parcel in) {
         name = in.readString();
         notes = in.readString();
-        onTheseDays = in.readString();
         long tmpStart = in.readLong();
-//        start = tmpStart != -1 ? new Date(tmpStart) : null;
-        long tmpEnd = in.readLong();
-        date = tmpEnd != -1 ? new Date(tmpEnd) : null;
+        date = tmpStart != -1 ? new Date(tmpStart) : null;
         hour = in.readInt();
         min = in.readInt();
         primarykey = (UUID) in.readValue(UUID.class.getClassLoader());
@@ -116,7 +103,6 @@ public class Reminders implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(notes);
-        dest.writeString(onTheseDays);
         dest.writeLong(date != null ? date.getTime() : -1L);
         dest.writeInt(hour);
         dest.writeInt(min);

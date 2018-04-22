@@ -21,7 +21,8 @@ public class Commitments implements Parcelable {
     private String professor;
     private String cname;
     private String onTheseDays;
-    private String placeID;
+    private Double lat = 0.0;
+    private Double lng = 0.0;
     private Date start;
     private Date end;
     private int startHour;
@@ -114,11 +115,13 @@ public class Commitments implements Parcelable {
         this.professor = professor;
     }
 
-    public void setPlaceID(String placeID){
-        this.placeID = placeID;
-    }
+    public void setLat(Double mLat){lat=mLat;}
 
-    public String getPlaceID(){return placeID;}
+    public double getLat(){return lat;}
+
+    public void setLng(Double mLng){lng=mLng;}
+
+    public double getLng(){return lng;}
 
     public String getCname() {
         return cname;
@@ -131,6 +134,8 @@ public class Commitments implements Parcelable {
     public String getOnTheseDays() {
         return onTheseDays;
     }
+
+    public int getClassesPerWeek() { return onTheseDays.length(); }
 
     public void setOnTheseDays(String onTheseDays) {
         this.onTheseDays = onTheseDays;
@@ -150,6 +155,8 @@ public class Commitments implements Parcelable {
         startMinute = in.readInt();
         endMinute = in.readInt();
         primarykey = (UUID) in.readValue(UUID.class.getClassLoader());
+        lat = in.readDouble();
+        lng = in.readDouble();
     }
 
     @Override
@@ -169,6 +176,8 @@ public class Commitments implements Parcelable {
         dest.writeInt(startMinute);
         dest.writeInt(endMinute);
         dest.writeValue(primarykey);
+        dest.writeDouble(lat);
+        dest.writeDouble(lng);
     }
 
     @SuppressWarnings("unused")

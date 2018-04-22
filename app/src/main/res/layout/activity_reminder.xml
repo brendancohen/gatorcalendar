@@ -52,30 +52,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/commitment_name"
-        android:layout_alignTop="@+id/start_date_reminder"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="40dp"
         android:text="@string/reminder_time"
-        app:layout_constraintBottom_toTopOf="@+id/commit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/start_date_reminder"
-        app:layout_constraintTop_toBottomOf="@+id/notes" />
-
-    <Button
-        android:id="@+id/start_date_reminder"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="49dp"
-        android:layout_alignEnd="@+id/commitment_name"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="4dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/reminder_date"
-        app:layout_constraintBottom_toTopOf="@+id/commit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notes" />
 
@@ -92,7 +74,8 @@
         android:text="@string/commit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_time_reminder" />
 
     <CalendarView
         android:id="@+id/Reminder_Calendar"

@@ -1,10 +1,12 @@
 package com.group18.app.calendar;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -26,7 +29,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class AddReminder extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddReminder extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
     private EditText reminderName, reminderNotes;
     private Button reminderTime, reminderDate;
@@ -37,7 +40,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
     public int hour;
     public int min;
     private String name, notes;
-    Reminders reminderObj = new Reminders("","","");
+    Reminders reminderObj = new Reminders("","");
 
 
     @Override
@@ -56,7 +59,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
         //initializing the values of the textboxes and the buttons
         reminderName = findViewById(R.id.commitment_name);
         reminderNotes = findViewById(R.id.notes);
-        reminderDate = findViewById(R.id.start_date_reminder);
+
         reminderTime = findViewById(R.id.start_time_reminder);
         Date currentTime = Calendar.getInstance().getTime();
         mCalendar.setTime(currentTime);
@@ -106,10 +109,27 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
             }
         });
 
-        reminderDate.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                DialogFragment datePicker = new ReminderDatePicker();
-                datePicker.show(getSupportFragmentManager(), "date picker");
+//        reminderDate.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                DialogFragment datePicker = new ReminderDatePicker();
+//                datePicker.show(getSupportFragmentManager(), "date picker");
+//            }
+//        });
+        CalendarView calendarView = (CalendarView) findViewById(R.id.Reminder_Calendar);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                //time is sent from ReminderDatePicker
+                //initialize values
+//                year = y;
+//                month = m;
+//                day = dayOfMonth;
+                //change the information into the same format as the class Date
+                Date date = new GregorianCalendar(year,month,dayOfMonth).getTime();
+//        Log.i("addReminder", "the date = " + date);
+
+                //place the values into the reminderObj object
+                reminderObj.setDate(date);
             }
         });
 
@@ -121,13 +141,13 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
             public void onClick(View v) {
                 //check to see if user has input a Reminder name, else set Error
                 if(reminderName.getText().toString().length() == 0)
-                    reminderName.setError("Class Name is Required!");
+                    reminderName.setError("Event Name is Required!");
 
                 //if EditText error, do not proceed
                 if(reminderName.getError() != null || reminderNotes.getError() != null)
                     return;
 
-                if(reminderObj.getHour() == 0 && reminderObj.getMinute() == 0) {
+                if(reminderObj.getHour() == 0 && reminderObj.getMin() == 0) {
                     Toast.makeText(AddReminder.this, "Please select a Start Time", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -145,23 +165,14 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
                 //when i was testing to see if the name and notes would go to MainActivity = the answer is YES
 //                intent.putExtra("Reminder Name", reminderName.getText().toString());
 //                intent.putExtra("Reminder Notes", reminderNotes.getText().toString());
-                startActivity(intent);
+
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
     }
 
-    public void onDateSet(DatePicker view, int y, int m, int dayOfMonth) {
-        //time is sent from ReminderDatePicker
-        //initialize values
-        year = y;
-        month = m;
-        day = dayOfMonth;
-        //change the information into the same format as the class Date
-        Date date = new GregorianCalendar(year,month,day).getTime();
 
-        //place the values into the reminderObj object
-        reminderObj.setStart(date);
-    }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -172,6 +183,6 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
 
         //place the values into the reminderObj object
         reminderObj.setHour(hourOfDay);
-        reminderObj.setMinute(minute);
+        reminderObj.setMin(minute);
     }
 }
