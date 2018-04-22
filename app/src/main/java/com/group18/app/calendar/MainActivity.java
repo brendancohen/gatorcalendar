@@ -106,9 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mRecyclerView.setAdapter(mAdapter);
 
-        if(myCommits.isEmpty())
+
             LoadCommitmentDatabase();
-        if(myReminders.isEmpty())
             LoadReminderDatabase();
 
 

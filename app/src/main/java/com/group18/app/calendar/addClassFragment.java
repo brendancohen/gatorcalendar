@@ -64,6 +64,7 @@ public class addClassFragment extends Fragment {
     private HashMap<String, List<String>> mListHashMap;
     Commitments obj1 = new Commitments("","","");
 
+
     private static final String CLASS_BEGIN_DATE = "BeginDate";
     private static final String CLASS_END_DATE = "EndDate";
     private static final int START_DATE_PICKED = 1;
@@ -79,6 +80,10 @@ public class addClassFragment extends Fragment {
 
         //retain this fragment across configuration changes
         this.setRetainInstance(true);
+        Date start = new GregorianCalendar(2018,0,8).getTime();
+        Date end = new GregorianCalendar(2018,3,25).getTime();
+        obj1.setStart(start);
+        obj1.setEnd(end);
     }
 
     //declare interface so that AddClassActivity can receive the Commitment object from this fragment
