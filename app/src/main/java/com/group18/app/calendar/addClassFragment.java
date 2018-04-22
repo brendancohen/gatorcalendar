@@ -35,6 +35,8 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -62,6 +64,7 @@ public class addClassFragment extends Fragment {
     private HashMap<String, List<String>> mListHashMap;
     Commitments obj1 = new Commitments("","","");
 
+
     private static final String CLASS_BEGIN_DATE = "BeginDate";
     private static final String CLASS_END_DATE = "EndDate";
     private static final int START_DATE_PICKED = 1;
@@ -77,6 +80,10 @@ public class addClassFragment extends Fragment {
 
         //retain this fragment across configuration changes
         this.setRetainInstance(true);
+        Date start = new GregorianCalendar(2018,0,8).getTime();
+        Date end = new GregorianCalendar(2018,3,25).getTime();
+        obj1.setStart(start);
+        obj1.setEnd(end);
     }
 
     //declare interface so that AddClassActivity can receive the Commitment object from this fragment
@@ -116,8 +123,7 @@ public class addClassFragment extends Fragment {
         Button starttime = v.findViewById(R.id.time_start_class);
         Button endtime = v.findViewById(R.id.time_end_class);
         Button commitlocation = v.findViewById(R.id.commit_location);
-        //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.mytoolbar);
-        //mListView.expandGroup(0,true);
+
 
 
 
@@ -338,11 +344,13 @@ public class addClassFragment extends Fragment {
             obj1.setEndMinute(minute);
         }
         if (requestCode == COMMIT_LOCATION_PICKED) {
-            if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(getActivity(), data);
-                final String placeId = place.getId();
-                obj1.setPlaceID(placeId);
-            }
+                final LatLng mLatLng = place.getLatLng();
+                double lat = mLatLng.latitude;
+                double lng = mLatLng.longitude;
+                obj1.setLat(lat);
+                obj1.setLng(lng);
+
         }
     }
 

@@ -1,26 +1,15 @@
 package com.group18.app.calendar;
 
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -80,8 +69,9 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         }
         else
             holder.endTime.setText(commitment.getEndHour() + ":" + commitment.getEndMinute());
+
         String[] date_no_time_start = commitment.getStart().toString().split(" ",0);
-        String[] date_no_time_end = commitment.getStart().toString().split(" ", 0);
+        String[] date_no_time_end = commitment.getEnd().toString().split(" ", 0);
         holder.startDate.setText("Start: "+ date_no_time_start[1] + " " + date_no_time_start[2]);
         holder.endDate.setText("End:   "+ date_no_time_end[1] + " " + date_no_time_end[2]);
     }
@@ -91,10 +81,6 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         return commitments.size();
     }
 
-
-//        i may need to extend Activity to this class but i can't extend more than one class
-//          one way that i found is to make an interface and then extend activity to it
-//          but this seems overly complicated -- must be another way
 
     public static class CustomViewHolder extends RecyclerView.ViewHolder {
         //can add other things to make a custom layout e.g. images or checkboxes
@@ -109,7 +95,7 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
              super(view);
              //the layout is being binded to the view
             profName = (TextView) view.findViewById(R.id.ProfessorName);
-            className = (TextView) view.findViewById(R.id.ClassName);
+            className = (TextView) view.findViewById(R.id.commitment_name);
             startTime = view.findViewById(R.id.time_start);
             startDate = view.findViewById(R.id.date_start);
             endDate = view.findViewById(R.id.date_end);

@@ -165,6 +165,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.pref_headers, target);
+        //create a toolbar so that we can navigate back to MainActivity if user wants to not commit a reminder anymore
     }
 
     /**

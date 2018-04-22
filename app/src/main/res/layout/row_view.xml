@@ -18,7 +18,7 @@
 
         <TextView
             android:id="@+id/ProfessorName"
-            android:layout_width="174dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="4dp"
@@ -26,13 +26,13 @@
             android:text="ProfessorName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.611"
             app:layout_constraintStart_toEndOf="@+id/time_end"
-            app:layout_constraintTop_toBottomOf="@+id/ClassName"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/commitment_name"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/ClassName"
+            android:id="@+id/commitment_name"
             android:layout_width="181dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"

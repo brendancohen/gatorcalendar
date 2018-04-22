@@ -27,7 +27,8 @@ public class CommitmentHelper extends SQLiteOpenHelper {
             + ", " + CommitmentTable.Cols.START_MINUTE
             + ", " + CommitmentTable.Cols.END_HOUR
             + ", " + CommitmentTable.Cols.END_MINUTE
-            + ", " + CommitmentTable.Cols.PLACEID+")";
+            + ", " + CommitmentTable.Cols.LAT
+            + ", " + CommitmentTable.Cols.LONG+")";
 
     public CommitmentHelper(Context context){
         super(context, DATABASE_NAME, null,VERSION);
