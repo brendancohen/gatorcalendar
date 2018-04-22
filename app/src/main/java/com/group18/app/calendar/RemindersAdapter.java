@@ -57,9 +57,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Cust
                 holder.startTime.setText(reminder.getHour() + ":" + reminder.getMin());
 
             String[] date_no_time_start = reminder.getDate().toString().split(" ",0);
-            Log.i("reminderAdapt", "date_no_time_start[1] = " + date_no_time_start[1]);
-            Log.i("reminderAdapt", "date_no_time_start[2] = " + date_no_time_start[2]);
-            holder.startDate.setText("Start: "+ date_no_time_start[1] + " " + date_no_time_start[2]);
+            holder.startDate.setText(date_no_time_start[1] + " " + date_no_time_start[2]);
         }
 
         @Override

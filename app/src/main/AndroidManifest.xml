@@ -51,6 +51,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.group18.app.calendar.MainActivity" />
         </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/title_activity_help"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.group18.app.calendar.MainActivity" />
+        </activity>
         <!--<activity-->
             <!--android:name=".AddCommitmentActivity"-->
             <!--android:parentActivityName=".MainActivity"-->

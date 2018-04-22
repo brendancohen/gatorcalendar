@@ -1,37 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="369dp"
-        android:layout_height="182dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Hello! Thank you for using our application."
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="0dp" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="357dp"
-        android:layout_height="115dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="If you have any questions email us"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="175dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="720dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="310dp"
-        android:layout_height="212dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text=" at gatorcalendar@ufl.edu."
-        tools:layout_editor_absoluteX="33dp"
-        tools:layout_editor_absoluteY="290dp" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/helptoolbar"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/heading"
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:text="Frequently Asked Questions"
+                android:textAlignment="center"
+                android:textAppearance="@android:style/TextAppearance.Material.Display2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/helptoolbar" />
+
+            <TextView
+                android:id="@+id/question1"
+                android:layout_width="320dp"
+                android:layout_height="55dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:text="I accidentally misspelled my name. How can I fix it?"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.515"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/heading" />
+
+            <TextView
+                android:id="@+id/answer1"
+                android:layout_width="300dp"
+                android:layout_height="66dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="You can reset the app to its beginning state through System Settings > Apps > Calendar > Storage > Clear Data. Keep in mind this will also erase all classes and reminders."
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/question1" />
+
+            <TextView
+                android:id="@+id/question2"
+                android:layout_width="320dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:text="Is it possible to change the language of the app?"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answer1" />
+
+            <TextView
+                android:id="@+id/answer2"
+                android:layout_width="300dp"
+                android:layout_height="57dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Yes, the app is supported in English and Spanish. The language options can be toggled through Settings > General > Language Settings."
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/question2" />
+
+            <TextView
+                android:id="@+id/question3"
+                android:layout_width="344dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:text="How can I turn off notifications?"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answer2" />
+
+            <TextView
+                android:id="@+id/answer3"
+                android:layout_width="300dp"
+                android:layout_height="65dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Go to System Settings > Notifications > Calendar. There you can choose “Block All”
+so that notifications never show, or “Show Silently” to turn off notification sounds and
+vibrations."
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/question3" />
+
+            <TextView
+                android:id="@+id/question4"
+                android:layout_width="344dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:text="How do I add a class in the app?"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answer3" />
+
+            <TextView
+                android:id="@+id/answer4"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="On the home screen, press the “ADD CLASS” button. There, insert your class
+information in the appropriate fields, and press “COMMIT” at the bottom of the screen to
+submit the class. Your class card will now appear on the home screen."
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/question4" />
+
+            <TextView
+                android:id="@+id/question5"
+                android:layout_width="344dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:text="How do I delete a class in the app?"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answer4" />
+
+            <TextView
+                android:id="@+id/answer5"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Long Click on the card for the class you want to delete and select “YES” when asked
+if you would like to delete the commitment."
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/question5" />
+
+            <TextView
+                android:id="@+id/question6"
+                android:layout_width="344dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:text="If I clear my app’s data, what will happen to my classes?"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answer5" />
+
+            <TextView
+                android:id="@+id/answer6"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="If you clear the app’s data, data will be deleted from the local database. Only clear
+the data on your app if you wish to reset the app to its beginning state. If you want to
+clear up space, go to System Settings > Apps > Calendar > Storage > Clear Cache."
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/question6" />
+
+            <TextView
+                android:id="@+id/question7"
+                android:layout_width="344dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:text="How can I find out where my next class is?"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answer6" />
+
+            <TextView
+                android:id="@+id/answer7"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="On the home screen, press the pointer icon in the upper right. This opens the
+commute screen, where you can search for the location of your next class usingGoogle. If you select directions, the app will open Google Maps and show directions
+from your current location to your class."
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="50dp"
+                app:layout_constraintTop_toBottomOf="@+id/question7" />
+
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

@@ -32,11 +32,8 @@ import java.util.Locale;
 public class AddReminder extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
     private EditText reminderName, reminderNotes;
-    private Button reminderTime, reminderDate;
+    private Button reminderTime;
     private Calendar mCalendar = GregorianCalendar.getInstance(Locale.ENGLISH);
-    public int year;
-    public int month;
-    public int day;
     public int hour;
     public int min;
     private String name, notes;
@@ -59,7 +56,6 @@ public class AddReminder extends AppCompatActivity implements TimePickerDialog.O
         //initializing the values of the textboxes and the buttons
         reminderName = findViewById(R.id.commitment_name);
         reminderNotes = findViewById(R.id.notes);
-        reminderDate = findViewById(R.id.start_date_reminder);
         reminderTime = findViewById(R.id.start_time_reminder);
         Date currentTime = Calendar.getInstance().getTime();
         mCalendar.setTime(currentTime);
