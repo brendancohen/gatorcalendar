@@ -59,7 +59,7 @@ public class AddReminder extends AppCompatActivity implements TimePickerDialog.O
         //initializing the values of the textboxes and the buttons
         reminderName = findViewById(R.id.commitment_name);
         reminderNotes = findViewById(R.id.notes);
-        reminderDate = findViewById(R.id.start_date_reminder);
+
         reminderTime = findViewById(R.id.start_time_reminder);
         Date currentTime = Calendar.getInstance().getTime();
         mCalendar.setTime(currentTime);
