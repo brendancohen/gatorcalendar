@@ -13,10 +13,18 @@ public class Reminders implements Parcelable {
     private Date date;
     private int hour;
     private int min;
+    private UUID primarykey;
 
 
     //we want to be able to uniquely identify this class
 
+    public void setPrimarykey(String primarykey) {
+        this.primarykey = UUID.fromString(primarykey);
+    }
+
+    public UUID getPrimarykey() {
+        return primarykey;
+    }
 
     public int getMin() {
         return min;
@@ -53,10 +61,9 @@ public class Reminders implements Parcelable {
     public Reminders(String remName, String remNotes){
         name = remName;
         notes = remNotes;
-//        date = userDate;
         date = new Date();
+        primarykey = UUID.randomUUID();
 
-        date = new Date();
     }
 
     public String getName() {
@@ -84,7 +91,7 @@ public class Reminders implements Parcelable {
         date = tmpStart != -1 ? new Date(tmpStart) : null;
         hour = in.readInt();
         min = in.readInt();
-
+        primarykey = (UUID) in.readValue(UUID.class.getClassLoader());
     }
 
     @Override
@@ -96,11 +103,10 @@ public class Reminders implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(notes);
-//        dest.writeString(onTheseDays);
         dest.writeLong(date != null ? date.getTime() : -1L);
         dest.writeInt(hour);
         dest.writeInt(min);
-//        dest.writeValue(primarykey);
+        dest.writeValue(primarykey);
     }
 
     @SuppressWarnings("unused")
