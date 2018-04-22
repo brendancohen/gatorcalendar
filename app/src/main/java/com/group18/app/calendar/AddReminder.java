@@ -1,15 +1,23 @@
 package com.group18.app.calendar;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -23,7 +31,9 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.time.Month;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -167,6 +177,9 @@ public class AddReminder extends AppCompatActivity implements TimePickerDialog.O
 //                intent.putExtra("Reminder Notes", reminderNotes.getText().toString());
 
                 setResult(Activity.RESULT_OK, intent);
+
+                String content = "Reminder for " + reminderObj.getHour() + ":" + reminderObj.getMin() + ": " + reminderObj.getNotes();
+                scheduleNotification(reminderObj.getHour(), reminderObj.getNotificationMinute(), reminderObj.getDate(), content);
                 finish();
             }
         });
@@ -185,4 +198,79 @@ public class AddReminder extends AppCompatActivity implements TimePickerDialog.O
         reminderObj.setHour(hourOfDay);
         reminderObj.setMin(minute);
     }
+
+    private void scheduleNotification(int startHour, int startMinute, Date notificationDate, String content) {
+
+        //Build channel
+        Context context = AddReminder.this;
+        String channel_id = "gc_channel";
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+            String channel_name = "gator_calendar_notifications";
+            String channel_description = "notifications for gator calendar app";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channel_id, channel_name, importance);
+            channel.setDescription(channel_description);
+            //fun things
+            channel.enableLights(true);
+            channel.setLightColor(Color.BLUE);
+            // Register the channel with the system
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        //Build notification
+        String textTitle = "Better Hurry! Your class starts in 5 minutes!";
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channel_id)
+                .setSmallIcon(R.drawable.gc_png)
+                .setContentTitle(textTitle)
+                .setContentText(content)
+                // .setContentText(className + " with " + profName + " at " + startTime)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        //Set intent
+        Intent intent = new Intent(context, addClassFragment.class);
+        PendingIntent activity = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        notificationBuilder.setContentIntent(activity);
+
+        Notification notification = notificationBuilder.build();
+
+        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        if(startMinute < 5) {
+            int leftoverMinutes = 5-startMinute;
+            startMinute = 60-leftoverMinutes;
+            startHour--;
+        }
+
+        Calendar calendar = Calendar.getInstance().getInstance();
+        calendar.setTime(notificationDate);
+     //   int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_YEAR);
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, startHour);
+        calendar.set(Calendar.MINUTE, startMinute);
+        calendar.set(Calendar.DAY_OF_YEAR, day);
+
+        //      Toast testing = Toast.makeText(context, "set for " + startHour + ":"
+        //              + startMinute + ", day: " + dayOfWeek, Toast.LENGTH_LONG);
+        //     testing.show();
+
+        //check to see if setting isn't in the past (would trigger alarm)
+        if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 7);
+        }
+
+        //set alarm
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+
+    }
+
 }
