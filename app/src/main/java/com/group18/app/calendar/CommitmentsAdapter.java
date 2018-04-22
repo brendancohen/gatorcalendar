@@ -243,7 +243,7 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         } else
             holder.endTime.setText(commitment.getEndHour() + ":" + commitment.getEndMinute());
         String[] date_no_time_start = commitment.getStart().toString().split(" ", 0);
-        String[] date_no_time_end = commitment.getStart().toString().split(" ", 0);
+        String[] date_no_time_end = commitment.getEnd().toString().split(" ", 0);
         holder.startDate.setText("Start: " + date_no_time_start[1] + " " + date_no_time_start[2]);
         holder.endDate.setText("End:   " + date_no_time_end[1] + " " + date_no_time_end[2]);
     }
