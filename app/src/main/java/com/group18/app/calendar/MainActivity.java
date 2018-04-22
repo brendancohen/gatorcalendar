@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mytoolbar.setTitle(R.string.app_name);
 
         mRecyclerView = findViewById(R.id.my_recycler_view);
-
         //this improves performance of RecyclerView
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

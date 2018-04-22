@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -27,7 +29,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class AddReminder extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddReminder extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
     private EditText reminderName, reminderNotes;
     private Button reminderTime, reminderDate;
@@ -107,10 +109,27 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
             }
         });
 
-        reminderDate.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                DialogFragment datePicker = new ReminderDatePicker();
-                datePicker.show(getSupportFragmentManager(), "date picker");
+//        reminderDate.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                DialogFragment datePicker = new ReminderDatePicker();
+//                datePicker.show(getSupportFragmentManager(), "date picker");
+//            }
+//        });
+        CalendarView calendarView = (CalendarView) findViewById(R.id.Reminder_Calendar);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                //time is sent from ReminderDatePicker
+                //initialize values
+//                year = y;
+//                month = m;
+//                day = dayOfMonth;
+                //change the information into the same format as the class Date
+                Date date = new GregorianCalendar(year,month,dayOfMonth).getTime();
+//        Log.i("addReminder", "the date = " + date);
+
+                //place the values into the reminderObj object
+                reminderObj.setDate(date);
             }
         });
 
@@ -153,19 +172,7 @@ public class AddReminder extends AppCompatActivity implements DatePickerDialog.O
         });
     }
 
-    public void onDateSet(DatePicker view, int y, int m, int dayOfMonth) {
-        //time is sent from ReminderDatePicker
-        //initialize values
-        year = y;
-        month = m;
-        day = dayOfMonth;
-        //change the information into the same format as the class Date
-        Date date = new GregorianCalendar(year,month,day).getTime();
-//        Log.i("addReminder", "the date = " + date);
 
-        //place the values into the reminderObj object
-        reminderObj.setDate(date);
-    }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
