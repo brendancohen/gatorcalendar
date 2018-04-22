@@ -178,7 +178,7 @@ public class AddReminder extends AppCompatActivity implements TimePickerDialog.O
 
                 setResult(Activity.RESULT_OK, intent);
 
-                String content = "Reminder for " + reminderObj.getHour() + ":" + reminderObj.getMin() + ": " + reminderObj.getNotes();
+                String content = reminderObj.getNotes();
                 scheduleNotification(reminderObj.getHour(), reminderObj.getNotificationMinute(), reminderObj.getDate(), content);
                 finish();
             }
@@ -223,7 +223,7 @@ public class AddReminder extends AppCompatActivity implements TimePickerDialog.O
         }
 
         //Build notification
-        String textTitle = "Better Hurry! Your class starts in 5 minutes!";
+        String textTitle = "Reminder for " + reminderObj.getName() + " in 5 minutes" ;
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channel_id)
                 .setSmallIcon(R.drawable.gc_png)
                 .setContentTitle(textTitle)
@@ -258,9 +258,9 @@ public class AddReminder extends AppCompatActivity implements TimePickerDialog.O
         calendar.set(Calendar.MINUTE, startMinute);
         calendar.set(Calendar.DAY_OF_YEAR, day);
 
-        //      Toast testing = Toast.makeText(context, "set for " + startHour + ":"
-        //              + startMinute + ", day: " + dayOfWeek, Toast.LENGTH_LONG);
-        //     testing.show();
+   //           Toast testing = Toast.makeText(context, "set for " + startHour + ":"
+     //                 + startMinute + ", day: " + day, Toast.LENGTH_LONG);
+      //       testing.show();
 
         //check to see if setting isn't in the past (would trigger alarm)
         if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
