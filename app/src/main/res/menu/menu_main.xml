@@ -4,7 +4,7 @@
     <item
         android:title="Toggle View"
         android:id="@+id/schedule"
-        android:icon="@drawable/schedule"
+        android:icon="@drawable/calendar"
         app:showAsAction="ifRoom"
         android:tooltipText="Toggle Between Reminders and Classes"/>
     <item

@@ -42,5 +42,5 @@
         android:layout_height="wrap_content"
         android:background="@android:color/holo_orange_dark"
         android:textColor="@android:color/white"
-        android:text="Enter" />
+        android:text="@string/Enter" />
 </LinearLayout>

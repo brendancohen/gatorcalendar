@@ -49,14 +49,12 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
         for (int i = 0; i < commitments.size(); i++) {
             Log.i("Notify", "Entering for loop" + i);
             Commitments temp = commitments.get(i);
-
-            Log.i("1", "currentDate" + currentDate);
-            Log.i("2", "temp start" + temp.getStart());
-            Log.i("3", "temp end" + temp.getEnd());
-            Log.i("4", "bool" + currentDate.after(temp.getStart()));
-            Log.i("5", "bool" + currentDate.after(temp.getEnd()));
-
-            //if ((currentDate.after(temp.getStart()) && currentDate.before(temp.getEnd())) || currentDate.equals(temp.getStart()) || currentDate.equals(temp.getEnd())) { //If we are within range of the dates
+            Log.i("date","bool:" + currentDate.after(temp.getStart()));
+            Log.i("date","bool 2" + currentDate.before(temp.getEnd()));
+            Log.i("date","current Date" + currentDate);
+            Log.i("date","temp start" + temp.getStart());
+            Log.i("date","temp end" + temp.getEnd());
+            //if ((currentDate.after(temp.getStart()) && currentDate.before(temp.getEnd()))) { //If we are within range of the dates
             //This condition must be changed
             if (true) {
                 Log.i("Notify", "Date range met");

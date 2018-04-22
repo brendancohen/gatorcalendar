@@ -35,13 +35,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 //this is the Activity that is launched when app is started, see manifest file
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DeleteDialogFragment.InterfaceCommunicator, addClassFragment.CheckDuplicate{
 
     private DrawerLayout myDrawerLayout;
-    private ArrayList<Commitments> myCommits = new ArrayList<>();
-    private ArrayList<Reminders> myReminders = new ArrayList<>();
+    public static ArrayList<Commitments> myCommits = new ArrayList<>();
+    public ArrayList<Reminders> myReminders = new ArrayList<>();
     private boolean mScheduleVisible = true;
     private static final String SAVED_SCHEDULE_VISIBLE = "schedule";
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
@@ -82,13 +83,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
         mytoolbar.setTitle(R.string.app_name);
-
         mRecyclerView = findViewById(R.id.my_recycler_view);
         //this improves performance of RecyclerView
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        LoadCommitmentDatabase();
+        if (myCommits.isEmpty())
+            LoadCommitmentDatabase();
         LoadReminderDatabase();
         Log.i("hello", myReminders.size() + "");
         dailyClassAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
@@ -246,11 +247,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 break;
             case R.id.schedule:
-                Toast.makeText(this, "What setting are we including here? ", Toast.LENGTH_SHORT).show();
-                if(mScheduleVisible)
-                item.setIcon(R.drawable.calendar);
-                else
-                    item.setIcon(R.drawable.schedule);
+                Intent intent1 = new Intent(MainActivity.this, WeeklyView.class);
+                startActivity(intent1);
                 mScheduleVisible = !mScheduleVisible;
                 break;
 
@@ -563,7 +561,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String min = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.MIN));
                 String id = cursor.getString(cursor.getColumnIndex(CommitmentSchema.CommitmentTable.Cols.ID));
 
-                SimpleDateFormat stringformatter = new SimpleDateFormat("E MMM dd HH:mm:ss z YYYY");
+                SimpleDateFormat stringformatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
                 Date startdate = stringformatter.parse(date);
 
                 Reminders obj1 = new Reminders(event,notes);
@@ -595,8 +593,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 DeletefromDatabase(primarykey,CommitmentSchema.CommitmentTable.NAME);
             }
-
-            //have to figure out which array we are deleting from ... the myReminders arrayList or the myCommits arrayList or Iago's new one
         }
         else{
             if(delete && position != -1){
@@ -608,7 +604,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void DeletefromDatabase(String primarykey, String name) {
+    public void DeletefromDatabase(String primarykey, String name) {
 
         if(name == CommitmentSchema.CommitmentTable.NAME) {
             mCommitmentDatabase.delete(CommitmentSchema.CommitmentTable.NAME, CommitmentSchema.CommitmentTable.Cols.ID + " = ?",
@@ -621,6 +617,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+
     //implementing interface method for AddClassFragment
     @Override
     public boolean Check(String classname) {
@@ -630,4 +627,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return false;
     }
+
+
 }
