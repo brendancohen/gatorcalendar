@@ -39,11 +39,6 @@
 
 </RelativeLayout>
 
-<<<<<<< HEAD
-    <!--<LinearLayout -->
-        <!--   android:layout_width="match_parent"-->
-           <!--   android:layout_height="wrap_content"-->
-              <!--    android:orientation="vertical">-->
                   <TextView
                       android:layout_width="match_parent"
                       android:layout_height="40dp"
@@ -76,69 +71,4 @@
                       android:scrollbars="vertical" />
               <!--</LinearLayout> -->
 
-=======
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="@string/today"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:background="@color/colorPrimary"
-        android:gravity="center"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="50dp"
-        android:padding="4dp"
-        android:scrollbars="vertical" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="@string/reminders"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:background="@color/colorPrimary"
-        android:gravity="center"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_recycler_view2"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="50dp"
-        android:padding="4dp"
-        android:scrollbars="vertical" />
-
-
-    <!---->
-<!--<ScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content">-->
-<!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical">-->
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:text="@string/today"-->
-        <!--android:textSize="20dp"-->
-        <!--android:textStyle="bold"-->
-        <!--android:background="@color/colorPrimary"-->
-        <!--android:gravity="center"/>-->
-    <!---->
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:text="@string/reminders"-->
-        <!--android:textSize="20dp"-->
-        <!--android:textStyle="bold"-->
-        <!--android:background="@color/colorPrimary"-->
-        <!--android:gravity="center"/>-->
-    <!---->
-<!--</LinearLayout>-->
-<!--</ScrollView>-->
->>>>>>> 7ce55bef8536881b6010f614a8eae429bca47abc
 </LinearLayout>

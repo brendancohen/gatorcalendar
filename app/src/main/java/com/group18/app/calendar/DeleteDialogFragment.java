@@ -26,11 +26,6 @@ public class DeleteDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-<<<<<<< HEAD:app/src/main/java/com/group18/app/calendar/DeleteCommitmentFragment.java
-        int position =  getArguments().getInt("position", -1); //What position is this
-        builder.setTitle("Delete Commitment?");
-        builder.setMessage("Are you sure you want to delete this commitment?");
-=======
         int position =  getArguments().getInt("position", -1);
         String whoCalled = getArguments().getString("ReminderAdapter");
         if(whoCalled == null) {
@@ -41,7 +36,6 @@ public class DeleteDialogFragment extends DialogFragment {
             builder.setTitle("Delete Reminder?");
             builder.setMessage("Are you sure you want to delete this reminder?");
         }
->>>>>>> 7ce55bef8536881b6010f614a8eae429bca47abc:app/src/main/java/com/group18/app/calendar/DeleteDialogFragment.java
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {

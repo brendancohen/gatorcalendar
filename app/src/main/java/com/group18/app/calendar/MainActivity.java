@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SQLiteDatabase mReminderDatabase;
     private RecyclerView mRecyclerView;
     private CommitmentsAdapter dailyClassAdapter;
-    private CommitmentsAdapter mAdapter;
     private NavigationView myNavView;
     private TextView welcome;
     private RecyclerView mRecyclerView2;
@@ -75,10 +74,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(!askForName)
             showDialog();
 
-
-
-
-
         mCommitmentDbHelper = new CommitmentHelper(getApplicationContext());
         mReminderDbHelper = new ReminderHelper(getApplicationContext());
         mCommitmentDatabase = mCommitmentDbHelper.getWritableDatabase();
@@ -93,7 +88,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
+        LoadCommitmentDatabase();
+        LoadReminderDatabase();
+        Log.i("hello", myReminders.size() + "");
         dailyClassAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
 
         dailyClassAdapter.setonItemClickListener(new CommitmentsAdapter.OnItemClickListener() {
@@ -111,9 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mRecyclerView.setAdapter(dailyClassAdapter);
 
-        mRecyclerView.setAdapter(mAdapter);
-            LoadCommitmentDatabase();
-            LoadReminderDatabase();
+
 
 
 
@@ -313,16 +308,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(requestCode == AddClassCode){
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
-
                 mCommitmentDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
                 int should_i_notify = daily_class_view_add_notification(tempclass);
                 if (should_i_notify != -1){
                     dailyClassAdapter.notifyItemInserted(should_i_notify);
                 }
 
-                mCommitmentDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
-                mAdapter.notifyItemInserted(myCommits.size()-1);
-                Log.i("hello", "this is called!!!!");
             }
             if(requestCode == AddReminderCode) {
                 Reminders reminder = data.getParcelableExtra("reminderObj");
@@ -348,16 +339,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (dailyClassAdapter.daily_commitments.isEmpty()){
                     dailyClassAdapter.daily_commitments.add(0,temp);
                     return 0;
-                }
-                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
-                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
-                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
-                        dailyClassAdapter.daily_commitments.add(k,temp);
-                        return k;
-                    }
-                    if (k == dailyClassAdapter.daily_commitments.size()-1){
-                        dailyClassAdapter.daily_commitments.add(k+1,temp);
-                        return k+1;
+                } else {
+                    for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                        //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                        if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() || (dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                            dailyClassAdapter.daily_commitments.add(k, temp);
+                            return k;
+                        }
+                        if (k == dailyClassAdapter.daily_commitments.size() - 1) {
+                            dailyClassAdapter.daily_commitments.add(k + 1, temp);
+                            return k + 1;
+                        }
                     }
                 }
             }
@@ -365,16 +357,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (dailyClassAdapter.daily_commitments.isEmpty()){
                     dailyClassAdapter.daily_commitments.add(0,temp);
                     return 0;
-                }
-                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
-                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
-                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
-                        dailyClassAdapter.daily_commitments.add(k,temp);
-                        return k;
-                    }
-                    if (k == dailyClassAdapter.daily_commitments.size()-1){
-                        dailyClassAdapter.daily_commitments.add(k+1,temp);
-                        return k+1;
+                } else {
+                    for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                        //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                        if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() || (dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                            dailyClassAdapter.daily_commitments.add(k, temp);
+                            return k;
+                        }
+                        if (k == dailyClassAdapter.daily_commitments.size() - 1) {
+                            dailyClassAdapter.daily_commitments.add(k + 1, temp);
+                            return k + 1;
+                        }
                     }
                 }
             }
@@ -382,16 +375,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (dailyClassAdapter.daily_commitments.isEmpty()){
                     dailyClassAdapter.daily_commitments.add(0,temp);
                     return 0;
-                }
-                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
-                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
-                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
-                        dailyClassAdapter.daily_commitments.add(k,temp);
-                        return k;
-                    }
-                    if (k == dailyClassAdapter.daily_commitments.size()-1){
-                        dailyClassAdapter.daily_commitments.add(k+1,temp);
-                        return k+1;
+                } else {
+                    for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                        //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                        if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() || (dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                            dailyClassAdapter.daily_commitments.add(k, temp);
+                            return k;
+                        }
+                        if (k == dailyClassAdapter.daily_commitments.size() - 1) {
+                            dailyClassAdapter.daily_commitments.add(k + 1, temp);
+                            return k + 1;
+                        }
                     }
                 }
             }
@@ -399,16 +393,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (dailyClassAdapter.daily_commitments.isEmpty()){
                     dailyClassAdapter.daily_commitments.add(0,temp);
                     return 0;
-                }
-                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
-                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
-                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
-                        dailyClassAdapter.daily_commitments.add(k,temp);
-                        return k;
-                    }
-                    if (k == dailyClassAdapter.daily_commitments.size()-1){
-                        dailyClassAdapter.daily_commitments.add(k+1,temp);
-                        return k+1;
+                } else {
+                    for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                        //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                        if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() || (dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                            dailyClassAdapter.daily_commitments.add(k, temp);
+                            return k;
+                        }
+                        if (k == dailyClassAdapter.daily_commitments.size() - 1) {
+                            dailyClassAdapter.daily_commitments.add(k + 1, temp);
+                            return k + 1;
+                        }
                     }
                 }
             }
@@ -416,16 +411,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (dailyClassAdapter.daily_commitments.isEmpty()){
                     dailyClassAdapter.daily_commitments.add(0,temp);
                     return 0;
-                }
-                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
-                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
-                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
-                        dailyClassAdapter.daily_commitments.add(k,temp);
-                        return k;
-                    }
-                    if (k == dailyClassAdapter.daily_commitments.size()-1){
-                        dailyClassAdapter.daily_commitments.add(k+1,temp);
-                        return k+1;
+                } else {
+                    for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                        //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                        if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() || (dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                            dailyClassAdapter.daily_commitments.add(k, temp);
+                            return k;
+                        }
+                        if (k == dailyClassAdapter.daily_commitments.size() - 1) {
+                            dailyClassAdapter.daily_commitments.add(k + 1, temp);
+                            return k + 1;
+                        }
                     }
                 }
             }
@@ -433,33 +429,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (dailyClassAdapter.daily_commitments.isEmpty()){
                     dailyClassAdapter.daily_commitments.add(0,temp);
                     return 0;
-                }
-                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
-                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
-                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
-                        dailyClassAdapter.daily_commitments.add(k,temp);
-                        return k;
+                } else {
+                    for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                        //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                        if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() || (dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                            dailyClassAdapter.daily_commitments.add(k, temp);
+                            return k;
+                        }
+                        if (k == dailyClassAdapter.daily_commitments.size() - 1) {
+                            dailyClassAdapter.daily_commitments.add(k + 1, temp);
+                            return k + 1;
+                        }
                     }
-                    if (k == dailyClassAdapter.daily_commitments.size()-1){
-                        dailyClassAdapter.daily_commitments.add(k+1,temp);
-                        return k+1;
-                    }
+
                 }
             }
             else if (temp.getOnTheseDays().contains("Sunday") && Calendar.SUNDAY == day) { //If today is monday and the class is on mondays
                 if (dailyClassAdapter.daily_commitments.isEmpty()){
                     dailyClassAdapter.daily_commitments.add(0,temp);
                     return 0;
-                }
-                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
-                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
-                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
-                        dailyClassAdapter.daily_commitments.add(k,temp);
-                        return k;
-                    }
-                    if (k == dailyClassAdapter.daily_commitments.size()-1){
-                        dailyClassAdapter.daily_commitments.add(k+1,temp);
-                        return k+1;
+                } else {
+                    for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                        //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                        if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() || (dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                            dailyClassAdapter.daily_commitments.add(k, temp);
+                            return k;
+                        }
+                        if (k == dailyClassAdapter.daily_commitments.size() - 1) {
+                            dailyClassAdapter.daily_commitments.add(k + 1, temp);
+                            return k + 1;
+                        }
                     }
                 }
             }

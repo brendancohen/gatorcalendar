@@ -271,7 +271,7 @@ public class CommitmentsAdapter extends RecyclerView.Adapter<CommitmentsAdapter.
             super(view);
             //the layout is being binded to the view
             profName = (TextView) view.findViewById(R.id.ProfessorName);
-            className = (TextView) view.findViewById(R.id.ClassName);
+            className = (TextView) view.findViewById(R.id.commitment_name);
             startTime = view.findViewById(R.id.time_start);
             startDate = view.findViewById(R.id.date_start);
             endDate = view.findViewById(R.id.date_end);
