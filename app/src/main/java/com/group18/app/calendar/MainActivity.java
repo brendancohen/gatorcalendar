@@ -2,10 +2,8 @@ package com.group18.app.calendar;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -28,9 +26,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.group18.app.calendar.database.CommitmentHelper;
 import com.group18.app.calendar.database.CommitmentSchema;
+import com.group18.app.calendar.database.ReminderHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,8 +46,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int AddClassCode = 0; //code used to identify result information coming from AddClassActivity
     private static final int DeleteFragmentCode = 1;
     private static final int AddReminderCode = 2;
-    private CommitmentHelper mDbHelper;
-    private SQLiteDatabase mDatabase;
+    private CommitmentHelper mCommitmentDbHelper;
+    private ReminderHelper mReminderDbHelper;
+    private SQLiteDatabase mCommitmentDatabase;
+    private SQLiteDatabase mReminderDatabase;
     private RecyclerView mRecyclerView;
     private CommitmentsAdapter mAdapter;
     private NavigationView myNavView;
@@ -76,8 +76,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        mDbHelper = new CommitmentHelper(getApplicationContext());
-        mDatabase = mDbHelper.getWritableDatabase();
+        mCommitmentDbHelper = new CommitmentHelper(getApplicationContext());
+        mReminderDbHelper = new ReminderHelper(getApplicationContext());
+        mCommitmentDatabase = mCommitmentDbHelper.getWritableDatabase();
+        mReminderDatabase = mReminderDbHelper.getWritableDatabase();
         setContentView(R.layout.navigation_drawer);
         Toolbar mytoolbar = findViewById(R.id.mytoolbar);
         setSupportActionBar(mytoolbar);
@@ -105,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView.setAdapter(mAdapter);
 
         if(myCommits.isEmpty())
-            LoadDatabase();
+            LoadCommitmentDatabase();
+        if(myReminders.isEmpty())
+            LoadReminderDatabase();
 
 
         //Reminders adapter and RecyclerView
@@ -133,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView2.setAdapter(mAdapter2);
 
         if(myReminders.isEmpty())
-            LoadDatabase();
+            LoadCommitmentDatabase();
 
 
         myNavView = findViewById(R.id.nav_view);
@@ -307,13 +311,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(requestCode == AddClassCode){
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
-                mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
+                mCommitmentDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
                 mAdapter.notifyItemInserted(myCommits.size()-1);
                 Log.i("hello", "this is called!!!!");
             }
             if(requestCode == AddReminderCode) {
                 Reminders reminder = data.getParcelableExtra("reminderObj");
                 myReminders.add(reminder);
+                mReminderDatabase.insert(CommitmentSchema.ReminderTable.NAME,null,getContentValues(reminder));
                 mAdapter2.notifyItemInserted(myReminders.size()-1);
                 Log.i("hello", "reminder = " + reminder.getName());
             }
@@ -343,9 +348,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return values;
     }
 
-    private void LoadDatabase(){
+    private static ContentValues getContentValues(Reminders my_reminder){
+        ContentValues values = new ContentValues();
+        values.put(CommitmentSchema.ReminderTable.Cols.EVENT, my_reminder.getName());
+        values.put(CommitmentSchema.ReminderTable.Cols.NOTES, my_reminder.getNotes());
+        values.put(CommitmentSchema.ReminderTable.Cols.DATE, my_reminder.getDate().toString());
+        values.put(CommitmentSchema.ReminderTable.Cols.HOUR, String.valueOf(my_reminder.getHour()));
+        values.put(CommitmentSchema.ReminderTable.Cols.MIN, String.valueOf(my_reminder.getMin()));
+        return values;
+    }
 
-        Cursor cursor = mDatabase.query(CommitmentSchema.CommitmentTable.NAME, null,
+    private void LoadCommitmentDatabase(){
+
+        Cursor cursor = mCommitmentDatabase.query(CommitmentSchema.CommitmentTable.NAME, null,
                 null, null, null, null, null);
 
             try {
@@ -390,6 +405,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
     }
 
+    private void LoadReminderDatabase() {
+        Cursor cursor = mReminderDatabase.query(CommitmentSchema.ReminderTable.NAME, null,
+                null, null, null, null, null);
+
+        try {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()) {
+
+                String event = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.EVENT));
+                String notes = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.NOTES));
+                String date = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.DATE));
+                String hour = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.HOUR));
+                String min = cursor.getString(cursor.getColumnIndex(CommitmentSchema.ReminderTable.Cols.MIN));
+
+                SimpleDateFormat stringformatter = new SimpleDateFormat("E MMM dd HH:mm:ss z YYYY");
+                Date startdate = stringformatter.parse(date);
+
+                Reminders obj1 = new Reminders(event,notes);
+                obj1.setDate(startdate);
+                obj1.setHour(Integer.valueOf(hour));
+                obj1.setMin(Integer.valueOf(min));
+                myReminders.add(obj1);
+                cursor.moveToNext();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+    }
+
     @Override
     public void sendRequestCode(int code, boolean delete, int position) {
         if(code == DeleteFragmentCode){
@@ -404,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void DeletefromDatabase(String primarykey) {
-        mDatabase.delete(CommitmentSchema.CommitmentTable.NAME, CommitmentSchema.CommitmentTable.Cols.ID + " = ?",
+        mCommitmentDatabase.delete(CommitmentSchema.CommitmentTable.NAME, CommitmentSchema.CommitmentTable.Cols.ID + " = ?",
                 new String[] {primarykey});
 
     }

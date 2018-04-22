@@ -11,19 +11,11 @@ public class Reminders implements Parcelable {
     private String name;
     private String notes;
     private Date date;
-    private int year;
-    private int month;
-    private int day;
     private int hour;
     private int min;
-    private String onTheseDays;
+
 
     //we want to be able to uniquely identify this class
-    private UUID primarykey;
-
-    public void setPrimarykey(String primarykey) {
-        this.primarykey = UUID.fromString(primarykey);
-    }
 
 
     public int getMin() {
@@ -47,10 +39,6 @@ public class Reminders implements Parcelable {
         this.hour = hour;
     }
 
-    public UUID getPrimarykey() {
-        return primarykey;
-    }
-
     public Date getDate() {
         Log.i("date Rem", "getDate: the date start = " + date);
         return date;
@@ -67,7 +55,7 @@ public class Reminders implements Parcelable {
         notes = remNotes;
 //        date = userDate;
         date = new Date();
-        primarykey = UUID.randomUUID();
+
         date = new Date();
     }
 
@@ -87,15 +75,8 @@ public class Reminders implements Parcelable {
         this.notes = notes;
     }
 
-    public String getOnTheseDays() {
-        return onTheseDays;
-    }
 
-    public void setOnTheseDays(String onTheseDays) {
-        this.onTheseDays = onTheseDays;
-    }
 
-    //ISSUE: startHour is being overwritten by startMinute, endHour is being overwritten by endMinute
     protected Reminders(Parcel in) {
         name = in.readString();
         notes = in.readString();
@@ -103,7 +84,7 @@ public class Reminders implements Parcelable {
         date = tmpStart != -1 ? new Date(tmpStart) : null;
         hour = in.readInt();
         min = in.readInt();
-        primarykey = (UUID) in.readValue(UUID.class.getClassLoader());
+
     }
 
     @Override

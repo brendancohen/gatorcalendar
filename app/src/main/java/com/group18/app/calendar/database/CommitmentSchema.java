@@ -33,7 +33,8 @@ public class CommitmentSchema {
         public static final class Cols{
             public static final String EVENT = "event";
             public static final String NOTES = "notes";
-            public static final String TIME = "time";
+            public static final String HOUR = "hour";
+            public static final String MIN = "minute";
             public static final String DATE = "date";
         }
     }

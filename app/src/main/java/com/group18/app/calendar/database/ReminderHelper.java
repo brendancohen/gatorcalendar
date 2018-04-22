@@ -7,13 +7,14 @@ import com.group18.app.calendar.database.CommitmentSchema.ReminderTable;
 
 public class ReminderHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
-    private static final String DATABASE_NAME = "commitmentBase.db";
+    private static final String DATABASE_NAME = "reminderBase.db";
 
     private static final String SQL_CREATE_ENTRIES = "create table "
             + ReminderTable.NAME
             + "(" + ReminderTable.Cols.EVENT
             + ", " + ReminderTable.Cols.NOTES
-            + ", " + ReminderTable.Cols.TIME
+            + ", " + ReminderTable.Cols.HOUR
+            + ", " + ReminderTable.Cols.MIN
             + ", " + ReminderTable.Cols.DATE
             + ")";
 
