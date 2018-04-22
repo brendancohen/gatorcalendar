@@ -2,7 +2,6 @@ package com.group18.app.calendar;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -32,6 +31,7 @@ import com.group18.app.calendar.database.CommitmentSchema;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 //this is the Activity that is launched when app is started, see manifest file
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CommitmentHelper mDbHelper;
     private SQLiteDatabase mDatabase;
     private RecyclerView mRecyclerView;
-    private CommitmentsAdapter mAdapter;
+    private CommitmentsAdapter dailyClassAdapter;
     private RecyclerView mRecyclerView2;
     private RemindersAdapter mAdapter2;
 
@@ -83,9 +83,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //this improves performance of RecyclerView
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
 
-        mAdapter.setonItemClickListener(new CommitmentsAdapter.OnItemClickListener() {
+            LoadDatabase();
+
+        dailyClassAdapter = new CommitmentsAdapter(MainActivity.this, myCommits);
+
+        dailyClassAdapter.setonItemClickListener(new CommitmentsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 //android.app.FragmentManager mFragmentManager = getFragmentManager();
@@ -97,10 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        mRecyclerView.setAdapter(mAdapter);
-
-        if(myCommits.isEmpty())
-            LoadDatabase();
+        mRecyclerView.setAdapter(dailyClassAdapter);
 
 
         //Reminders adapter and RecyclerView
@@ -290,7 +290,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override //Function called after a commitment is committed. It adds the commitment to the myCommits array
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
             //if we receive a bad result from the activity, do nothing
             if(resultCode != Activity.RESULT_OK)
                 return;
@@ -300,7 +299,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Commitments tempclass =  data.getParcelableExtra("retrieveUFClass");
                 myCommits.add(tempclass);
                 mDatabase.insert(CommitmentSchema.CommitmentTable.NAME, null, getContentValues(tempclass));
-                mAdapter.notifyItemInserted(myCommits.size()-1);
+                int should_i_notify = daily_class_view_add_notification(tempclass);
+                if (should_i_notify != -1){
+                    dailyClassAdapter.notifyItemInserted(should_i_notify);
+                }
             }
     }
 
@@ -309,6 +311,133 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     method will take a commitment object and insert it into a ContentValues object,
     it will return a ContentValues object that is ready to be inserted into the database
     */
+    private int daily_class_view_add_notification(Commitments temp){
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        Date currentDate = calendar.getTime();
+        if ((currentDate.after(temp.getStart()) && currentDate.before(temp.getEnd())) || currentDate.equals(temp.getStart()) || currentDate.equals(temp.getEnd())) { //If we are within range of the dates
+            if (temp.getOnTheseDays().contains("Monday") && Calendar.MONDAY == day) { //If today is monday and the class is on mondays
+                if (dailyClassAdapter.daily_commitments.isEmpty()){
+                    dailyClassAdapter.daily_commitments.add(0,temp);
+                    return 0;
+                }
+                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                        dailyClassAdapter.daily_commitments.add(k,temp);
+                        return k;
+                    }
+                    if (k == dailyClassAdapter.daily_commitments.size()-1){
+                        dailyClassAdapter.daily_commitments.add(k+1,temp);
+                        return k+1;
+                    }
+                }
+            }
+            else if (temp.getOnTheseDays().contains("Tuesday") && Calendar.TUESDAY == day) { //If today is monday and the class is on mondays
+                if (dailyClassAdapter.daily_commitments.isEmpty()){
+                    dailyClassAdapter.daily_commitments.add(0,temp);
+                    return 0;
+                }
+                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                        dailyClassAdapter.daily_commitments.add(k,temp);
+                        return k;
+                    }
+                    if (k == dailyClassAdapter.daily_commitments.size()-1){
+                        dailyClassAdapter.daily_commitments.add(k+1,temp);
+                        return k+1;
+                    }
+                }
+            }
+            else if (temp.getOnTheseDays().contains("Wednesday") && Calendar.WEDNESDAY == day) { //If today is monday and the class is on mondays
+                if (dailyClassAdapter.daily_commitments.isEmpty()){
+                    dailyClassAdapter.daily_commitments.add(0,temp);
+                    return 0;
+                }
+                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                        dailyClassAdapter.daily_commitments.add(k,temp);
+                        return k;
+                    }
+                    if (k == dailyClassAdapter.daily_commitments.size()-1){
+                        dailyClassAdapter.daily_commitments.add(k+1,temp);
+                        return k+1;
+                    }
+                }
+            }
+            else if (temp.getOnTheseDays().contains("Thursday") && Calendar.THURSDAY == day) { //If today is monday and the class is on mondays
+                if (dailyClassAdapter.daily_commitments.isEmpty()){
+                    dailyClassAdapter.daily_commitments.add(0,temp);
+                    return 0;
+                }
+                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                        dailyClassAdapter.daily_commitments.add(k,temp);
+                        return k;
+                    }
+                    if (k == dailyClassAdapter.daily_commitments.size()-1){
+                        dailyClassAdapter.daily_commitments.add(k+1,temp);
+                        return k+1;
+                    }
+                }
+            }
+            else if (temp.getOnTheseDays().contains("Friday") && Calendar.FRIDAY == day) { //If today is monday and the class is on mondays
+                if (dailyClassAdapter.daily_commitments.isEmpty()){
+                    dailyClassAdapter.daily_commitments.add(0,temp);
+                    return 0;
+                }
+                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                        dailyClassAdapter.daily_commitments.add(k,temp);
+                        return k;
+                    }
+                    if (k == dailyClassAdapter.daily_commitments.size()-1){
+                        dailyClassAdapter.daily_commitments.add(k+1,temp);
+                        return k+1;
+                    }
+                }
+            }
+            else if (temp.getOnTheseDays().contains("Saturday") && Calendar.SATURDAY == day) { //If today is monday and the class is on mondays
+                if (dailyClassAdapter.daily_commitments.isEmpty()){
+                    dailyClassAdapter.daily_commitments.add(0,temp);
+                    return 0;
+                }
+                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                        dailyClassAdapter.daily_commitments.add(k,temp);
+                        return k;
+                    }
+                    if (k == dailyClassAdapter.daily_commitments.size()-1){
+                        dailyClassAdapter.daily_commitments.add(k+1,temp);
+                        return k+1;
+                    }
+                }
+            }
+            else if (temp.getOnTheseDays().contains("Sunday") && Calendar.SUNDAY == day) { //If today is monday and the class is on mondays
+                if (dailyClassAdapter.daily_commitments.isEmpty()){
+                    dailyClassAdapter.daily_commitments.add(0,temp);
+                    return 0;
+                }
+                for (int k = 0; k < dailyClassAdapter.daily_commitments.size(); k++) {
+                    //is called when daily commitments hour is earlier than the new temp class we are trying to add
+                    if (dailyClassAdapter.daily_commitments.get(k).getStartHour() > temp.getStartHour() ||( dailyClassAdapter.daily_commitments.get(k).getStartHour() == temp.getStartHour() && dailyClassAdapter.daily_commitments.get(k).getStartMinute() > temp.getStartMinute())) {
+                        dailyClassAdapter.daily_commitments.add(k,temp);
+                        return k;
+                    }
+                    if (k == dailyClassAdapter.daily_commitments.size()-1){
+                        dailyClassAdapter.daily_commitments.add(k+1,temp);
+                        return k+1;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
 
     private static ContentValues getContentValues(Commitments my_commitment){
         ContentValues values = new ContentValues();
@@ -327,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void LoadDatabase(){
-
+        Log.i("database", "the database has been called!");
         Cursor cursor = mDatabase.query(CommitmentSchema.CommitmentTable.NAME, null,
                 null, null, null, null, null);
 
@@ -373,9 +502,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void sendRequestCode(int code, boolean delete, int position) {
         if(code == DeleteFragmentCode){
             if(delete && position != -1){
-                String primarykey = myCommits.get(position).getPrimarykey().toString();
-                myCommits.remove(position);
-                mAdapter.notifyItemRemoved(position);
+                String primarykey = dailyClassAdapter.daily_commitments.get(position).getPrimarykey().toString();
+                dailyClassAdapter.daily_commitments.remove(position);
+                dailyClassAdapter.notifyItemRemoved(position);
+                for(int i = 0; i<myCommits.size(); i++){
+                    if(myCommits.get(i).getPrimarykey().toString().equalsIgnoreCase(primarykey)){
+                        myCommits.remove(i);
+                    }
+                }
                 DeletefromDatabase(primarykey);
             }
         }
