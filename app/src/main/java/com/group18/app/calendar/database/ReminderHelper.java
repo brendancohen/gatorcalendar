@@ -16,6 +16,7 @@ public class ReminderHelper extends SQLiteOpenHelper {
             + ", " + ReminderTable.Cols.HOUR
             + ", " + ReminderTable.Cols.MIN
             + ", " + ReminderTable.Cols.DATE
+            + ", " + ReminderTable.Cols.ID
             + ")";
 
 

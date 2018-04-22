@@ -23,6 +23,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Cust
         }
 
         public RemindersAdapter(Context context, ArrayList<Reminders> reminders) {
+
             this.reminders = reminders;
         }
 
