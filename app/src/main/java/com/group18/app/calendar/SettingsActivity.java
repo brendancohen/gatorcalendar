@@ -236,6 +236,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
+            Preference display_name = (Preference) findPreference("example_text");
+            display_name.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String tempName = newValue.toString();
+                    MainActivity.username = tempName;
+                    MainActivity.welcome.setText(getResources().getString(R.string.welcome_name).replace("%s", MainActivity.username));
+                    return false;
+                }
+            });
         }
 
         @Override

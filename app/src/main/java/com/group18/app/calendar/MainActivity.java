@@ -56,10 +56,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;
     private CommitmentsAdapter dailyClassAdapter;
     private NavigationView myNavView;
-    private TextView welcome;
+    public static TextView welcome;
     private RecyclerView mRecyclerView2;
     private RemindersAdapter mAdapter2;
     public static boolean first_day_monday = false;
+    public static String username;
 
 
     @Override
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         welcome = myNavView.getHeaderView(0).findViewById(R.id.nav_header_string);
-        String username = pref.getString("username","John Doe");
+        username = pref.getString("username", "John Doe");
         welcome.setText(getResources().getString(R.string.welcome_name).replace("%s",username));
 
         Button startaddClass = findViewById(R.id.start_add_class);
