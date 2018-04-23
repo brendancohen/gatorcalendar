@@ -226,10 +226,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         //Switch is on
                         //Include code here to make the first day of the week be Monday
                         MainActivity.first_day_monday = true;
+                        startActivity(new Intent(getActivity(), MainActivity.class));
                     } else {
                         //Switch is off
                         //Include code here to make the first day of the week NOT be monday
                         MainActivity.first_day_monday = false;
+                        startActivity(new Intent(getActivity(), MainActivity.class));
                     }
                     return true;
                 }
