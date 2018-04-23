@@ -34,7 +34,7 @@
             android:layout_marginEnd="4dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="ReminderName"
+            android:text="@string/ReminderName"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/time_start"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-            android:text="Start Date"
+            android:text="@string/start_date_1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="Start Time"
+            android:text="@string/start_time_1"
             app:layout_constraintStart_toEndOf="@+id/date_start"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView welcome;
     private RecyclerView mRecyclerView2;
     private RemindersAdapter mAdapter2;
+    public static boolean first_day_monday = false;
 
 
     @Override

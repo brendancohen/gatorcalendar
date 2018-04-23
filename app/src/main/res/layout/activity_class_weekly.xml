@@ -24,6 +24,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/day1"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="@string/monday"
@@ -39,6 +40,7 @@
                 android:scrollbars="vertical" />
 
             <TextView
+                android:id="@+id/day2"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="@string/tuesday"
@@ -54,6 +56,7 @@
                 android:scrollbars="vertical" />
 
             <TextView
+                android:id="@+id/day3"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="@string/wednesday"
@@ -69,6 +72,7 @@
                 android:scrollbars="vertical" />
 
             <TextView
+                android:id="@+id/day4"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="@string/thursday"
@@ -84,6 +88,7 @@
                 android:scrollbars="vertical" />
 
             <TextView
+                android:id="@+id/day5"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="@string/friday"
@@ -99,6 +104,7 @@
                 android:scrollbars="vertical" />
 
             <TextView
+                android:id="@+id/day6"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="@string/saturday"
@@ -114,6 +120,7 @@
                 android:scrollbars="vertical" />
 
             <TextView
+                android:id="@+id/day7"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="@string/sunday"

@@ -23,7 +23,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="4dp"
             android:layout_marginStart="16dp"
-            android:text="ProfessorName"
+            android:text="@string/professorname"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.611"
@@ -38,7 +38,7 @@
             android:layout_marginEnd="4dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="ClassName"
+            android:text="@string/classname"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/time_start"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-            android:text="Start Date"
+            android:text="@string/start_date_2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="4dp"
-            android:text="End Date"
+            android:text="@string/end_date_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="Start Time"
+            android:text="@string/start_time_1"
             app:layout_constraintStart_toEndOf="@+id/date_start"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
-            android:text="End time"
+            android:text="@string/end_time_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/date_end" />
 

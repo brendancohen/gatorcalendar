@@ -225,9 +225,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     if (isOn){
                         //Switch is on
                         //Include code here to make the first day of the week be Monday
+                        MainActivity.first_day_monday = true;
                     } else {
                         //Switch is off
                         //Include code here to make the first day of the week NOT be monday
+                        MainActivity.first_day_monday = false;
                     }
                     return true;
                 }
