@@ -104,7 +104,7 @@ public class MapActivity extends AppCompatActivity
         }
         LatLng gainesville = new LatLng(29.6463, -82.3478);
         mMap.addMarker(new MarkerOptions().position(gainesville)
-                .title("Marker in Gainesville"));
+                .title("Reitz Union"));
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(gainesville, 14.0f) );
         mUiSettings.setZoomControlsEnabled(true);
     }

@@ -75,7 +75,7 @@
     <string name="language_switcher">Cambia la app a inglés haciendo click aquí. </string>
 
     <string name="pref_title_display_name">Nombre</string>
-    <string name="pref_default_display_name">Jorge Smith</string>
+    <string name="pref_default_display_name"></string>
 
     <string name="pref_title_add_friends_to_messages">Añadir amigos a los mensajes</string>
     <string-array name="pref_example_list_titles">
